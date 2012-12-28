@@ -1,4 +1,4 @@
 yarn
 ====
 
-Yet Another RusNet
+Yet Another RussNet
