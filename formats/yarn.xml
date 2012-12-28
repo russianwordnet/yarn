@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<yarn>
+	<words>
+		<wordEntry id="n1" approvedBy="pb" approvedWhen="2012-12-26T17:14:00Z" author="pb" version="2" timestamp="2012-12-26T17:12:00Z">
+			<!--первая буква в id: n, a, v — существительные, прилагательные и глаголы-->
+			<word>кошка</word>
+			<grammar>3*a</grammar>
+			<!-- строка, по классификации Зализняка http://ru.wiktionary.org/wiki/Викисловарь:Использование_словаря_Зализняка  -->
+			<accent>2</accent>
+			<accent>5</accent>
+			<!-- может быть несколько правильных ударений -->
+			<url>http://ru.wiktionary.org/wiki/%D0%BA%D0%BE%D1%88%D0%BA%D0%B0</url>
+			<!-- ссылка на какой-то внешний источник-->
+			<url>http://ru.wiktionary.org/wiki/%D0%BA%D0%BE%D1%88%D0%BA%D0%B0</url>
+			<!-- может быть несколько-->
+		</wordEntry>
+
+		<wordEntry id="n2" author="pb" version="2" timestamp="2012-12-26T17:12:00Z">
+			<word>царская водка</word>
+			<url>http://ru.wikipedia.org/wiki/Царская_водка</url>
+		</wordEntry>
+
+		<wordEntry id="n3" author="pb" version="1" timestamp="2012-12-26T17:12:00Z">
+			<word>нечто</word>
+		</wordEntry>
+	</words>
+
+
+	<synsets>
+		<synsetEntry id="sn1" approvedBy="pb" approvedWhen="2012-12-26T17:14:00Z" author="pb" version="2" timestamp="2012-12-26T17:12:00Z">
+			<!-- слов может не быть вообще. Например: "столовые приборы", для объединения вилки и ложки связями is_a-->
+			<word ref="n3" nonStandardGrammar="true">
+				<mark>устар</mark> <!-- помета всегда внутри синсета, а не у самого слова -->
+				<sample url="http://e1.ru/forums" source="Пушкин">sadfsfdsd</sample>
+				<sample source="Пушкин">sadfsfdsd</sample>
+				<sample>sadfsfdsd</sample>
+			</word>
+			<word ref="n1"/>
+			<definition url="http://ru.wikipedia.org/wiki/Кошка" source="wikipedia">
+				домашнее животное, одно из наиболее популярных (наряду с собакой) «животных-компаньонов»
+			</definition>
+			<definition>
+				Говорит мяу-мяу. (Это определение придумал один из редакторов yarn-а. Поэтому у него нет ни источника, ни url-а.)
+			</definition>
+			<definition source="Толковый словарь Ушакова">
+				Самка кота.
+			</definition>
+			<definition url="http://ru.wiktionary.org/wiki/кошка"/>
+			<pwn synsetId="12345678"/>
+		</synsetEntry>
+		
+		<synsetEntry id="sn2" approvedBy="pb" approvedWhen="2012-12-26T17:14:00Z" author="pb" version="2" timestamp="2012-12-26T17:12:00Z">
+			<definition>
+				Коммутативное кольцо без единицы. Слов, для описания этого смысла нет.
+			</definition>
+		</synsetEntry>
+	</synsets>
+
+	<synsetRelations>
+		<relationEntry id="r1" synset1="sn1" type="is_a" synset2="sn2" approvedBy="pb" approvedWhen="2012-12-26T17:14:00Z" author="pb" version="2" timestamp="2012-12-26T17:12:00Z" />
+		<relationEntry id="r2" synset1="sn1" type="part_of" synset2="sn2" author="pb" version="2" timestamp="2012-12-26T17:12:00Z" />
+		<relationEntry id="r3" synset1="sn2" type="sister" synset2="sn1" author="pb" version="2" timestamp="2012-12-26T17:12:00Z" />
+		<relationEntry id="r4" synset1="sn2" type="antonym" synset2="sn1" author="pb" version="2" timestamp="2012-12-26T17:12:00Z" />
+	</synsetRelations>
+
+	<wordRelations>
+		<wordRelationsEntry id="rw1" word1="n1" type="пока непонятно что" word2="n2"  approvedBy="pb" approvedWhen="2012-12-26T17:14:00Z" author="pb" version="2" timestamp="2012-12-26T17:12:00Z" />
+		<wordRelationsEntry id="rw2" word1="n2" type="пока непонятно что" word2="n1" author="pb" version="2" timestamp="2012-12-26T17:12:00Z" />
+	</wordRelations>
+</yarn>
