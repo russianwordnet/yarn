@@ -6,17 +6,34 @@ namespace :ruwikt do
     raise 'Missing ENV["filename"]' unless ENV['filename']
 
     xml = Nokogiri::XML(File.read(ENV['filename']))
-    xml.xpath('//wordEntry').each do |we|
-      id, author, timestamp = we[:id], we[:author], we[:timestamp]
+    xml.xpath('//wordEntry').each do |entry|
+      id, author, timestamp = entry[:id], entry[:author], entry[:timestamp]
 
-      word = we.children.find { |e| e.name == 'word' }.text
-      grammar = we.children.find { |e| e.name == 'grammar' }.text rescue nil
+      next unless word = entry.xpath('./word[1]').map(&:text).first
+      grammar = entry.xpath('./grammar[1]').map(&:text).first
 
-      accents = we.children.
-        select { |e| e.name == 'accent' }.
-        map { |e| e.text.to_i }
+      accents = entry.xpath('./accent').map(&:text).map(&:to_i)
+      urls = entry.xpath('./url').map(&:text)
+    end
 
-      urls = we.children.select { |e| e.name == 'url' }.map(&:text)
+    xml.xpath('//synsetEntry').each do |entry|
+      id, author, timestamp = entry[:id], entry[:author], entry[:timestamp]
+
+      definitions = entry.xpath('./definition').map do |definition|
+        { url: definition[:url], source: definition[:source] }
+      end
+
+      words = entry.xpath('./word').map do |word|
+        ref, nsg = word[:ref], word[:nonStandardGrammar] == 'true'
+
+        samples = word.xpath('./sample').map do |sample|
+          { sample: sample.text, source: sample[:source] }
+        end
+
+        marks = word.xpath('./mark').map(&:text)
+
+        { ref: ref, nsg: nsg, samples: samples, marks: marks }
+      end
     end
   end
 end
