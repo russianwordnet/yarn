@@ -16,7 +16,7 @@ namespace :ruwikt do
         select { |e| e.name == 'accent' }.
         map { |e| e.text.to_i }
 
-      urls = we.children.select { |e| e.name == 'url' }.map { |e| e.text }
+      urls = we.children.select { |e| e.name == 'url' }.map(&:text)
     end
   end
 end
