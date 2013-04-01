@@ -1,7 +1,9 @@
 Yarn::Application.routes.draw do
-  devise_for :users, :controllers => { :omniauth_callbacks => 'users/omniauth_callbacks' } do
-    delete 'logout' => 'users#destroy', :as => :destroy_user_session
+  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' } do
+    delete 'signout' => 'devise/sessions#destroy', :as => :destroy_user_session
   end
+
+  root to: 'users#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
