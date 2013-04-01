@@ -12,6 +12,7 @@ class CreateEntries < ActiveRecord::Migration
       t.index :type
       t.index :author_id
       t.index :approver_id
+      t.index :approved_at
 
       t.foreign_key :users, :column => :author_id, :dependent => :delete
       t.foreign_key :users, :column => :approver_id, :dependent => :delete
