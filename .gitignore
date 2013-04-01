@@ -13,6 +13,10 @@ TestResults
 *.user
 *.sln.docstates
 
+# Vi IMproved files
+*.swp
+*.~*
+
 # Build results
 [Dd]ebug/
 [Rr]elease/
