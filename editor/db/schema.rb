@@ -11,7 +11,24 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130324195248) do
+ActiveRecord::Schema.define(:version => 20130401082536) do
+
+  create_table "synsets", :force => true do |t|
+    t.integer  "author_id"
+    t.integer  "approver_id"
+    t.datetime "approved_at"
+    t.integer  "revision",    :default => 1, :null => false
+    t.text     "words"
+    t.text     "definitions"
+    t.text     "pwns"
+    t.datetime "deleted_at"
+  end
+
+  add_index "synsets", ["approved_at"], :name => "index_synsets_on_approved_at"
+  add_index "synsets", ["approver_id"], :name => "index_synsets_on_approver_id"
+  add_index "synsets", ["author_id"], :name => "index_synsets_on_author_id"
+  add_index "synsets", ["deleted_at"], :name => "index_synsets_on_deleted_at"
+  add_index "synsets", ["revision"], :name => "index_synsets_on_revision"
 
   create_table "users", :force => true do |t|
     t.string   "name",       :null => false
@@ -37,12 +54,16 @@ ActiveRecord::Schema.define(:version => 20130324195248) do
     t.datetime "deleted_at"
   end
 
+  add_index "words", ["approved_at"], :name => "index_entries_on_approved_at"
   add_index "words", ["approver_id"], :name => "index_entries_on_approver_id"
   add_index "words", ["author_id"], :name => "index_entries_on_author_id"
   add_index "words", ["deleted_at"], :name => "index_entries_on_deleted_at"
   add_index "words", ["grammar"], :name => "index_entries_on_grammar"
   add_index "words", ["revision"], :name => "index_entries_on_revision"
   add_index "words", ["word"], :name => "index_entries_on_word", :unique => true
+
+  add_foreign_key "synsets", "users", :name => "synsets_approver_id_fk", :column => "approver_id", :dependent => :delete
+  add_foreign_key "synsets", "users", :name => "synsets_author_id_fk", :column => "author_id", :dependent => :delete
 
   add_foreign_key "words", "users", :name => "entries_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "words", "users", :name => "entries_author_id_fk", :column => "author_id", :dependent => :delete
