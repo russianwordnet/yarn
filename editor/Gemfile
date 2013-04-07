@@ -26,6 +26,7 @@ end
 
 group :development do
   gem 'puma'
+  gem 'railroady'
 end
 
 gem 'jquery-rails'
