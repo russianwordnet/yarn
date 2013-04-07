@@ -5,6 +5,8 @@ Yarn::Application.routes.draw do
 
   root to: 'users#index'
 
+  match 'words.json' => 'application#words'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
