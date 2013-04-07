@@ -1,0 +1,26 @@
+class Sample < ActiveRecord::Base
+  self.table_name = 'current_samples'
+
+  attr_accessible :text, :source, :uri
+
+  has_many :old_samples, :order => :revision,
+    :inverse_of => :origin
+
+  has_many :synset_words, :inverse_of => :samples, finder_sql: proc {
+    %Q{SELECT * FROM current_synset_words WHERE samples_ids @> '{#{id}}';} }
+
+  def update_from(new_sample)
+    Sample.transaction do
+      old_sample = OldSample.from_sample(self)
+      old_sample.save!
+
+      self.text = new_sample.text
+      self.source = new_sample.source
+      self.uri = new_sample.uri
+      self.author_id = new_sample.author_id
+      self.revision += 1
+
+      save
+    end
+  end
+end

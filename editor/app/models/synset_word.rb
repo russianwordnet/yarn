@@ -11,6 +11,11 @@ class SynsetWord < ActiveRecord::Base
   has_many :synsets, :inverse_of => :words, finder_sql: proc {
     %Q{SELECT * FROM current_synsets WHERE words_ids @> '{#{id}}';} }
 
+  has_many :samples, :inverse_of => :synset_words, finder_sql: proc {
+    %Q{SELECT * FROM current_samples WHERE id IN
+        (SELECT unnest(samples_ids) FROM current_synset_words
+          WHERE id = #{id});} }
+
   def update_from(new_synset_word)
     SynsetWord.transaction do
       old_synset_word = OldSynsetWord.from_synset_word(self)
