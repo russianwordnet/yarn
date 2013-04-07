@@ -11,18 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130404215233) do
+ActiveRecord::Schema.define(:version => 20130407112728) do
 
   create_table "current_words", :force => true do |t|
     t.integer  "author_id"
     t.integer  "approver_id"
     t.datetime "approved_at"
     t.datetime "updated_at"
-    t.string   "word",        :null => false
+    t.string   "word",                       :null => false
     t.string   "grammar"
     t.text     "accents"
     t.text     "uris"
     t.datetime "deleted_at"
+    t.integer  "revision",    :default => 1
   end
 
   add_index "current_words", ["approved_at"], :name => "index_current_words_on_approved_at"
@@ -30,6 +31,7 @@ ActiveRecord::Schema.define(:version => 20130404215233) do
   add_index "current_words", ["author_id"], :name => "index_current_words_on_author_id"
   add_index "current_words", ["deleted_at"], :name => "index_current_words_on_deleted_at"
   add_index "current_words", ["grammar"], :name => "index_current_words_on_grammar"
+  add_index "current_words", ["revision"], :name => "index_current_words_on_revision"
   add_index "current_words", ["word"], :name => "index_current_words_on_word"
 
   create_table "synsets", :force => true do |t|

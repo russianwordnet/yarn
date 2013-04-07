@@ -19,6 +19,7 @@ class Word < ActiveRecord::Base
       self.accents = new_word.accents
       self.uris = new_word.uris
       self.author_id = new_word.author_id
+      self.revision += 1
 
       save
     end
