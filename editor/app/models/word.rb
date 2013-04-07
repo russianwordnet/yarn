@@ -6,6 +6,8 @@ class Word < ActiveRecord::Base
   has_many :old_words, :order => :revision,
     :inverse_of => :origin
 
+  has_many :synset_words
+
   def update_from(new_word)
     Word.transaction do
       old_word = OldWord.from_word(self)
