@@ -4,6 +4,7 @@ gem 'rails', '3.2.12'
 
 gem 'activerecord-jdbcpostgresql-adapter'
 gem 'activerecord-import'
+gem 'postgres_ext'
 
 gem 'foreigner'
 gem 'devise'
