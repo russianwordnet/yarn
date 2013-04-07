@@ -11,7 +11,24 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130407112728) do
+ActiveRecord::Schema.define(:version => 20130407115628) do
+
+  create_table "current_synsets", :force => true do |t|
+    t.integer  "author_id"
+    t.integer  "approver_id"
+    t.datetime "approved_at"
+    t.integer  "revision",    :default => 1, :null => false
+    t.text     "words"
+    t.text     "definitions"
+    t.datetime "deleted_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "current_synsets", ["approved_at"], :name => "index_current_synsets_on_approved_at"
+  add_index "current_synsets", ["approver_id"], :name => "index_current_synsets_on_approver_id"
+  add_index "current_synsets", ["author_id"], :name => "index_current_synsets_on_author_id"
+  add_index "current_synsets", ["deleted_at"], :name => "index_current_synsets_on_deleted_at"
+  add_index "current_synsets", ["revision"], :name => "index_current_synsets_on_revision"
 
   create_table "current_words", :force => true do |t|
     t.integer  "author_id"
@@ -41,8 +58,9 @@ ActiveRecord::Schema.define(:version => 20130407112728) do
     t.integer  "revision",    :default => 1, :null => false
     t.text     "words"
     t.text     "definitions"
-    t.text     "pwns"
     t.datetime "deleted_at"
+    t.integer  "synset_id"
+    t.datetime "created_at"
   end
 
   add_index "synsets", ["approved_at"], :name => "index_synsets_on_approved_at"
@@ -50,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20130407112728) do
   add_index "synsets", ["author_id"], :name => "index_synsets_on_author_id"
   add_index "synsets", ["deleted_at"], :name => "index_synsets_on_deleted_at"
   add_index "synsets", ["revision"], :name => "index_synsets_on_revision"
+  add_index "synsets", ["synset_id"], :name => "index_synsets_on_synset_id"
 
   create_table "users", :force => true do |t|
     t.string   "name",       :null => false
@@ -85,9 +104,13 @@ ActiveRecord::Schema.define(:version => 20130407112728) do
   add_index "words", ["word"], :name => "index_words_on_word"
   add_index "words", ["word_id"], :name => "index_words_on_word_id"
 
+  add_foreign_key "current_synsets", "users", :name => "current_synsets_approver_id_fk", :column => "approver_id", :dependent => :delete
+  add_foreign_key "current_synsets", "users", :name => "current_synsets_author_id_fk", :column => "author_id", :dependent => :delete
+
   add_foreign_key "current_words", "users", :name => "current_words_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "current_words", "users", :name => "current_words_author_id_fk", :column => "author_id", :dependent => :delete
 
+  add_foreign_key "synsets", "current_synsets", :name => "synsets_synset_id_fk", :column => "synset_id", :dependent => :delete
   add_foreign_key "synsets", "users", :name => "synsets_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "synsets", "users", :name => "synsets_author_id_fk", :column => "author_id", :dependent => :delete
 
