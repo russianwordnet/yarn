@@ -3,6 +3,8 @@ class SynsetWord < ActiveRecord::Base
 
   attr_accessible :word, :nsg, :marks, :samples
 
+  belongs_to :author, class_name: 'User'
+
   belongs_to :word
 
   has_many :old_synset_words, :order => :revision,

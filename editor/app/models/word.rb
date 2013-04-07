@@ -3,6 +3,8 @@ class Word < ActiveRecord::Base
 
   attr_accessible :word, :grammar, :accents, :uris
 
+  belongs_to :author, class_name: 'User'
+
   has_many :old_words, :order => :revision,
     :inverse_of => :origin
 

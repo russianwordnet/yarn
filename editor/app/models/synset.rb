@@ -3,6 +3,8 @@ class Synset < ActiveRecord::Base
 
   attr_accessible :words_ids, :definitions_ids
 
+  belongs_to :author, class_name: 'User'
+
   has_many :old_synsets, :order => :revision,
     :inverse_of => :origin
 

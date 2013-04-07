@@ -3,6 +3,8 @@ class Definition < ActiveRecord::Base
 
   attr_accessible :text, :source, :uri
 
+  belongs_to :author, class_name: 'User'
+
   has_many :old_definitions, :order => :revision,
     :inverse_of => :origin
 
