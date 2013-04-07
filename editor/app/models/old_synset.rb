@@ -6,9 +6,6 @@ class OldSynset < ActiveRecord::Base
   belongs_to :origin, class_name: 'Synset', foreign_key: 'synset_id',
     :inverse_of => :old_synsets
 
-  serialize :words, JSON
-  serialize :definitions, JSON
-
   def self.from_synset(synset)
     old_synset = synset.old_synsets.build
     old_synset.words = synset.words

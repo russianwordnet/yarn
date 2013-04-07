@@ -6,9 +6,6 @@ class Word < ActiveRecord::Base
   has_many :old_words, :order => :revision,
     :inverse_of => :origin
 
-  serialize :accents, JSON
-  serialize :uris, JSON
-
   def update_from(new_word)
     Word.transaction do
       old_word = OldWord.from_word(self)

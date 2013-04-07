@@ -1,13 +1,10 @@
 class Synset < ActiveRecord::Base
   self.table_name = 'current_synsets'
 
-  attr_accessible :words, :definitions
+  attr_accessible :words_ids, :definitions_ids
 
   has_many :old_synsets, :order => :revision,
     :inverse_of => :origin
-
-  serialize :words, JSON
-  serialize :definitions, JSON
 
   def update_from(new_synset)
     Synset.transaction do

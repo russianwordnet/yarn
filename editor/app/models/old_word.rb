@@ -4,9 +4,6 @@ class OldWord < ActiveRecord::Base
   belongs_to :origin, class_name: 'Word', foreign_key: 'word_id',
     :inverse_of => :old_words
 
-  serialize :accents, JSON
-  serialize :uris, JSON
-
   def self.from_word(word)
     old_word = word.old_words.build
     old_word.word = word.word
