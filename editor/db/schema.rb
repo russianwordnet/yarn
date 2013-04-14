@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130407173216) do
+ActiveRecord::Schema.define(:version => 20130414223407) do
 
   create_table "current_definitions", :force => true do |t|
     t.integer  "author_id"
@@ -75,7 +75,6 @@ ActiveRecord::Schema.define(:version => 20130407173216) do
   add_index "current_synset_words", ["marks"], :name => "index_current_synset_words_on_marks"
   add_index "current_synset_words", ["nsg"], :name => "index_current_synset_words_on_nsg"
   add_index "current_synset_words", ["revision"], :name => "index_current_synset_words_on_revision"
-  add_index "current_synset_words", ["samples_ids"], :name => "index_current_synset_words_on_samples_ids"
   add_index "current_synset_words", ["updated_at"], :name => "index_current_synset_words_on_updated_at"
   add_index "current_synset_words", ["word_id"], :name => "index_current_synset_words_on_word_id"
 
@@ -189,7 +188,6 @@ ActiveRecord::Schema.define(:version => 20130407173216) do
   add_index "synset_words", ["marks"], :name => "index_synset_words_on_marks"
   add_index "synset_words", ["nsg"], :name => "index_synset_words_on_nsg"
   add_index "synset_words", ["revision"], :name => "index_synset_words_on_revision"
-  add_index "synset_words", ["samples_ids"], :name => "index_synset_words_on_samples_ids"
   add_index "synset_words", ["synset_word_id"], :name => "index_synset_words_on_synset_word_id"
   add_index "synset_words", ["word_id"], :name => "index_synset_words_on_word_id"
 
