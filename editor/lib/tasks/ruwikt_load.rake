@@ -13,6 +13,9 @@ namespace :ruwikt do
       ENV['filename']
     ]
 
+    words_offset = Word.maximum(:id) || 0
+    synsets_offset = Synset.maximum(:id) || 0
+
     word_count, synset_count = 0, 0
     definition_count, synset_word_count, sample_count = 0, 0, 0
 
@@ -28,7 +31,7 @@ namespace :ruwikt do
         uris = entry.xpath('./url').map(&:text)
 
         Word.new(word: word, grammar: grammar, accents: accents,
-          uris: uris).tap { |w| w.id = id[/\d+/] }
+          uris: uris).tap { |w| w.id = words_offset + id[/\d+/].to_i }
       end
 
       Word.transaction { words.each(&:save!) }
@@ -65,9 +68,10 @@ namespace :ruwikt do
           end
 
           marks = word.xpath('./mark').map(&:text)
+          ref = words_offset + ref[/\d+/].to_i if ref
 
           SynsetWord.new(samples_ids: samples.map(&:id), marks: marks,
-            nsg: nsg).tap { |sw| sw.word_id = ref && ref[/\d+/] }
+            nsg: nsg).tap { |sw| sw.word_id = ref }
         end
 
         unless synset_words.empty?
@@ -76,7 +80,8 @@ namespace :ruwikt do
         end
 
         Synset.new(definitions_ids: definitions.map(&:id),
-          words_ids: synset_words.map(&:id)).tap { |w| w.id = id[/\d+/] }
+          words_ids: synset_words.map(&:id)).
+          tap { |s| s.id = synsets_offset + id[/\d+/].to_i }
       end
 
       Synset.transaction { synsets.each(&:save!) }
