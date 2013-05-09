@@ -16,6 +16,7 @@ gem 'devise-i18n'
 gem 'nokogiri'
 
 gem 'haml'
+gem 'high_voltage'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
