@@ -11,6 +11,8 @@ Yarn::Application.routes.draw do
     end
   end
 
+  root to: 'high_voltage/pages#show', id: 'index'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

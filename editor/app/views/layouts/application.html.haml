@@ -6,7 +6,7 @@
     = javascript_include_tag "application"
     = csrf_meta_tags
   %body
-    %h1{style: 'display: inline;'} YARN
+    %h1{style: 'display: inline;'}= link_to 'YARN', root_url
     %p{style: 'display: inline;'}
       = surround '[', ']' do
         = link_to 'Слова', words_url
