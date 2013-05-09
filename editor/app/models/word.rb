@@ -1,6 +1,8 @@
 class Word < ActiveRecord::Base
   self.table_name = 'current_words'
 
+  paginates_per 150
+
   attr_accessible :word, :grammar, :accents, :uris
 
   belongs_to :author, class_name: 'User'

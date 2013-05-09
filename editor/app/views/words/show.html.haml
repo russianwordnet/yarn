@@ -1,0 +1,25 @@
+%h2= 'Слово №%d: "%s"' % [@word.id, @word.word]
+%p
+  %strong Автор:
+  = @word.author ? link_to(@word.author) : 'н/д'
+%p
+  %strong Дата редактирования:
+  = @word.updated_at
+%p
+  %strong Версия:
+  = @word.revision
+%p
+  %strong Подтверждённая редакция:
+  - if @word.approver_id && @word.approved_at
+    = @word.approver
+  - else
+    нет
+%h3 Связанные синсеты
+%ul
+  - @word.synset_words.each do |synset_word|
+    - synset_word.synsets.each do |synset|
+      %li
+        = link_to synset.id, synset_url(synset)
+        %ul
+          - synset_word.samples.each do |sample|
+            %li= sample.text

@@ -1,0 +1,28 @@
+%h2= 'Пример №%d' % @sample.id
+%p
+  %strong Автор:
+  = @sample.author ? link_to(@sample.author) : 'н/д'
+%p
+  %strong Дата редактирования:
+  = @sample.updated_at
+%p
+  %strong Версия:
+  = @sample.revision
+%p
+  %strong Подтверждённая редакция:
+  - if @sample.approver_id && @sample.approved_at
+    = @sample.approver
+  - else
+    нет
+%h3 Текст
+%p= @sample.text
+%p
+  %strong Источник:
+  = @sample.source || 'н/д'
+%p
+  %strong URI:
+  = @sample.uri ? link_to(@sample.uri, @sample.uri) : 'н/д'
+%p= @sample.inspect
+%p
+  = link_to 'Назад к слову в синсете', synset_word_url(@synset, @synset_word)
+  = link_to 'Назад к синсету', synset_url(@synset)

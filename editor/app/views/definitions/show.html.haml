@@ -1,0 +1,27 @@
+%h2= 'Определение №%d' % @definition.id
+%p
+  %strong Автор:
+  = @definition.author ? link_to(@definition.author) : 'н/д'
+%p
+  %strong Дата редактирования:
+  = @definition.updated_at
+%p
+  %strong Версия:
+  = @definition.revision
+%p
+  %strong Подтверждённая редакция:
+  - if @definition.approver_id && @definition.approved_at
+    = @definition.approver
+  - else
+    нет
+%h3 Текст
+%p= @definition.text
+%p
+  %strong Источник:
+  = @definition.source || 'н/д'
+%p
+  %strong URI:
+  = @definition.uri ? link_to(@definition.uri, @definition.uri) : 'н/д'
+%p= @definition.inspect
+%p
+  = link_to 'Назад к синсету', synset_url(@synset)

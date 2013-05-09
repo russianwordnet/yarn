@@ -3,9 +3,13 @@ Yarn::Application.routes.draw do
     delete 'signout' => 'devise/sessions#destroy', :as => :destroy_user_session
   end
 
-  root to: 'users#index'
-
-  match 'words.json' => 'application#words'
+  resources :words, only: [:index, :show]
+  resources :synsets, only: [:index, :show] do
+    resources :definitions, only: [:show]
+    resources :words, controller: 'synset_words', only: [:show] do
+      resources :samples, only: [:show]
+    end
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

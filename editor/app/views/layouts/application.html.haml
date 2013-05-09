@@ -1,0 +1,15 @@
+!!!
+%html
+  %head
+    %title YARN
+    = stylesheet_link_tag    "application", :media => "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+  %body
+    %h1{style: 'display: inline;'} YARN
+    %p{style: 'display: inline;'}
+      = surround '[', ']' do
+        = link_to 'Слова', words_url
+      = surround '[', ']' do
+        = link_to 'Синсеты', synsets_url
+    = yield

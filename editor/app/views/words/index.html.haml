@@ -1,0 +1,6 @@
+%h2 Слова
+%ul
+  - @words.each do |word|
+    %li
+      = link_to word.word, word_url(word)
+= paginate @words

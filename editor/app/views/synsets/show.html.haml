@@ -1,0 +1,33 @@
+%h2= 'Синсет №%d' % @synset.id
+%p
+  %strong Автор:
+  = @synset.author ? link_to(@synset.author) : 'н/д'
+%p
+  %strong Дата редактирования:
+  = @synset.updated_at
+%p
+  %strong Версия:
+  = @synset.revision
+%p
+  %strong Подтверждённая редакция:
+  - if @synset.approver_id && @synset.approved_at
+    = @synset.approver
+  - else
+    нет
+%h3= 'Слова (%d)' % @synset.words_ids.size
+%ul
+  - @synset.words.each do |synset_word|
+    %li= link_to synset_word.word.word, synset_word_url(@synset, synset_word)
+%h3= 'Определения (%d)' % @synset.definitions_ids.size
+%ul
+  - @synset.definitions.each do |definition|
+    %li
+      = link_to definition.text, synset_definition_url(@synset, definition)
+      = surround '(', ')' do
+        - if definition.uri
+          = link_to definition.source || 'источник', definition.uri
+%p= @synset.inspect
+%p= @synset.definitions
+%p= @synset.words
+%p
+  = link_to 'Назад к списку', synsets_url

@@ -1,6 +1,8 @@
 class Synset < ActiveRecord::Base
   self.table_name = 'current_synsets'
 
+  paginates_per 70
+
   attr_accessible :words_ids, :definitions_ids
 
   belongs_to :author, class_name: 'User'

@@ -1,0 +1,8 @@
+%h2 Синсеты
+%ul
+  - @synsets.each do |synset|
+    %li
+      = link_to synset.id, synset_url(synset)
+      = surround '(', ')' do
+        = synset.words.map(&:word).map(&:word).join ', '
+= paginate @synsets
