@@ -18,6 +18,8 @@ gem 'nokogiri'
 gem 'haml'
 gem 'high_voltage'
 
+gem 'puma'
+
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
@@ -26,7 +28,6 @@ group :assets do
 end
 
 group :development do
-  gem 'puma'
   gem 'railroady'
 end
 
