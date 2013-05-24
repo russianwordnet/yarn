@@ -20,5 +20,8 @@
 /bin/*.pid
 /tmp
 
+# Prevent git-checkout from erasing production configuration
+/config/database.yml
+
 # Ignore XML dumps
 /*.xml
