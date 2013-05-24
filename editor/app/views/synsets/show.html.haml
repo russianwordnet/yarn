@@ -1,33 +1,20 @@
-%h2= 'Синсет №%d' % @synset.id
-%p
-  %strong Автор:
-  = @synset.author ? link_to(@synset.author) : 'н/д'
-%p
-  %strong Дата редактирования:
-  = @synset.updated_at
-%p
-  %strong Версия:
-  = @synset.revision
-%p
-  %strong Подтверждённая редакция:
-  - if @synset.approver_id && @synset.approved_at
-    = @synset.approver
-  - else
-    нет
-%h3= 'Слова (%d)' % @synset.words_ids.size
-%ul
-  - @synset.words.each do |synset_word|
-    %li= link_to synset_word.word.word, synset_word_url(@synset, synset_word)
-%h3= 'Определения (%d)' % @synset.definitions_ids.size
-%ul
-  - @synset.definitions.each do |definition|
-    %li
-      = link_to definition.text, synset_definition_url(@synset, definition)
-      = surround '(', ')' do
-        - if definition.uri
-          = link_to definition.source || 'источник', definition.uri
-%p= @synset.inspect
-%p= @synset.definitions
-%p= @synset.words
-%p
-  = link_to 'Назад к списку', synsets_url
+.row
+  .large-8.columns
+    %h2= 'Синсет №%d' % @synset.id
+    %h3= 'Слова (%d)' % @synset.words_ids.size
+    %ul
+      - @synset.words.each do |synset_word|
+        %li= link_to synset_word.word.word, synset_word_url(@synset, synset_word)
+    %h3= 'Определения (%d)' % @synset.definitions_ids.size
+    %table.large-12
+      %tr
+        %th{width: '70%'} Определение
+        %th{width: '30%'} Источник
+      - @synset.definitions.each do |definition|
+        %tr
+          %td.text-justify
+            = link_to definition.text, synset_definition_url(@synset, definition)
+          %td.text-center
+            = link_to_unless !definition.uri, definition.source || 'источник', definition.uri
+  .large-4.columns
+    = render_cell :entry, :metadata, entry: @synset

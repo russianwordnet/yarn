@@ -10,4 +10,8 @@ class User < ActiveRecord::Base
   has_many :definitions, :foreign_key => :author_id
 
   validates :name, presence: true
+
+  def to_s
+    name
+  end
 end

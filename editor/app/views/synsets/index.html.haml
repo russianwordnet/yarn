@@ -1,8 +1,10 @@
-%h2 Синсеты
-%ul
-  - @synsets.each do |synset|
-    %li
-      = link_to synset.id, synset_url(synset)
-      = surround '(', ')' do
-        = synset.words.map(&:word).map(&:word).join ', '
-= paginate @synsets
+.row
+  .large-12
+    %h2 Синсеты
+    %ul.small-block-grid-3
+      - @synsets.each do |synset|
+        %li
+          = link_to synset.id, synset_url(synset)
+          = surround '(', ')' do
+            = synset.words.map(&:word).map(&:word).join ', '
+    = paginate @synsets

@@ -1,15 +1,63 @@
-!!!
-%html
-  %head
-    %title YARN
-    = stylesheet_link_tag    "application", :media => "all"
-    = javascript_include_tag "application"
-    = csrf_meta_tags
-  %body
-    %h1{style: 'display: inline;'}= link_to 'YARN', root_url
-    %p{style: 'display: inline;'}
-      = surround '[', ']' do
-        = link_to 'Слова', words_url
-      = surround '[', ']' do
-        = link_to 'Синсеты', synsets_url
-    = yield
+!!! 5
+/[if lt IE 7 ] <html class='ie6' lang='en'>
+/[if IE 7 ]    <html class='ie7' lang='en'>
+/[if IE 8 ]    <html class='ie8' lang='en'>
+/[if IE 9 ]    <html class='ie9' lang='en'>
+/[if (gt IE 9)|!(IE)] <!--> <html lang='en'>
+%head
+  %meta{charset: 'utf-8'}
+  %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+
+  %title= content_for?(:title) ? yield(:title) : 'Yet Another RussNet'
+
+  = stylesheet_link_tag 'application'
+  = javascript_include_tag 'vendor/custom.modernizr'
+  = csrf_meta_tag
+
+%body
+  %nav.top-bar
+    %ul.title-area
+      %li.name
+        %h1= link_to 'YARN', root_url
+      %li.toggle-topbar.menu-icon
+        = link_to '#' do
+          %span Меню
+    %section.top-bar-section
+      %ul.left
+        %li.divider
+        = top_link_to 'Слова', words_url
+        %li.divider
+        = top_link_to 'Синсеты', synsets_url
+        %li.divider
+        - if top_bar_word
+          = top_link_to 'Слово №%d' % top_bar_word.id, word_url(top_bar_word)
+          %li.divider
+        - if top_bar_synset
+          = top_link_to 'Cинсет №%d' % top_bar_synset.id, synset_url(top_bar_synset)
+          %li.divider
+        - if top_bar_synset_word
+          = top_link_to 'Cинсет-слово №%d' % top_bar_synset_word.id, synset_word_url(top_bar_synset, top_bar_synset_word)
+          %li.divider
+      %ul.right
+        %li.divider
+        %li.has-dropdown
+          - if user_signed_in?
+            = link_to current_user, '#'
+            %ul.dropdown
+              %li= link_to 'Выйти', destroy_user_session_path, :method => :delete
+          - else
+            = link_to 'Войти', '#'
+            %ul.dropdown
+              - unless Rails.env.production?
+                %li
+                  = link_to 'Тестовый вход', user_omniauth_authorize_path(:developer)
+              %li= link_to 'Войти при помощи Facebook', user_omniauth_authorize_path(:facebook)
+
+  = yield
+
+  %footer.row.full-width
+    .large-12.text-center
+      %p &copy; YARN, 2012&ndash;2013
+
+  = javascript_include_tag 'application'
+</html>

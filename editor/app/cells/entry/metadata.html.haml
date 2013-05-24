@@ -1,0 +1,18 @@
+.panel
+  %p
+    %strong Версия:
+    = @entry.revision
+  %p
+    %strong Автор:
+    = @entry.author ? link_to(@entry.author) : 'н/д'
+  %p
+    %strong Обновлено:
+    = @entry.updated_at.strftime('%H:%M:%S %d.%m.%Y')
+  %p
+    %strong Утверждено:
+    - if @entry.approver_id && @entry.approved_at
+      = @entry.approver
+    - else
+      нет
+  - if @history_uri
+    = link_to 'История изменений', @history_uri, class: 'button'
