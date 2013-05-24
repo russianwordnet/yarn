@@ -9,6 +9,7 @@ gem 'foreigner'
 gem 'devise'
 gem 'omniauth-facebook'
 gem 'kaminari'
+gem 'cells'
 
 gem 'rails-i18n'
 gem 'devise-i18n'
@@ -17,10 +18,12 @@ gem 'nokogiri'
 
 gem 'haml'
 gem 'high_voltage'
+gem 'kramdown'
 
 gem 'puma'
 
 group :assets do
+  gem 'zurb-foundation', '~> 4.1.6'
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'therubyrhino'

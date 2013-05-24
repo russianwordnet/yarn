@@ -33,8 +33,12 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     arel (3.0.2)
+    bcrypt-ruby (3.0.1)
     bcrypt-ruby (3.0.1-java)
     builder (3.0.4)
+    cells (3.8.8)
+      actionpack (>= 3.0)
+      railties (>= 3.0)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -55,9 +59,9 @@ GEM
       multipart-post (~> 1.1)
     foreigner (1.4.1)
       activerecord (>= 3.0.0)
-    haml (4.0.2)
+    haml (4.0.3)
       tilt
-    hashie (2.0.4)
+    hashie (2.0.5)
     high_voltage (1.2.2)
     hike (1.2.2)
     httpauth (0.2.0)
@@ -67,12 +71,14 @@ GEM
     jquery-rails (2.2.1)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
-    json (1.7.7-java)
+    json (1.8.0)
+    json (1.8.0-java)
     jwt (0.1.8)
       multi_json (>= 1.5)
     kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    kramdown (1.0.2)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -80,6 +86,7 @@ GEM
     mime-types (1.23)
     multi_json (1.7.3)
     multipart-post (1.2.0)
+    nokogiri (1.5.9)
     nokogiri (1.5.9-java)
     oauth2 (0.8.1)
       faraday (~> 0.8)
@@ -96,11 +103,14 @@ GEM
       oauth2 (~> 0.8.0)
       omniauth (~> 1.0)
     orm_adapter (0.4.0)
+    pg_array_parser (0.0.8)
     pg_array_parser (0.0.8-java)
     polyglot (0.3.3)
     postgres_ext (0.3.1)
       activerecord (~> 3.2.0)
       pg_array_parser (~> 0.0.8)
+    puma (2.0.1)
+      rack (>= 1.1, < 2.0)
     puma (2.0.1-java)
       rack (>= 1.1, < 2.0)
     rack (1.4.5)
@@ -131,7 +141,7 @@ GEM
     rake (10.0.4)
     rdoc (3.12.2)
       json (~> 1.4)
-    sass (3.2.8)
+    sass (3.2.9)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
@@ -150,17 +160,20 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.37)
-    uglifier (2.1.0)
+    uglifier (2.1.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
     warden (1.2.1)
       rack (>= 1.0)
+    zurb-foundation (4.1.6)
+      sass (>= 3.2.0)
 
 PLATFORMS
   java
 
 DEPENDENCIES
   activerecord-jdbcpostgresql-adapter
+  cells
   coffee-rails (~> 3.2.1)
   devise
   devise-i18n
@@ -169,6 +182,7 @@ DEPENDENCIES
   high_voltage
   jquery-rails
   kaminari
+  kramdown
   nokogiri
   omniauth-facebook
   postgres_ext
@@ -179,3 +193,4 @@ DEPENDENCIES
   sass-rails (~> 3.2.3)
   therubyrhino
   uglifier (>= 1.0.3)
+  zurb-foundation (~> 4.1.6)
