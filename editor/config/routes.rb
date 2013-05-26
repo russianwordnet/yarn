@@ -12,6 +12,8 @@ Yarn::Application.routes.draw do
     member do
       get :approve
       get :disapprove
+      get :history
+      get :revert
     end
   end
 

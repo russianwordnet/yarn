@@ -8,8 +8,7 @@ class Word < ActiveRecord::Base
   belongs_to :author, class_name: 'User'
   belongs_to :approver, class_name: 'User'
 
-  has_many :old_words, :order => :revision,
-    :inverse_of => :origin
+  has_many :old_words, order: 'revision DESC', :inverse_of => :origin
 
   has_many :synset_words
 
@@ -22,12 +21,21 @@ class Word < ActiveRecord::Base
       self.accents = new_word.accents
       self.uris = new_word.uris
       self.author_id = new_word.author_id
-      self.approved_at = self.approver_id = nil
+      self.approver_id = new_word.approver_id
+      self.approved_at = new_word.approved_at
       self.revision += 1
 
       return save.tap { |saved| old_word.save! if saved }
     end
-  end
+  end  
 
   validates :word, presence: true
+
+  def to_s
+    word
+  end
+
+  def approved?
+    approved_at && approver
+  end
 end

@@ -1,11 +1,12 @@
 # encoding: utf-8
 
 class WordsController < ApplicationController
-  before_filter :authenticate_user!, :except => [:index, :search, :approved, :show]
+  before_filter :authenticate_user!, :except => [:index, :search, :approved, :show, :history]
   before_filter :find_word, :except => [:index, :search, :approved]
   before_filter :set_top_bar_word, :except => [:index, :search, :approved]
   before_filter :extract_query, :only => :search
-  before_filter :track_word, :only => :update
+  before_filter :prepare_revert, :only => :revert
+  before_filter :track_word, :only => [:update, :revert]
 
   def index
     @words = Word.order(:word).page params[:page]
@@ -27,6 +28,9 @@ class WordsController < ApplicationController
   end
 
   def update
+    params[:word].delete :approver_id
+    params[:word].delete :approved_at
+
     if @word.update_from(@new_word)
       flash[:notice] = 'Слово обновлено.'
       redirect_to word_url(@word)
@@ -61,6 +65,20 @@ class WordsController < ApplicationController
     redirect_to word_url(@word)
   end
 
+  def history
+    @history = @word.old_words
+  end
+
+  def revert
+    if @word.update_from(@new_word)
+      flash[:notice] = 'Выполнен откат к предыдущей версии.'
+    else
+      flash[:alert] = 'Не получилось откатиться.'
+    end
+
+    redirect_to word_url(@word)
+  end
+
   protected
   def find_word
     @word = Word.find(params[:id])
@@ -77,6 +95,11 @@ class WordsController < ApplicationController
     end
 
     @query = params[:q].split.map! { |s| '%%%s%%' % s }.join ' '
+  end
+
+  def prepare_revert
+    word = OldWord.find_by_word_id_and_revision(@word, params[:revision])
+    params[:word] = HashWithIndifferentAccess.new(word.attributes)
   end
 
   def track_word

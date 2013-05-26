@@ -4,6 +4,9 @@ class OldWord < ActiveRecord::Base
   belongs_to :origin, class_name: 'Word', foreign_key: 'word_id',
     :inverse_of => :old_words
 
+  belongs_to :author, class_name: 'User'
+  belongs_to :approver, class_name: 'User'
+
   def self.from_word(word)
     old_word = word.old_words.build
     old_word.word = word.word
@@ -16,5 +19,13 @@ class OldWord < ActiveRecord::Base
     old_word.revision = word.revision
     old_word.created_at = word.updated_at
     return old_word
+  end
+
+  def to_s
+    word
+  end
+
+  def approved?
+    approved_at && approver
   end
 end
