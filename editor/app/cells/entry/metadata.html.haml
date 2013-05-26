@@ -4,7 +4,7 @@
     = @entry.revision
   %p
     %strong Автор:
-    = @entry.author ? link_to(@entry.author) : 'н/д'
+    = @entry.author ? link_to(@entry.author, '#') : 'н/д'
   %p
     %strong Обновлено:
     = @entry.updated_at.strftime('%H:%M:%S %d.%m.%Y')
@@ -14,5 +14,15 @@
       = @entry.approver
     - else
       нет
-  - if @history_uri
-    = link_to 'История изменений', @history_uri, class: 'button'
+- if @history_uri
+  .row
+    .large-12
+      = link_to 'История изменений', @history_uri, class: 'button expand'
+- if @approve_uri && !@entry.approved_at
+  .row
+    .large-12
+      = link_to 'Одобрить версию', @approve_uri, class: 'button expand'
+- if @edit_uri
+  .row
+    .large-12
+      = link_to 'Редактировать', @edit_uri, class: 'button expand'

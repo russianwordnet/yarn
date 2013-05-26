@@ -3,7 +3,7 @@ Yarn::Application.routes.draw do
     delete 'signout' => 'devise/sessions#destroy', :as => :destroy_user_session
   end
 
-  resources :words, only: [:index, :show] do
+  resources :words, except: [:new, :create, :destroy] do
     collection do
       get :search
     end

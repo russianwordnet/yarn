@@ -61,6 +61,20 @@
                   = link_to 'Тестовый вход', user_omniauth_authorize_path(:developer)
               %li= link_to 'Войти при помощи Facebook', user_omniauth_authorize_path(:facebook)
 
+  - if alert
+    .row
+      .large-12
+        .alert-box.alert{'data-alert' => true}
+          = alert
+          %a{class: 'close', href: '#'} &times;
+
+  - if notice
+    .row
+      .large-12
+        .alert-box{'data-alert' => true}
+          = notice
+          %a{class: 'close', href: '#'} &times;
+
   = yield
 
   %footer.row.full-width
