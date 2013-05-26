@@ -87,4 +87,7 @@
       %p &copy; YARN, 2012&ndash;2013
 
   = javascript_include_tag 'application'
+
+  - if Rails.env.production?
+    = render partial: 'layouts/metrika'
 </html>
