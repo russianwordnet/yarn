@@ -56,7 +56,8 @@
           - if user_signed_in?
             = link_to current_user, '#'
             %ul.dropdown
-              %li= link_to 'Выйти', destroy_user_session_path, :method => :delete
+              %li= link_to 'Профиль', profile_url
+              %li= link_to 'Выйти', destroy_user_session_url, :method => :delete
           - else
             = link_to 'Войти', '#'
             %ul.dropdown
