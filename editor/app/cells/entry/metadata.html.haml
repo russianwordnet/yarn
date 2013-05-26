@@ -8,11 +8,16 @@
   %p
     %strong Обновлено:
     = @entry.updated_at.strftime('%H:%M:%S %d.%m.%Y')
-  %p
-    %strong Утверждено:
-    - if @entry.approver_id && @entry.approved_at
-      = @entry.approver
-    - else
+  - if @entry.approver_id || @entry.approved_at
+    %p
+      %strong Утверждено (кем):
+      = @entry.approver ? link_to(@entry.approver, '#') : 'н/д'
+    %p
+      %strong Утверждено (когда):
+      = @entry.approved_at.strftime('%H:%M:%S %d.%m.%Y') rescue 'н/д'
+  - else
+    %p
+      %strong Утверждено:
       нет
 - if @history_uri
   .row
@@ -21,7 +26,11 @@
 - if @approve_uri && !@entry.approved_at
   .row
     .large-12
-      = link_to 'Одобрить версию', @approve_uri, class: 'button expand'
+      = link_to 'Утвердить версию', @approve_uri, class: 'button expand'
+- elsif @disapprove_uri && @entry.approved_at
+  .row
+    .large-12
+      = link_to 'Снять утвреждение версии', @disapprove_uri, class: 'button expand'
 - if @edit_uri
   .row
     .large-12

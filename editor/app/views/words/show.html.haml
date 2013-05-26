@@ -14,4 +14,7 @@
               - synset_word.samples.each do |sample|
                 %div= sample.text
   .large-4.columns
-    = render_cell :entry, :metadata, entry: @word, edit_uri: edit_word_url(@word)
+    = render_cell :entry, :metadata, entry: @word,
+      edit_uri: edit_word_url(@word),
+      approve_uri: approve_word_url(@word),
+      disapprove_uri: disapprove_word_url(@word)

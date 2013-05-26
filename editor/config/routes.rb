@@ -7,6 +7,11 @@ Yarn::Application.routes.draw do
     collection do
       get :search
     end
+
+    member do
+      get :approve
+      get :disapprove
+    end
   end
 
   resources :synsets, only: [:index, :show] do

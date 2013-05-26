@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class WordsController < ApplicationController
-  before_filter :authenticate_user!, :only => [:edit, :update]
+  before_filter :authenticate_user!, :except => [:index, :search, :show]
   before_filter :find_word, :except => [:index, :search]
   before_filter :set_top_bar_word, :except => [:index, :search]
   before_filter :extract_query, :only => :search
@@ -24,6 +24,31 @@ class WordsController < ApplicationController
       flash[:alert] = 'Не получилось обновить слово.'
       render action: 'edit'
     end
+  end
+
+  def approve
+    @word.approved_at = DateTime.now
+    @word.approver = current_user
+
+    if @word.save
+      flash[:notice] = 'Версия была утверждена.'
+    else
+      flash[:alert] = 'Не удалось утвердить версию.'
+    end
+
+    redirect_to word_url(@word)
+  end
+
+  def disapprove
+    @word.approved_at = @word.approver = nil
+
+    if @word.save
+      flash[:notice] = 'Утверждение версии снято.'
+    else
+      flash[:alert] = 'Не удалось снять утверждение версии.'
+    end
+
+    redirect_to word_url(@word)
   end
 
   protected
