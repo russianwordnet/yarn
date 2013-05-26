@@ -1,15 +1,6 @@
 //= require foundation_and_overrides
 //= require_tree .
 
-@media only screen {
-  h1 { text-align: center; }
-}
-
-@media only screen and (min-width: 48em) {
-  /*nav { margin-top: 1em; }*/
-  h1 { text-align: left; }
-}
-
 a {
   text-decoration: underline;
 }
