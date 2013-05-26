@@ -25,7 +25,11 @@
     %section.top-bar-section
       %ul.left
         %li.divider
-        = top_link_to 'Слова', words_url
+        %li.has-dropdown
+          %a{href: '#'} Слова
+          %ul.dropdown
+            %li= link_to 'Все слова', words_url
+            %li= link_to 'Утверждённые слова', approved_words_url
         %li.divider
         = top_link_to 'Синсеты', synsets_url
         %li.divider

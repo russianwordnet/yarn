@@ -6,6 +6,7 @@ Yarn::Application.routes.draw do
   resources :words, except: [:new, :create, :destroy] do
     collection do
       get :search
+      get :approved
     end
 
     member do

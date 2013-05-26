@@ -1,0 +1,17 @@
+.row
+  .large-12
+    %h2 Утверждённые слова
+    - if @words.any?
+      %table.large-12
+        %tr
+          %th{width: '40%'} Слово
+          %th{width: '30%'} Утвердил
+          %th{width: '30%'} Дата утверждения
+        - @words.each do |word|
+          %tr
+            %td.text-center= link_to word.word, word_url(word)
+            %td.text-center= word.approver ? link_to(word.approver, '#') : 'н/д'
+            %td.text-center= word.approved_at.strftime('%H:%M:%S %d.%m.%Y') rescue 'н/д'
+      = paginate @words
+    - else
+      %p Нет утверждённых слов.

@@ -1,9 +1,9 @@
 # encoding: utf-8
 
 class WordsController < ApplicationController
-  before_filter :authenticate_user!, :except => [:index, :search, :show]
-  before_filter :find_word, :except => [:index, :search]
-  before_filter :set_top_bar_word, :except => [:index, :search]
+  before_filter :authenticate_user!, :except => [:index, :search, :approved, :show]
+  before_filter :find_word, :except => [:index, :search, :approved]
+  before_filter :set_top_bar_word, :except => [:index, :search, :approved]
   before_filter :extract_query, :only => :search
   before_filter :track_word, :only => :update
 
@@ -14,6 +14,16 @@ class WordsController < ApplicationController
   def search
     field = Word.arel_table[:word]
     @words = Word.where(field.matches(@query)).page params[:page]
+  end
+
+  def approved
+    approver_id = Word.arel_table[:approver_id]
+    approved_at = Word.arel_table[:approved_at]
+
+    @words = Word.where(
+      approver_id.not_eq(nil),
+      approved_at.not_eq(nil)
+    ).order(:word).page params[:page]
   end
 
   def update
