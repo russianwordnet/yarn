@@ -26,3 +26,7 @@ a {
 ul {
   list-style-position: inside;
 }
+
+.highlight {
+  background-color: #2ba6cb;
+}

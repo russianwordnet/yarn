@@ -16,7 +16,7 @@
 
 %body
   %nav.top-bar
-    %ul.title-area
+    %ul.title-area.highlight
       %li.name
         %h1= link_to 'YARN', root_url
       %li.toggle-topbar.menu-icon
@@ -39,6 +39,14 @@
           = top_link_to 'Cинсет-слово №%d' % top_bar_synset_word.id, synset_word_url(top_bar_synset, top_bar_synset_word)
           %li.divider
       %ul.right
+        %li.divider.hide-for-small
+        %li.has-form
+          %form{action: search_words_url, method: 'get'}
+            .row.collapse
+              .small-8.columns
+                %input#search.expand{name: 'q', type: 'text', value: params[:q]}
+              .small-4.columns
+                %input.button.expand{type: 'submit', value: 'Слово'}
         %li.divider
         %li.has-dropdown
           - if user_signed_in?

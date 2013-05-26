@@ -1,0 +1,11 @@
+.row
+  .large-12
+    %h2= 'Слова по запросу "%s"' % params[:q]
+    - if @words.present?
+      %ul.small-block-grid-3
+        - @words.each do |word|
+          %li
+            = link_to word.word, word_url(word)
+      = paginate @words
+    - else
+      %p Слова не найдены.
