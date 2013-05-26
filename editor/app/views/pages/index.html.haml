@@ -17,3 +17,11 @@
         %li= link_to 'Список рассылки', 'https://groups.google.com/group/yarn_org/'
         %li= link_to 'Установка', 'http://nlpub.ru/wiki/YARN/Установка'
         %li= link_to 'Схема данных', 'http://nlpub.ru/wiki/YARN/Данные'
+      %h4 Статистика
+      %ul
+        %li
+          %strong Слов:
+          = Word.count
+        %li
+          %strong Синсетов:
+          = Synset.count
