@@ -1,0 +1,26 @@
+$('.word').text('<%= @word %>')
+
+var definitions = $('#definitions');
+definitions.empty();
+
+var synonymes = $('#synonymes');
+synonymes.empty();
+
+var synset_words = $('#synset_words');
+synset_words.empty();
+
+var synset_definitions = $('#synset_definitions');
+synset_definitions.empty();
+
+definitions.before($('<%= link_to('В синсет', editor_append_word_url(word_id: @word), remote: true, class: %w(button tiny)) %>'))
+
+<% if @definitions.empty? -%>
+  definitions.append($('<li>Определений не найдено.</li>'));
+<% end -%>
+
+<% @definitions.each do |definition| -%>
+  var node = $('<li>');
+  node.append('<%= link_to(definition, editor_synonymes_url(word_id: @word, definition_id: definition), remote: true) %>');
+  node.append($('<%= link_to('В синсет', editor_append_definition_url(definition_id: definition), remote: true, class: %w(button tiny)) %>'))
+  definitions.append(node);
+<% end -%>

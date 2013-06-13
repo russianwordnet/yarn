@@ -1,0 +1,29 @@
+.row.full-width
+  .large-2.columns
+    %form{action: editor_search_url, method: 'post', 'data-remote' => true}
+      .row.collapse
+        .small-8.columns
+          %input#search.expand{name: 'q', type: 'text', value: params[:q]}
+        .small-4.columns
+          %input.button.expand{type: 'submit', value: 'Слово'}
+    %ul#words
+      %li Введите что-нибудь для поиска.
+  .large-5.columns
+    .row
+      .large-12.columns
+        %h3
+          Слово
+          %span.word
+        %ul#definitions
+    .row
+      .large-12.columns
+        %h3 Синонимы
+        %ul#synonymes
+  .large-5.columns
+    .row
+      .large-12.columns
+        %h3 Текущий синсет
+        %h4 Слова
+        %ul#synset_words
+        %h4 Определения
+        %ul#synset_definitions
