@@ -14,6 +14,11 @@
         .large-8.columns
           = f.text_field :word, class: 'expand'
       .row
+        .large-4.columns
+          = f.label :grammar, 'Склонение:'
+        .large-8.columns
+          = f.text_field :grammar, class: 'expand'
+      .row
         .large-4.large-offset-8
           = f.submit 'Отправить', class: %w(button expand)
   .large-4.columns
