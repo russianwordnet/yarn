@@ -94,7 +94,7 @@ class WordsController < ApplicationController
       return false
     end
 
-    @query = params[:q].split.map! { |s| '%%%s%%' % s }.join ' '
+    @query = params[:q].split.map! { |s| '%s%%' % s }.join ' '
   end
 
   def prepare_revert
