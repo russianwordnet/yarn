@@ -32,7 +32,14 @@ end
 
 group :development do
   gem 'railroady'
+end
+
+group :test do
   gem 'rspec-rails'
+  gem 'database_cleaner'
+  gem 'shoulda-matchers'
+  gem 'factory_girl'
+  gem 'faker'
 end
 
 gem 'jquery-rails'
