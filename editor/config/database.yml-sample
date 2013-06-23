@@ -31,7 +31,7 @@ test:
   encoding: unicode
   database: yarn_test
   username: yarn
-  password:
+  password: yarn
 
 production:
   adapter: postgresql
