@@ -1,4 +1,4 @@
-<h1>Синсет-слово №<%= @synset_word.id %></h1>
+<%= heading_with_title "Синсет-слово №#{@synset_word.id}" %>
 
 <% if @synset_word.samples_ids.size > 0 %>
   <h3>Примеры <span class="badge"><%= @synset_word.samples_ids.size %></span></h3>

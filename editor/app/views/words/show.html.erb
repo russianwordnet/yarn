@@ -1,33 +1,6 @@
-<h1>Слово <%= title_word(@word) %></h1>
+<%= heading_with_title raw "Слово #{title_word(@word)}" %>
 
-<% if @word.synset_words.size > 0 %>
-  <h3>Связанные синсеты <span class="badge"><%= @word.synset_words.size %></span></h3>
-  <table class="table table-bordered table-striped">
-    <tr>
-      <th>Синсет</th>
-      <th>Пример</th>
-    </tr>
-
-    <% @word.synset_words.each do |synset_word| %>
-      <% synset_word.synsets.each do |synset|%>
-      <tr>
-        <td><%= link_to synset.id, synset_path(synset) %></td>
-        <td>
-          <% if synset_word.samples_ids.size > 0%>
-            <% synset_word.samples.each do |sample| %>
-              <div><%= sample.text %></div>
-            <% end %>
-          <% else %>
-            &mdash;
-          <% end %>
-        </td>
-      </tr>
-      <% end %>
-    <% end %>
-  </table>
-<% else %>
-  <p>Ещё нет ни одного связанного синсета.</p>
-<% end %>
+<%= render 'words/synsets', :word => @word %>
 
 <%= render_cell :entry, :metadata, entry: @word,
   edit_uri: edit_word_url(@word),
