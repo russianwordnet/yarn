@@ -10,7 +10,7 @@ class EditorController < ApplicationController
 
     respond_to do |format|
       format.xml { render xml: @words }
-      format.js { render json: @words }
+      format.json { render json: @words }
     end
   end
 
@@ -21,7 +21,7 @@ class EditorController < ApplicationController
 
     respond_to do |format|
       format.xml { render xml: @definitions }
-      format.js { render json: @definitions }
+      format.json { render json: @definitions }
     end
   end
 
@@ -42,7 +42,7 @@ class EditorController < ApplicationController
 
     respond_to do |format|
       format.xml { render xml: @synonymes }
-      format.js { render json: @synonymes }
+      format.json { render json: @synonymes }
     end
   end
 
