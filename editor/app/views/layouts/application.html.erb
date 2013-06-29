@@ -29,21 +29,21 @@
   <%= flash_messages %>
 
   <div class="container" id="container">
-    <%= link_to user_omniauth_authorize_path(:facebook), :id => 'facebook-auth' do %>
-      <i class="icon icon-user"></i>&nbsp;Войти при помощи Facebook
-    <% end %>
+    <%= render 'shared/userbar' %>
 
-    <div class="row-fluid">
-      <aside class="span3" id="sidebar">
-        <h1 id="yarn-logo"><%= link_to 'Yarn', root_path %></h1>
+    <div id="main-content">
+      <div class="row-fluid">
+        <aside class="span3" id="sidebar">
+          <h1 id="yarn-logo"><%= link_to 'Yarn', root_path %></h1>
 
-        <%= render 'shared/search' %>
-        <%= render 'shared/navigation' %>
-      </aside>
-      <div class="span9">
-        <article>
-          <%= yield %>
-        </article>
+          <%= render 'shared/search' %>
+          <%= render 'shared/navigation' %>
+        </aside>
+        <div class="span9">
+          <article>
+            <%= yield %>
+          </article>
+        </div>
       </div>
     </div>
 
@@ -53,6 +53,9 @@
   <footer id="footer">
     <div class="container">&copy;&nbsp;YARN,&nbsp;2012&ndash;<%= Time.now.utc.year %></p></div>
   </footer>
+
+  <%= javascript_include_tag 'application' %>
+  <%= render 'shared/metrika' if Rails.env.production? %>
 </body>
 </html>
     
