@@ -7,12 +7,22 @@ class EditorController < ApplicationController
   def search
     field = Word.arel_table[:word]
     @words = Word.where(field.matches(@query)).order('word').page params[:page]
+
+    respond_to do |format|
+      format.xml { render xml: @words }
+      format.js { render json: @words }
+    end
   end
 
-  def word
+  def definitions
     @word = Word.find(params[:word_id])
     @synsets = @word.synset_words.map(&:synsets).flatten.uniq
     @definitions = @synsets.map(&:definitions).flatten.uniq
+
+    respond_to do |format|
+      format.xml { render xml: @definitions }
+      format.js { render json: @definitions }
+    end
   end
 
   def synonymes
@@ -28,6 +38,11 @@ class EditorController < ApplicationController
       synsets = synonym.synset_words.map(&:synsets).flatten.uniq
       hash[synonym] = synsets.map(&:definitions).flatten.uniq
       hash
+    end
+
+    respond_to do |format|
+      format.xml { render xml: @synonymes }
+      format.js { render json: @synonymes }
     end
   end
 

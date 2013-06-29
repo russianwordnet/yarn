@@ -30,7 +30,7 @@ Yarn::Application.routes.draw do
 
   namespace :editor do
     post 'search', :as => :search
-    get 'word', :as => :word
+    get 'definitions', :as => :definitions
     get 'synonymes', :as => :synonymes
     get 'append_word', :as => :append_word
     get 'append_definition', :as => :append_definition
