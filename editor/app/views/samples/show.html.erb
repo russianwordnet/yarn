@@ -1,0 +1,14 @@
+<%= heading_with_title "Пример №#{@sample.id}" %>
+
+<dl>
+  <dt>Текст</dt>
+  <dd><%= @sample.text %></dd>
+
+  <dt>Источник</dt>
+  <dd><%= @sample.source || 'н/д' %></dd>
+
+  <dt>URI</dt>
+  <dd><%= @sample.uri ? link_to(@sample.uri, @sample.uri) : 'н/д' %></dd>
+</dl>
+
+<%= render_cell :entry, :metadata, entry: @sample %>

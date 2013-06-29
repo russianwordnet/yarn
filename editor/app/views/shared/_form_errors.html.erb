@@ -1,0 +1,11 @@
+<% if f.object.errors.any? %>
+  <h3>Возникшие ошибки</h3>
+  <div class="alert alert-error">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <ul>
+      <% f.object.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

@@ -1,0 +1,27 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <%= csrf_meta_tag %>
+
+  <title><%= page_title %></title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <script>
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'js')
+  </script>
+
+  <%= stylesheet_link_tag "application", :media => :screen  %>
+</head>
+<body>
+
+  <%= flash_messages %>
+
+  <div class="container" id="container">
+    <%= render 'shared/userbar' %>
+
+    <div id="main-content">
+      <div class="row-fluid">

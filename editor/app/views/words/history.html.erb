@@ -1,0 +1,44 @@
+<%= heading_with_title raw "История изменений слова #{title_word(@word)}" %>
+
+<% if @history.any? %>
+  <table class="table table-bordered table-striped">
+    <tr>
+      <th>Версия</th>
+      <th>Автор</th>
+      <th>Дата</th>
+      <th>Слово</th>
+      <th>Утв.?</th>
+      <th>Действие</th>
+    </tr>
+
+    <tr>
+      <td><%= @word.revision %></td>
+      <td><%= @word.author ? link_to(@word.author, '#') : 'н/д' %></td>
+      <td><%= @word.updated_at.strftime('%H:%M:%S %d.%m.%Y') %></td>
+      <td><%= @word %></td>
+      <td><%= @word.approved? ? 'да' : 'нет' %></td>
+      <td>(нет)</td>
+    </tr>
+
+    <tr>
+      <% @history.each do |old_word| %>
+        <td><%= old_word.revision %></td>
+        <td><%= old_word.author ? link_to(old_word.author, '#') : 'н/д' %></td>
+        <td><%= old_word.created_at.strftime('%H:%M:%S %d.%m.%Y') %></td>
+        <td><%= old_word %></td>
+        <td><%= old_word.approved? ? 'да' : 'нет' %></td>
+        <td>
+          <%= link_to 'Откатиться',
+            revert_word_url(@word, revision: old_word.revision),
+            class: %w(btn btn-small)
+          %>
+        </td>
+      <% end %>
+    </tr>
+  </table>
+<% else %>
+  <p>Нет истории изменений.</p>
+<% end %>
+
+<%= render_cell :entry, :metadata, entry: @word %>
+    

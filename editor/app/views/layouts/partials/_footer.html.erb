@@ -1,0 +1,13 @@
+      </div>
+    </div>
+
+    <div id="footer-gap"></div>
+  </div>
+
+  <footer id="footer">
+    <div class="container">&copy;&nbsp;YARN,&nbsp;2012&ndash;<%= Time.now.utc.year %></p></div>
+  </footer>
+
+  <%= javascript_include_tag 'application' %>
+  <%= render 'shared/metrika' if Rails.env.production? %>
+</body>

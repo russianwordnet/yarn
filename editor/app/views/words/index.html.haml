@@ -1,8 +1,0 @@
-.row
-  .large-12.columns
-    %h2 Слова
-    %ul.small-block-grid-3
-      - @words.each do |word|
-        %li
-          = link_to word.word, word_url(word)
-    = paginate @words
