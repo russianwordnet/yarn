@@ -1,0 +1,10 @@
+<%= heading_with_title raw "Слово #{title_word(@word)}" %>
+
+<%= render 'words/synsets', :word => @word %>
+
+<%= render_cell :entry, :metadata, entry: @word,
+  edit_uri: edit_word_url(@word),
+  approve_uri: approve_word_url(@word),
+  disapprove_uri: disapprove_word_url(@word),
+  history_uri: history_word_url(@word)
+%>

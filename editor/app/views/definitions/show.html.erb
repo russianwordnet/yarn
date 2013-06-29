@@ -1,0 +1,14 @@
+<%= heading_with_title "Определение №#{@definition.id}" %>
+
+<dl>
+  <dt>Текст</dt>
+  <dd><%= @definition.text %></dd>
+
+  <dt>Источник</dt>
+  <dd><%= @definition.source || 'н/д' %></dd>
+
+  <dt>URI</dt>
+  <dd><%= @definition.uri ? link_to(@definition.uri, @definition.uri) : 'н/д' %></dd>
+</dl>
+
+<%= render_cell :entry, :metadata, entry: @definition %>

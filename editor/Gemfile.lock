@@ -14,6 +14,8 @@ GEM
       rack-cache (~> 1.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.2.1)
+    active_link_to (1.0.1)
+      actionpack
     activemodel (3.2.12)
       activesupport (= 3.2.12)
       builder (~> 3.0.0)
@@ -35,10 +37,16 @@ GEM
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
     bcrypt-ruby (3.0.1-java)
+    bootstrap-sass (2.3.2.0)
+      sass (~> 3.2)
     builder (3.0.4)
+    ceaser-easing (0.7)
+      compass (>= 0.12.2)
+      rake
     cells (3.8.8)
       actionpack (>= 3.0)
       railties (>= 3.0)
+    chunky_png (1.2.8)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -46,6 +54,12 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.2)
+    compass (0.12.2)
+      chunky_png (~> 1.2)
+      fssm (>= 0.2.7)
+      sass (~> 3.1)
+    compass-rails (1.0.3)
+      compass (>= 0.12.2, < 0.14)
     database_cleaner (1.0.1)
     devise (2.2.4)
       bcrypt-ruby (~> 3.0)
@@ -68,6 +82,7 @@ GEM
       multipart-post (~> 1.1)
     foreigner (1.4.2)
       activerecord (>= 3.0.0)
+    fssm (0.2.10)
     haml (4.0.3)
       tilt
     hashie (2.0.5)
@@ -190,16 +205,19 @@ GEM
       multi_json (~> 1.0, >= 1.0.2)
     warden (1.2.1)
       rack (>= 1.0)
-    zurb-foundation (4.1.6)
-      sass (>= 3.2.0)
 
 PLATFORMS
   java
+  ruby
 
 DEPENDENCIES
+  active_link_to
   activerecord-jdbcpostgresql-adapter
+  bootstrap-sass (~> 2.3.2.0)
+  ceaser-easing
   cells
   coffee-rails (~> 3.2.1)
+  compass-rails (= 1.0.3)
   database_cleaner
   devise
   devise-i18n
@@ -223,4 +241,3 @@ DEPENDENCIES
   shoulda-matchers
   therubyrhino
   uglifier (>= 1.0.3)
-  zurb-foundation (~> 4.1.6)

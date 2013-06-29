@@ -1,0 +1,22 @@
+<%= heading_with_title "Синсет-слово №#{@synset_word.id}" %>
+
+<% if @synset_word.samples_ids.size > 0 %>
+  <h3>Примеры <span class="badge"><%= @synset_word.samples_ids.size %></span></h3>
+  <table class="table table-bordered table-striped">
+    <tr>
+      <th>Определение</th>
+      <th>Источник</th>
+    </tr>
+
+    <% @samples.each do |sample| %>
+      <tr>
+        <td><%= link_to sample.text, synset_word_sample_url(@synset, @synset_word, sample) %></td>
+        <td><%= link_to_unless !sample.uri, sample.source || 'источник', sample.uri %></td>
+      </tr>
+    <% end %>
+  </table>
+
+  <%= render_cell :entry, :metadata, entry: @synset_word %>
+<% else %>
+  <p>Ещё нет ни одного примера.</p>
+<% end %>

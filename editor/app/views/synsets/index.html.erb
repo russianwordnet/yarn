@@ -1,0 +1,12 @@
+<%= heading_with_title "Синсеты" %>
+
+<ul class="triple-columns">
+  <% @synsets.each do |synset| %>
+    <li>
+      <%= link_to synset.id, synset_path(synset) %>
+      <%= synset_words(synset) %>
+    </li>
+  <% end %>
+</ul>
+
+<%= paginate @synsets %>

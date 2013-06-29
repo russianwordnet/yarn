@@ -1,0 +1,14 @@
+<%= with_header_and_footer do %>
+  <aside class="span3" id="sidebar">
+    <h1 id="yarn-logo"><%= link_to 'Yarn', root_path %></h1>
+
+    <%= render 'shared/search' %>
+    <%= render 'shared/navigation' %>
+  </aside>
+  <div class="span9">
+    <article>
+      <%= yield %>
+    </article>
+  </div>
+<% end %>
+    
