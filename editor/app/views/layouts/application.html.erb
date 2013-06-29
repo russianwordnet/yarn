@@ -1,0 +1,58 @@
+<!DOCTYPE html><!--[if lt IE 7 ]> <html class="ie6 no-js" lang="ru"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7 no-js" lang="ru"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8 no-js" lang="ru"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9 no-js" lang="ru"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html class="no-js" lang="ru"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <%= csrf_meta_tag %>
+
+  <title><%= content_for?(:title) ? yield(:title) : 'Yet Another RussNet' %></title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <script>
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'js')
+  </script>
+
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <%= stylesheet_link_tag "application", :media => :screen  %>
+</head>
+<body>
+  <%= flash_messages %>
+
+  <div class="container" id="container">
+    <%= link_to user_omniauth_authorize_path(:facebook), :id => 'facebook-auth' do %>
+      <i class="icon icon-user"></i>&nbsp;Войти при помощи Facebook
+    <% end %>
+
+    <div class="row-fluid">
+      <aside class="span3" id="sidebar">
+        <h1 id="yarn-logo"><%= link_to 'Yarn', root_path %></h1>
+
+        <%= render 'shared/search' %>
+        <%= render 'shared/navigation' %>
+      </aside>
+      <div class="span9">
+        <article>
+          <%= yield %>
+        </article>
+      </div>
+    </div>
+
+    <div id="footer-gap"></div>
+  </div>
+
+  <footer id="footer">
+    <div class="container">&copy;&nbsp;YARN,&nbsp;2012&ndash;<%= Time.now.utc.year %></p></div>
+  </footer>
+</body>
+</html>
+    

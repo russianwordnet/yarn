@@ -1,0 +1,9 @@
+<h1>Слова</h1>
+
+<ul class="triple-columns">
+  <% @words.each do |word| %>
+    <li><%= link_to word.word, word_path(word) %></li>
+  <% end %>
+</ul>
+
+<%= paginate @words %>

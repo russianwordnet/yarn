@@ -1,0 +1,23 @@
+<h1>Утверждённые слова</h1>
+
+<% if @words.any? %>
+  <table class="table table-bordered table-striped">
+    <tr>
+      <th>Слово</th>
+      <th>Утвердил</th>
+      <th>Дата утверждения</th>
+    </tr>
+
+    <% @words.each do |word| %>
+    <tr>
+      <td><%= link_to word.word, word_path(word) %></td>
+      <td><%= word.approver ? link_to(word.approver, '#') : 'н/д' %></td>
+      <td><%= word.approved_at.strftime('%H:%M:%S %d.%m.%Y') rescue 'н/д' %></td>
+    </tr>
+    <% end %>
+  </table>
+
+  <%= paginate @words %>
+<% else %>
+  <p>Нет утверждённых слов.</p>
+<% end %>

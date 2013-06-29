@@ -1,0 +1,8 @@
+<ul class="nav nav-list">
+  <%= active_link_to 'Главная страница', root_path, :wrap_tag => :li, :active => :exclusive %>
+  <li class="divider"></li>
+  <%= active_link_to 'Все слова', words_path, :wrap_tag => :li, :active => :exclusive %>
+  <%= active_link_to 'Утверждённые слова', approved_words_path, :wrap_tag => :li %>
+  <li class="divider"></li>
+  <%= active_link_to 'Синсеты', synsets_path, :wrap_tag => :li %>
+</ul>
