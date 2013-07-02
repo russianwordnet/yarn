@@ -1,11 +1,15 @@
 <div id="userbar">
   <% if user_signed_in? %>
-    <%= link_to current_user, '#' %>
-    <%= link_to 'Профиль', profile_path %>
-    <%= link_to 'Выйти', destroy_user_session_path, :method => :delete %>
+    <%= link_to profile_path, :title => 'Профиль' do %>
+      <i class="icon icon-user"></i>&nbsp;<%= current_user %>
+    <% end %>
+
+    <%= link_to destroy_user_session_path, :method => :delete, :confirm => 'Завершить работу?' do %>
+      <i class="icon icon-remove-circle"></i>&nbsp;Выйти
+    <% end %>
   <% else %>
     <% unless Rails.env.production? %>
-      <%= link_to 'Тестовый вход', user_omniauth_authorize_path(:developer) %>&nbsp;или&nbsp;
+      <%= link_to 'Тестовый вход', user_omniauth_authorize_path(:developer) %>
     <% end %>
 
     <%= link_to user_omniauth_authorize_path(:facebook), :id => 'facebook-auth' do %>
