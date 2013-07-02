@@ -10,12 +10,14 @@ $linkColor: shade($base-blue, 10%);
 $linkColorHover: $base-blue;
 
 @import "bootstrap";
-@ipmort "normalize";
+@import "bootstrap-responsive";
+@import "normalize";
 @import "compass";
 @import "compass/css3/transition";
 @import "compass/layout/sticky-footer";
 @import "compass/utilities/lists/bullets";
 @import "ceaser-easing";
+@import "editor";
 
 // Fonts
 @import url(http://fonts.googleapis.com/css?family=Courgette);
@@ -66,22 +68,55 @@ ul.triple-columns {
   }
 }
 
+.yarn-logo {
+  text-align: center;
+  height: 140px;
+
+  a {
+    @include border-radius(50%);
+    background-color: $base-gray;
+    width: $logo-size;
+    height: $logo-size;
+    padding: $logo-padding;
+    vertical-align: middle;
+    line-height: $logo-size;
+    text-align: center;
+    color: #fff;
+    display: inline-block;
+    margin-top: 0;
+    font-family: 'Courgette', 'Times New Roman';
+    font-size: 120%;
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+      @include single-transition(all, 0.2s, ceaser($easeInOutExpo), 0);
+      padding: $logo-padding + 10px;
+      margin-top: -($logo-padding/2);
+      font-size: 140%;
+      background-color: $base-blue;
+    }
+  }
+}
+
 body {
-  @include sticky-footer(60px, "#container", "#footer-gap", "#footer");
+  @include sticky-footer(60px, "main", "#footer-gap", "#footer");
   background: $bgcolor asset-url("body_bg.gif", image);
   font-family: 'PT Sans Narrow', Arial;
+  font-size: 100%;
 
   #project-intro {
     @include text-shadow(0 1px 1px #fff);
     font-family: 'PT Sans Narrow', 'Arial Narrow', Arial;
-    font-size: 170%;
+    font-size: 160%;
     line-height: 28px;
     padding: 13px 0 33px 0;
     color: #333;
     text-align: center;
   }
 
-  #container {
+  main {
+    @extend .container;
     position: relative;
 
     #userbar {
@@ -89,6 +124,12 @@ body {
       right: 4px;
       top: 4px;
       color: #555;
+      font-size: 90%;
+
+      a, span {
+        display: inline-block;
+        margin-left: 15px;
+      }
     }
 
     #main-content {
@@ -107,7 +148,7 @@ body {
         background-size: 10px 1px;
         background-repeat: repeat-x;
 
-        &.btn {
+        &.btn, &.no-underline {
           @include background-image(none);
         }
       }
@@ -184,7 +225,10 @@ body {
       margin: 45px 0 20px;
 
       input {
-        width: 190px;
+        @include box-sizing(border-box);
+        width: 100%;
+        padding-top: 14px;
+        padding-bottom: 14px;
       }
 
       button {
@@ -202,34 +246,12 @@ body {
       padding: 7px 15px
     }
 
-    #yarn-logo {
+    #editor-btn {
       text-align: center;
-      height: 140px;
+      margin-top: 30px;
 
       a {
-        @include border-radius(50%);
-        background-color: $base-gray;
-        width: $logo-size;
-        height: $logo-size;
-        padding: $logo-padding;
-        vertical-align: middle;
-        line-height: $logo-size;
-        text-align: center;
-        color: #fff;
         display: inline-block;
-        margin-top: 0;
-        font-family: 'Courgette', 'Times New Roman';
-        font-size: 120%;
-        font-weight: bold;
-        text-decoration: none;
-
-        &:hover {
-          @include single-transition(all, 0.2s, ceaser($easeInOutExpo), 0);
-          padding: $logo-padding + 10px;
-          margin-top: -($logo-padding/2);
-          font-size: 140%;
-          background-color: $base-blue;
-        }
       }
     }
   }

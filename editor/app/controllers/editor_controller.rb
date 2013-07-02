@@ -1,4 +1,5 @@
 class EditorController < ApplicationController
+  layout 'editor'
   before_filter :extract_query, :only => :search
 
   def index
