@@ -1,0 +1,45 @@
+#editor-ui {
+  position:relative;
+
+  .yarn-logo {
+    height: 60px;
+    position: absolute;
+    top: -26px;
+    left: -56px;
+
+    a {
+      width: 50px;
+      height: 50px;
+      font-size: 60%;
+      padding: 10px;
+      line-height: 54px;
+
+      &:hover {
+        padding: 10 + 7px;
+        margin-top: -(10/2);
+        font-size: 80%;
+      }
+    }
+
+    &:hover {
+      @include single-transition(all, 0.2s, ceaser($easeInOutExpo), 0);
+      left: -62px;
+    }
+  }
+
+  #searchbar {
+    min-height: auto;
+    padding: 15px;
+    margin-bottom: 20px;
+
+    form {
+      margin: 0 auto;
+      width: 400px;
+      display: block;
+
+      input {
+        width: 320px;
+      }
+    }
+  }
+}
