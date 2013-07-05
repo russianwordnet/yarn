@@ -1,18 +1,7 @@
 <%= heading_with_title raw "Редактирование слова #{title_word(@word)}" %>
 
 <%= form_for @word do |f| %>
-  <%= render 'shared/form_errors', :f => f %>
-  <div>
-    <%= f.label :word, 'Слово:' %>
-    <%= f.text_field :word %>
-  </div>
-  <div>
-    <%= f.label :grammar, 'Склонение:' %>
-    <%= f.text_field :grammar %>
-  </div>
-  <div>
-    <%= f.submit 'Отправить', class: %w(btn btn-large) %>
-  </div>
+  <%= render 'form', f: f %>
 <% end %>
 
 <%= render_cell :entry, :metadata, entry: @word %>

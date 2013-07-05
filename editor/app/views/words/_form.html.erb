@@ -1,0 +1,12 @@
+<%= render 'shared/form_errors', :f => f %>
+<div>
+  <%= f.label :word, 'Слово:' %>
+  <%= f.text_field :word %>
+</div>
+<div>
+  <%= f.label :grammar, 'Склонение:' %>
+  <%= f.text_field :grammar %>
+</div>
+<div>
+  <%= f.submit 'Отправить', class: %w(btn btn-large) %>
+</div>

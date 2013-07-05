@@ -2,7 +2,7 @@
 
 class WordsController < ApplicationController
   before_filter :authenticate_user!, :except => [:index, :search, :approved, :show, :history]
-  before_filter :find_word, :except => [:index, :search, :approved]
+  before_filter :find_word, :except => [:index, :search, :approved, :new, :create]
   before_filter :set_top_bar_word, :except => [:index, :search, :approved]
   before_filter :extract_query, :only => :search
   before_filter :prepare_revert, :only => :revert
@@ -25,6 +25,22 @@ class WordsController < ApplicationController
       approver_id.not_eq(nil),
       approved_at.not_eq(nil)
     ).order(:word).page params[:page]
+  end
+
+  def new
+    @word = Word.new
+  end
+
+  def create
+    @word = Word.new(params[:word])
+
+    if @word.save
+      flash[:notice] = 'Слово добавлено.'
+      redirect_to word_url(@word)
+    else
+      flash[:alert] = 'Не получилось добавить слово.'
+      render action: 'new'
+    end
   end
 
   def update

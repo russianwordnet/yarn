@@ -1,5 +1,7 @@
 <%= heading_with_title "Слова" %>
 
+<%= link_to 'Добавить слово', new_word_path %>
+
 <ul class="triple-columns">
   <% @words.each do |word| %>
     <li><%= link_to word.word, word_path(word) %></li>

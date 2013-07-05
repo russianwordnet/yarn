@@ -5,7 +5,7 @@ Yarn::Application.routes.draw do
 
   resource :profile, controller: 'users', only: [:show]
 
-  resources :words, except: [:new, :create, :destroy] do
+  resources :words, except: [:destroy] do
     collection do
       get :search
       get :approved
