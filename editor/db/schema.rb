@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130414223407) do
+ActiveRecord::Schema.define(:version => 20130705092512) do
 
   create_table "current_definitions", :force => true do |t|
     t.integer  "author_id"
@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(:version => 20130414223407) do
     t.integer  "revision",    :default => 1
     t.integer  "accents",     :default => [],                 :array => true
     t.string   "uris",        :default => [],                 :array => true
+    t.integer  "frequency",   :default => 0,  :null => false
   end
 
   add_index "current_words", ["accents"], :name => "index_current_words_on_accents"
@@ -115,6 +116,7 @@ ActiveRecord::Schema.define(:version => 20130414223407) do
   add_index "current_words", ["approver_id"], :name => "index_current_words_on_approver_id"
   add_index "current_words", ["author_id"], :name => "index_current_words_on_author_id"
   add_index "current_words", ["deleted_at"], :name => "index_current_words_on_deleted_at"
+  add_index "current_words", ["frequency"], :name => "index_current_words_on_frequency"
   add_index "current_words", ["grammar"], :name => "index_current_words_on_grammar"
   add_index "current_words", ["revision"], :name => "index_current_words_on_revision"
   add_index "current_words", ["uris"], :name => "index_current_words_on_uris"
@@ -235,6 +237,7 @@ ActiveRecord::Schema.define(:version => 20130414223407) do
     t.integer  "word_id",                     :null => false
     t.integer  "accents",     :default => [],                 :array => true
     t.string   "uris",        :default => [],                 :array => true
+    t.integer  "frequency",   :default => 0,  :null => false
   end
 
   add_index "words", ["accents"], :name => "index_words_on_accents"
@@ -242,6 +245,7 @@ ActiveRecord::Schema.define(:version => 20130414223407) do
   add_index "words", ["approver_id"], :name => "index_entries_on_approver_id"
   add_index "words", ["author_id"], :name => "index_entries_on_author_id"
   add_index "words", ["deleted_at"], :name => "index_entries_on_deleted_at"
+  add_index "words", ["frequency"], :name => "index_words_on_frequency"
   add_index "words", ["grammar"], :name => "index_entries_on_grammar"
   add_index "words", ["revision"], :name => "index_entries_on_revision"
   add_index "words", ["uris"], :name => "index_words_on_uris"
