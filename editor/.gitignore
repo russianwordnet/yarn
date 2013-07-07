@@ -28,3 +28,6 @@
 .ruby-gemset
 .ruby-version
 .rvmrc
+
+# Do not include the Rails documentation
+/doc/api
