@@ -7,7 +7,8 @@ class EditorController < ApplicationController
 
   def search
     field = Word.arel_table[:word]
-    @words = Word.where(field.matches(@query)).order('word').page params[:page]
+    @words = Word.where(field.matches(@query)).
+      order('frequency DESC', 'word').page params[:page]
 
     respond_to do |format|
       format.xml { render xml: @words }
