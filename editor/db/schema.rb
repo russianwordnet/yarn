@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130705092512) do
+ActiveRecord::Schema.define(:version => 20130707204128) do
 
   create_table "current_definitions", :force => true do |t|
     t.integer  "author_id"
@@ -145,6 +145,47 @@ ActiveRecord::Schema.define(:version => 20130705092512) do
   add_index "definitions", ["source"], :name => "index_definitions_on_source"
   add_index "definitions", ["uri"], :name => "index_definitions_on_uri"
 
+  create_table "raw_samples", :force => true do |t|
+    t.string   "text",       :null => false
+    t.string   "source"
+    t.string   "uri"
+    t.integer  "author_id",  :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "raw_samples", ["author_id"], :name => "index_raw_samples_on_author_id"
+  add_index "raw_samples", ["source"], :name => "index_raw_samples_on_source"
+  add_index "raw_samples", ["uri"], :name => "index_raw_samples_on_uri"
+
+  create_table "raw_synset_words", :force => true do |t|
+    t.integer  "word_id",                     :null => false
+    t.string   "nsg"
+    t.string   "marks",       :default => [], :null => false, :array => true
+    t.integer  "samples_ids", :default => [], :null => false, :array => true
+    t.integer  "author_id",                   :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
+
+  add_index "raw_synset_words", ["author_id"], :name => "index_raw_synset_words_on_author_id"
+  add_index "raw_synset_words", ["marks"], :name => "index_raw_synset_words_on_marks"
+  add_index "raw_synset_words", ["nsg"], :name => "index_raw_synset_words_on_nsg"
+  add_index "raw_synset_words", ["samples_ids"], :name => "index_raw_synset_words_on_samples_ids"
+  add_index "raw_synset_words", ["word_id"], :name => "index_raw_synset_words_on_word_id"
+
+  create_table "raw_synsets", :force => true do |t|
+    t.integer  "words_ids",       :default => [], :null => false, :array => true
+    t.integer  "definitions_ids", :default => [], :null => false, :array => true
+    t.integer  "author_id",                       :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+  end
+
+  add_index "raw_synsets", ["author_id"], :name => "index_raw_synsets_on_author_id"
+  add_index "raw_synsets", ["definitions_ids"], :name => "index_raw_synsets_on_definitions_ids"
+  add_index "raw_synsets", ["words_ids"], :name => "index_raw_synsets_on_words_ids"
+
   create_table "samples", :force => true do |t|
     t.integer  "author_id"
     t.integer  "approver_id"
@@ -271,6 +312,13 @@ ActiveRecord::Schema.define(:version => 20130705092512) do
   add_foreign_key "definitions", "current_definitions", :name => "definitions_definition_id_fk", :column => "definition_id", :dependent => :delete
   add_foreign_key "definitions", "users", :name => "definitions_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "definitions", "users", :name => "definitions_author_id_fk", :column => "author_id", :dependent => :delete
+
+  add_foreign_key "raw_samples", "users", :name => "raw_samples_author_id_fk", :column => "author_id", :dependent => :delete
+
+  add_foreign_key "raw_synset_words", "current_words", :name => "raw_synset_words_word_id_fk", :column => "word_id", :dependent => :delete
+  add_foreign_key "raw_synset_words", "users", :name => "raw_synset_words_author_id_fk", :column => "author_id", :dependent => :delete
+
+  add_foreign_key "raw_synsets", "users", :name => "raw_synsets_author_id_fk", :column => "author_id", :dependent => :delete
 
   add_foreign_key "samples", "current_samples", :name => "samples_sample_id_fk", :column => "sample_id", :dependent => :delete
   add_foreign_key "samples", "users", :name => "samples_approver_id_fk", :column => "approver_id", :dependent => :delete
