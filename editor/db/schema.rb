@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130708211227) do
+ActiveRecord::Schema.define(:version => 20130708230012) do
 
   create_table "current_definitions", :force => true do |t|
     t.integer  "author_id"
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(:version => 20130708211227) do
     t.datetime "approved_at"
     t.integer  "revision",    :default => 1, :null => false
     t.text     "text",                       :null => false
-    t.string   "source"
+    t.text     "source"
     t.string   "uri"
     t.datetime "updated_at"
     t.datetime "deleted_at"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(:version => 20130708211227) do
     t.datetime "approved_at"
     t.integer  "revision",    :default => 1, :null => false
     t.text     "text",                       :null => false
-    t.string   "source"
+    t.text     "source"
     t.string   "uri"
     t.datetime "updated_at"
     t.datetime "deleted_at"
@@ -128,7 +128,7 @@ ActiveRecord::Schema.define(:version => 20130708211227) do
     t.datetime "approved_at"
     t.integer  "revision",      :default => 1, :null => false
     t.text     "text",                         :null => false
-    t.string   "source"
+    t.text     "source"
     t.string   "uri"
     t.integer  "definition_id",                :null => false
     t.datetime "created_at"
@@ -147,7 +147,7 @@ ActiveRecord::Schema.define(:version => 20130708211227) do
 
   create_table "raw_samples", :force => true do |t|
     t.text     "text",       :null => false
-    t.string   "source"
+    t.text     "source"
     t.string   "uri"
     t.integer  "author_id",  :null => false
     t.datetime "created_at", :null => false
@@ -192,7 +192,7 @@ ActiveRecord::Schema.define(:version => 20130708211227) do
     t.datetime "approved_at"
     t.integer  "revision",    :default => 1, :null => false
     t.text     "text",                       :null => false
-    t.string   "source"
+    t.text     "source"
     t.string   "uri"
     t.integer  "sample_id",                  :null => false
     t.datetime "created_at"
