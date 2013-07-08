@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130708104753) do
+ActiveRecord::Schema.define(:version => 20130708211227) do
 
   create_table "current_definitions", :force => true do |t|
     t.integer  "author_id"
@@ -146,7 +146,7 @@ ActiveRecord::Schema.define(:version => 20130708104753) do
   add_index "definitions", ["uri"], :name => "index_definitions_on_uri"
 
   create_table "raw_samples", :force => true do |t|
-    t.string   "text",       :null => false
+    t.text     "text",       :null => false
     t.string   "source"
     t.string   "uri"
     t.integer  "author_id",  :null => false
