@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130707204128) do
+ActiveRecord::Schema.define(:version => 20130708104753) do
 
   create_table "current_definitions", :force => true do |t|
     t.integer  "author_id"
@@ -102,13 +102,13 @@ ActiveRecord::Schema.define(:version => 20130707204128) do
     t.integer  "approver_id"
     t.datetime "approved_at"
     t.datetime "updated_at"
-    t.string   "word",                        :null => false
+    t.string   "word",                         :null => false
     t.string   "grammar"
     t.datetime "deleted_at"
     t.integer  "revision",    :default => 1
-    t.integer  "accents",     :default => [],                 :array => true
-    t.string   "uris",        :default => [],                 :array => true
-    t.integer  "frequency",   :default => 0,  :null => false
+    t.integer  "accents",     :default => [],                  :array => true
+    t.string   "uris",        :default => [],                  :array => true
+    t.float    "frequency",   :default => 0.0, :null => false
   end
 
   add_index "current_words", ["accents"], :name => "index_current_words_on_accents"
@@ -270,15 +270,15 @@ ActiveRecord::Schema.define(:version => 20130707204128) do
     t.integer  "author_id"
     t.integer  "approver_id"
     t.datetime "approved_at"
-    t.datetime "created_at",                  :null => false
-    t.integer  "revision",    :default => 1,  :null => false
-    t.string   "word",                        :null => false
+    t.datetime "created_at",                   :null => false
+    t.integer  "revision",    :default => 1,   :null => false
+    t.string   "word",                         :null => false
     t.string   "grammar"
     t.datetime "deleted_at"
-    t.integer  "word_id",                     :null => false
-    t.integer  "accents",     :default => [],                 :array => true
-    t.string   "uris",        :default => [],                 :array => true
-    t.integer  "frequency",   :default => 0,  :null => false
+    t.integer  "word_id",                      :null => false
+    t.integer  "accents",     :default => [],                  :array => true
+    t.string   "uris",        :default => [],                  :array => true
+    t.float    "frequency",   :default => 0.0, :null => false
   end
 
   add_index "words", ["accents"], :name => "index_words_on_accents"

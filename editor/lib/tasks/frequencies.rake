@@ -8,8 +8,9 @@ namespace :yarn do
     raise 'Missing ENV["filename"]' unless ENV['filename']
 
     Word.transaction do
-      CSV.foreach(filename) do |row|
-        Word.where(word: row[0]).update_all(frequency: row[1])
+      CSV.foreach(ENV['filename'], col_sep: "\t", headers: true) do |row|
+        next unless %w(s s.PROP).include? row['PoS']
+        Word.where(word: row['Lemma']).update_all(frequency: row['Freq'].to_f)
       end
     end
   end
