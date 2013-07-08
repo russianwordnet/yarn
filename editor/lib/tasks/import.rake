@@ -126,8 +126,13 @@ namespace :yarn do
   task :import => :environment do
     raise 'Missing ENV["xml"]' unless ENV['xml']
     raise 'Missing ENV["path"]' unless ENV['path']
-    raise 'Missing ENV["duplicates"]' unless ENV['duplicates']
     raise 'Missing ENV["author_id"]' unless ENV['author_id']
+
+    duplicated_words = if ENV['duplicates']
+      load_duplicated_words(ENV['duplicates'])
+    else
+      {}
+    end
 
     FileUtils.mkdir_p ENV['path']
 
@@ -138,8 +143,6 @@ namespace :yarn do
       xml.xpath('//synsetEntry').size,
       ENV['xml']
     ]
-
-    duplicated_words = load_duplicated_words(ENV['duplicates'])
 
     words_offset = Word.maximum(:id) || 0
     synsets_offset = RawSynset.maximum(:id) || 0
