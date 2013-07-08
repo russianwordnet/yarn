@@ -9,7 +9,7 @@ class WordsController < ApplicationController
   before_filter :track_word, :only => [:update, :revert]
 
   def index
-    @words = Word.order(:word).page params[:page]
+    @words = Word.order('frequency DESC').page params[:page]
   end
 
   def search

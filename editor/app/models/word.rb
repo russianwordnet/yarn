@@ -3,7 +3,7 @@ class Word < ActiveRecord::Base
 
   paginates_per 150
 
-  attr_accessible :word, :grammar, :accents, :uris
+  attr_accessible :word, :grammar, :accents, :uris, :frequency
 
   belongs_to :author, class_name: 'User'
   belongs_to :approver, class_name: 'User'
