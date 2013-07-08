@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.12'
 
-gem 'activerecord-jdbcpostgresql-adapter'
+gem 'pg', :platform => :ruby
+gem 'activerecord-jdbcpostgresql-adapter', :platform => :jruby
 gem 'postgres_ext'
 
 gem 'foreigner'
@@ -29,7 +30,8 @@ group :assets do
   gem 'compass-rails',  '1.0.3'
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
-  gem 'therubyrhino'
+  gem 'therubyracer', :platform => :ruby
+  gem 'therubyrhino', :platform => :jruby
   gem 'uglifier', '>= 1.0.3'
 end
 
