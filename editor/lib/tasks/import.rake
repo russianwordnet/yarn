@@ -1,123 +1,71 @@
 # encoding: utf-8
 
-# Serialize a Ruby array into the PostgreSQL array. The implementation is
-# dirty and was copied from the postgres_ext gem.
-#
-def array_to_string(value, encode_single_quotes = false)
-  "{#{value.map { |x| item_to_string(x, encode_single_quotes) }.join(',')}}"
-end
-
-# Serialize a Ruby value into the PostgreSQL value. This method was copied
-# from the postgres_ext gem.
-#
-def item_to_string(value, encode_single_quotes = false)
-  return 'NULL' if value.nil?
-
-  if value.is_a?(String)
-    value = value.dup
-    # Encode backslashes.  One backslash becomes 4 in the resulting SQL.
-    # (why 4, and not 2?  Trial and error shows 4 works, 2 fails to parse.)
-    value.gsub!('\\', '\\\\\\\\')
-    # Encode a bare " in the string as \"
-    value.gsub!('"', '\\"')
-    # PostgreSQL parses the string values differently if they are quoted for
-    # use in a statement, or if it will be used as part of a bound argument.
-    # For directly-inserted values (UPDATE foo SET bar='{"array"}') we need to
-    # escape ' as ''.  For bound arguments, do not escape them.
-    if encode_single_quotes
-      value.gsub!("'", "''")
-    end
-
-    "\"#{value}\""
-  else
-    value
-  end
-end
+require File.expand_path('lib/yarn_sax', Rails.root)
 
 # Load the duplicated words list and represent it as a Hash.
 #
-def load_duplicated_words(filename)
-  Hash.new.tap do |duplicated_words|
+def load_duplicates(filename)
+  Hash.new.tap do |duplicates|
     CSV.foreach(filename) do |row|
-      duplicated_words[row[0]] = row[1].to_i
+      duplicates[row[0]] = row[1].to_i
     end
   end
 end
 
-# Process words and write them to the CSV file.
+# Create an instance of the Word class.
 #
-def write_words(xml, csv, duplicated_words, offset)
-  xml.xpath('//wordEntry').each do |entry|
-    id, author, timestamp = entry[:id], entry[:author],
-      entry[:timestamp]
-
-    next if duplicated_words[id]
-    next unless word = entry.xpath('./word[1]').map(&:text).first
-
-    grammar = entry.xpath('./grammar[1]').map(&:text).first
-    accents = entry.xpath('./accent').map(&:text).map(&:to_i)
-    uris = entry.xpath('./url').map(&:text)
-
-    csv << { 'id' => item_to_string(offset + id[/\d+/].to_i),
-             'author_id' => item_to_string(ENV['author_id'].to_i),
-             'word' => item_to_string(word),
-             'grammar' => item_to_string(grammar),
-             'accents' => array_to_string(accents),
-             'uris' => array_to_string(uris) }
+def new_word(sax, author_id, offset = 0)
+  Word.new.tap do |word|
+    word.id = offset + sax.id[/\d+/].to_i
+    word.author_id = author_id
+    word.word = sax.word
+    word.grammar = sax.grammar
+    word.accents = sax.accents
+    word.uris = sax.uris
   end
 end
 
-# Process synsets, definitions, synset_words and samples, and write
-# them to the CSV files.
+# Create an instance of the Definition class.
 #
-def write_synsets(xml, csv_s, csv_d, csv_sw, csv_sa, duplicated_words,
-                  words_offset, synsets_offset, definitions_offset,
-                  synset_words_offset, samples_offset)
-  synset_id = synsets_offset
-  definition_id = definitions_offset
-  synset_word_id = synset_words_offset
-  sample_id = samples_offset
+def new_definition(sax, author_id)
+  Definition.new.tap do |definition|
+    definition.author_id = author_id
+    definition.text = sax.text
+    definition.source = sax.source
+    definition.uri = sax.uri
+  end
+end
 
-  xml.xpath('//synsetEntry').each do |entry|
-    definitions = entry.xpath('./definition').map do |definition|
-      csv_d << { 'id' => item_to_string(definition_id += 1),
-                 'author_id' => item_to_string(ENV['author_id'].to_i),
-                 'text' => item_to_string(definition.text),
-                 'source' => item_to_string(definition[:source]),
-                 'uri' => item_to_string(definition[:uri]) }
-      definition_id
-    end
+# Create an instance of the RawSynset class.
+#
+def new_synset(sax, author_id, offset = 0)
+  RawSynset.new.tap do |synset|
+    synset.id = offset + sax.id[/\d+/].to_i
+    synset.author_id = author_id
+    synset.words_ids = sax.words.map(&:id)
+    synset.definitions_ids = sax.definitions.map(&:id)
+  end
+end
 
-    synset_words = entry.xpath('./word').map do |word|
-      ref = if word[:ref]
-        duplicated_words[word[:ref]] || (words_offset + word[:ref][/\d+/].to_i)
-      end
+# Create an instance of the RawSynsetWord class.
+#
+def new_synset_word(sax, author_id, word_id)
+  RawSynsetWord.new.tap do |synset_word|
+    synset_word.author_id = author_id
+    synset_word.word_id = word_id
+    synset_word.samples_ids = sax.samples.map(&:id)
+    synset_word.marks = sax.marks
+  end
+end
 
-      nsg = word[:nonStandardGrammar] == 'true'
-      marks = word.xpath('./mark').map(&:text)
-
-      samples = word.xpath('./sample').map do |sample|
-        csv_sa << { 'id' => item_to_string(sample_id += 1),
-                    'author_id' => item_to_string(ENV['author_id'].to_i),
-                    'text' => item_to_string(sample.text),
-                    'source' => item_to_string(sample[:source]),
-                    'uri' => item_to_string(sample[:uri]) }
-        sample_id
-      end
-
-      csv_sw << { 'id' => item_to_string(synset_word_id += 1),
-                  'author_id' => item_to_string(ENV['author_id'].to_i),
-                  'word_id' => item_to_string(ref),
-                  'nsg' => item_to_string(nsg),
-                  'marks' => array_to_string(marks),
-                  'samples_ids' => array_to_string(samples) }
-      synset_word_id
-    end
-
-    csv_s << { 'id' => item_to_string(synset_id += 1),
-               'author_id' => item_to_string(ENV['author_id'].to_i),
-               'definitions_ids' => array_to_string(definitions),
-               'words_ids' => array_to_string(synset_words) }
+# Create an instance of the RawSample class.
+#
+def new_sample(sax, author_id)
+  RawSample.new.tap do |sample|
+    sample.author_id = author_id
+    sample.text = sax.text
+    sample.source = sax.source
+    sample.uri = sax.uri
   end
 end
 
@@ -125,57 +73,75 @@ namespace :yarn do
   desc 'Import a dictionary in the YARN format'
   task :import => :environment do
     raise 'Missing ENV["xml"]' unless ENV['xml']
-    raise 'Missing ENV["path"]' unless ENV['path']
     raise 'Missing ENV["author_id"]' unless ENV['author_id']
 
-    duplicated_words = if ENV['duplicates']
-      load_duplicated_words(ENV['duplicates'])
+    duplicates = if ENV['duplicates']
+      load_duplicates(ENV['duplicates'])
     else
       {}
     end
 
-    FileUtils.mkdir_p ENV['path']
+    author_id = ENV['author_id'].to_i
 
-    xml = Nokogiri::XML(File.open(ENV['xml']))
-
-    puts 'Hey, there are %d words and %d synsets in "%s".' % [
-      xml.xpath('//wordEntry').size,
-      xml.xpath('//synsetEntry').size,
-      ENV['xml']
-    ]
-
+    words_count, synsets_count = 0, 0
     words_offset = Word.maximum(:id) || 0
-    synsets_offset = RawSynset.maximum(:id) || 0
-    definitions_offset = Definition.maximum(:id) || 0
-    synset_words_offset = RawSynsetWord.maximum(:id) || 0
-    samples_offset = RawSample.maximum(:id) || 0
+    synsets_offset = Synset.maximum(:id) || 0
 
-    words_path = File.expand_path('current_words.csv', ENV['path'])
-    CSV.open(words_path, 'w', write_headers: true, headers: Word.column_names) do |csv|
-      write_words(xml, csv, duplicated_words, words_offset)
+    puts 'Initializing "%s"' % ENV['xml']
+    yarn = YarnSAX.parse(File.open(ENV['xml']))
+
+    puts 'Started parsing words'
+    yarn.words.entries.each_slice(1228) do |words|
+      Word.transaction do
+        words.map! do |word|
+          next if duplicates.has_key? word.id
+          new_word(word, author_id, words_offset).tap(&:save!)
+        end.compact!
+      end
+      puts '%d words done' % (words_count += words.size)
     end
-    puts 'Words were written to "%s"' % words_path
+    puts 'Finished parsing words'
 
-    synsets_path = File.expand_path('raw_synsets.csv', ENV['path'])
-    definitions_path = File.expand_path('current_definitions.csv', ENV['path'])
-    synset_words_path = File.expand_path('raw_synset_words.csv', ENV['path'])
-    samples_path = File.expand_path('raw_samples.csv', ENV['path'])
-
-    CSV.open(synsets_path, 'w', write_headers: true, headers: RawSynset.column_names) do |csv_s|
-      CSV.open(definitions_path, 'w', write_headers: true, headers: Definition.column_names) do |csv_d|
-        CSV.open(synset_words_path, 'w', write_headers: true, headers: RawSynsetWord.column_names) do |csv_sw|
-          CSV.open(samples_path, 'w', write_headers: true, headers: RawSample.column_names) do |csv_sa|
-            write_synsets(xml, csv_s, csv_d, csv_sw, csv_sa, duplicated_words,
-              words_offset, synsets_offset, definitions_offset,
-              synset_words_offset, samples_offset)
+    puts 'Started parsing synsets'
+    yarn.synsets.entries.each_slice(228) do |synsets|
+      synsets.map! do |synset|
+        Definition.transaction do
+          synset.definitions.map! do |definition|
+            new_definition(definition, author_id).tap(&:save!)
           end
         end
-      end
-    end
 
-    puts 'Synsets were written to "%s"' % synsets_path
-    puts 'Definitions were written to "%s"' % definitions_path
-    puts 'SynsetWords were written to "%s"' % synset_words_path
-    puts 'Samples were written to "%s"' % samples_path
+        synset.words.map! do |synset_word|
+          RawSynsetWord.transaction do
+            synset_word.samples.map! do |sample|
+              new_sample(sample, author_id).tap(&:save!)
+            end
+          end
+
+          word_id = if duplicates.has_key? synset_word.ref
+            duplicates[synset_word.ref]
+          else
+            words_offset + synset_word.ref[/\d+/].to_i
+          end
+
+          new_synset_word(synset_word, author_id, word_id)
+        end
+
+        RawSynsetWord.transaction { synset.words.each(&:save!) }
+
+        new_synset(synset, author_id, synsets_offset)
+      end.compact!
+
+      RawSynset.transaction { synsets.each(&:save!) }
+      puts '%d synsets done' % (synsets_count += synsets.size)
+    end
+    puts 'Finished parsing synsets'
+
+    ActiveRecord::Base.connection.reset_pk_sequence! Word.table_name
+    ActiveRecord::Base.connection.reset_pk_sequence! Definition.table_name
+    ActiveRecord::Base.connection.reset_pk_sequence! RawSynset.table_name
+    ActiveRecord::Base.connection.reset_pk_sequence! RawSynsetWord.table_name
+    ActiveRecord::Base.connection.reset_pk_sequence! RawSample.table_name
+    puts 'Done'
   end
 end
