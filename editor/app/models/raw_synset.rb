@@ -5,7 +5,7 @@ class RawSynset < ActiveRecord::Base
 
   has_many :definitions, :inverse_of => :synsets, finder_sql: proc {
     %Q{SELECT * FROM current_definitions WHERE id IN
-        (SELECT unnest(definitions_ids) FROM current_synsets
+        (SELECT unnest(definitions_ids) FROM raw_synsets
           WHERE id = #{id});} }
 
   has_many :words, :inverse_of => :synsets, finder_sql: proc {

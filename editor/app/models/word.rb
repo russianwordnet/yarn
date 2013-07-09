@@ -11,6 +11,7 @@ class Word < ActiveRecord::Base
   has_many :old_words, order: 'revision DESC', :inverse_of => :origin
 
   has_many :synset_words
+  has_many :raw_synset_words
 
   def update_from(new_word)
     Word.transaction do
