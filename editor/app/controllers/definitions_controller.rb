@@ -4,6 +4,11 @@ class DefinitionsController < ApplicationController
   before_filter :set_top_bar_synset
 
   def show
+    respond_to do |format|
+      format.html
+      format.xml { render xml: @definition }
+      format.json { render json: @definition }
+    end
   end
 
   protected

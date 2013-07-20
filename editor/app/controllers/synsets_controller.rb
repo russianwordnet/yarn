@@ -4,9 +4,20 @@ class SynsetsController < ApplicationController
 
   def index
     @synsets = Synset.order('updated_at DESC').page params[:page]
+
+    respond_to do |format|
+      format.html
+      format.xml { render xml: @synsets }
+      format.json { render json: @synsets }
+    end
   end
 
   def show
+    respond_to do |format|
+      format.html
+      format.xml { render xml: @synset }
+      format.json { render json: @synset }
+    end
   end
 
   protected

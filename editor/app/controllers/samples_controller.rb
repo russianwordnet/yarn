@@ -7,6 +7,11 @@ class SamplesController < ApplicationController
   before_filter :set_top_bar_synset_word
 
   def show
+    respond_to do |format|
+      format.html
+      format.xml { render xml: @sample }
+      format.json { render json: @sample }
+    end
   end
 
   protected

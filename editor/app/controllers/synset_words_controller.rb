@@ -5,6 +5,11 @@ class SynsetWordsController < ApplicationController
   before_filter :set_top_bar_synset
 
   def show
+    respond_to do |format|
+      format.html
+      format.xml { render xml: @synset_word }
+      format.json { render json: @synset_word }
+    end
   end
 
   protected

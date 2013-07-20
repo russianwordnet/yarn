@@ -10,12 +10,24 @@ class WordsController < ApplicationController
 
   def index
     @words = Word.order('frequency DESC').page params[:page]
+
+    respond_to do |format|
+      format.html
+      format.xml { render xml: @words }
+      format.json { render json: @words }
+    end
   end
 
   def search
     field = Word.arel_table[:word]
     @words = Word.where(field.matches(@query)).
       order('frequency DESC', 'word').page params[:page]
+
+    respond_to do |format|
+      format.html
+      format.xml { render xml: @words }
+      format.json { render json: @words }
+    end
   end
 
   def approved
@@ -26,6 +38,12 @@ class WordsController < ApplicationController
       approver_id.not_eq(nil),
       approved_at.not_eq(nil)
     ).order(:word).page params[:page]
+
+    respond_to do |format|
+      format.html
+      format.xml { render xml: @words }
+      format.json { render json: @words }
+    end
   end
 
   def new
@@ -41,6 +59,14 @@ class WordsController < ApplicationController
     else
       flash[:alert] = 'Не получилось добавить слово.'
       render action: 'new'
+    end
+  end
+
+  def show
+    respond_to do |format|
+      format.html
+      format.xml { render xml: @word }
+      format.json { render json: @word }
     end
   end
 
