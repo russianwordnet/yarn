@@ -1,5 +1,5 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  def action_missing(provider)
+  def method_missing(provider)
     return redirect_to root_url if user_signed_in?
 
     omniauth = env['omniauth.auth']
