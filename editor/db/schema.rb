@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130720201503) do
+ActiveRecord::Schema.define(:version => 20130720211348) do
 
   create_table "current_definitions", :force => true do |t|
     t.integer  "author_id"
@@ -116,6 +116,26 @@ ActiveRecord::Schema.define(:version => 20130720201503) do
   add_index "current_synsets", ["deleted_at"], :name => "index_current_synsets_on_deleted_at"
   add_index "current_synsets", ["revision"], :name => "index_current_synsets_on_revision"
   add_index "current_synsets", ["words_ids"], :name => "index_current_synsets_on_words_ids"
+
+  create_table "current_word_relations", :force => true do |t|
+    t.integer  "word1_id",                   :null => false
+    t.integer  "word2_id",                   :null => false
+    t.integer  "author_id",                  :null => false
+    t.integer  "revision",    :default => 1, :null => false
+    t.integer  "approver_id",                :null => false
+    t.datetime "approved_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+  end
+
+  add_index "current_word_relations", ["approved_at"], :name => "index_current_word_relations_on_approved_at"
+  add_index "current_word_relations", ["approver_id"], :name => "index_current_word_relations_on_approver_id"
+  add_index "current_word_relations", ["author_id"], :name => "index_current_word_relations_on_author_id"
+  add_index "current_word_relations", ["deleted_at"], :name => "index_current_word_relations_on_deleted_at"
+  add_index "current_word_relations", ["revision"], :name => "index_current_word_relations_on_revision"
+  add_index "current_word_relations", ["updated_at"], :name => "index_current_word_relations_on_updated_at"
+  add_index "current_word_relations", ["word1_id"], :name => "index_current_word_relations_on_word1_id"
+  add_index "current_word_relations", ["word2_id"], :name => "index_current_word_relations_on_word2_id"
 
   create_table "current_words", :force => true do |t|
     t.integer  "author_id"
@@ -308,6 +328,28 @@ ActiveRecord::Schema.define(:version => 20130720201503) do
   add_index "users", ["name"], :name => "index_users_on_name"
   add_index "users", ["provider", "uid"], :name => "index_users_on_provider_and_uid", :unique => true
 
+  create_table "word_relations", :force => true do |t|
+    t.integer  "word_relation_id",                :null => false
+    t.integer  "word1_id",                        :null => false
+    t.integer  "word2_id",                        :null => false
+    t.integer  "author_id",                       :null => false
+    t.integer  "revision",         :default => 1, :null => false
+    t.integer  "approver_id",                     :null => false
+    t.datetime "approved_at"
+    t.datetime "created_at"
+    t.datetime "deleted_at"
+  end
+
+  add_index "word_relations", ["approved_at"], :name => "index_word_relations_on_approved_at"
+  add_index "word_relations", ["approver_id"], :name => "index_word_relations_on_approver_id"
+  add_index "word_relations", ["author_id"], :name => "index_word_relations_on_author_id"
+  add_index "word_relations", ["created_at"], :name => "index_word_relations_on_created_at"
+  add_index "word_relations", ["deleted_at"], :name => "index_word_relations_on_deleted_at"
+  add_index "word_relations", ["revision"], :name => "index_word_relations_on_revision"
+  add_index "word_relations", ["word1_id"], :name => "index_word_relations_on_word1_id"
+  add_index "word_relations", ["word2_id"], :name => "index_word_relations_on_word2_id"
+  add_index "word_relations", ["word_relation_id"], :name => "index_word_relations_on_word_relation_id"
+
   create_table "words", :force => true do |t|
     t.integer  "author_id"
     t.integer  "approver_id"
@@ -353,6 +395,11 @@ ActiveRecord::Schema.define(:version => 20130720201503) do
   add_foreign_key "current_synsets", "users", :name => "current_synsets_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "current_synsets", "users", :name => "current_synsets_author_id_fk", :column => "author_id", :dependent => :delete
 
+  add_foreign_key "current_word_relations", "current_words", :name => "current_word_relations_word1_id_fk", :column => "word1_id", :dependent => :delete
+  add_foreign_key "current_word_relations", "current_words", :name => "current_word_relations_word2_id_fk", :column => "word2_id", :dependent => :delete
+  add_foreign_key "current_word_relations", "users", :name => "current_word_relations_approver_id_fk", :column => "approver_id", :dependent => :delete
+  add_foreign_key "current_word_relations", "users", :name => "current_word_relations_author_id_fk", :column => "author_id", :dependent => :delete
+
   add_foreign_key "current_words", "users", :name => "current_words_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "current_words", "users", :name => "current_words_author_id_fk", :column => "author_id", :dependent => :delete
 
@@ -385,6 +432,12 @@ ActiveRecord::Schema.define(:version => 20130720201503) do
   add_foreign_key "synsets", "current_synsets", :name => "synsets_synset_id_fk", :column => "synset_id", :dependent => :delete
   add_foreign_key "synsets", "users", :name => "synsets_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "synsets", "users", :name => "synsets_author_id_fk", :column => "author_id", :dependent => :delete
+
+  add_foreign_key "word_relations", "current_word_relations", :name => "word_relations_word_relation_id_fk", :column => "word_relation_id", :dependent => :delete
+  add_foreign_key "word_relations", "current_words", :name => "word_relations_word1_id_fk", :column => "word1_id", :dependent => :delete
+  add_foreign_key "word_relations", "current_words", :name => "word_relations_word2_id_fk", :column => "word2_id", :dependent => :delete
+  add_foreign_key "word_relations", "users", :name => "word_relations_approver_id_fk", :column => "approver_id", :dependent => :delete
+  add_foreign_key "word_relations", "users", :name => "word_relations_author_id_fk", :column => "author_id", :dependent => :delete
 
   add_foreign_key "words", "current_words", :name => "words_word_id_fk", :column => "word_id", :dependent => :delete
   add_foreign_key "words", "users", :name => "entries_approver_id_fk", :column => "approver_id", :dependent => :delete
