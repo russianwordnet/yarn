@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130708230012) do
+ActiveRecord::Schema.define(:version => 20130720201503) do
 
   create_table "current_definitions", :force => true do |t|
     t.integer  "author_id"
@@ -54,6 +54,26 @@ ActiveRecord::Schema.define(:version => 20130708230012) do
   add_index "current_samples", ["source"], :name => "index_current_samples_on_source"
   add_index "current_samples", ["updated_at"], :name => "index_current_samples_on_updated_at"
   add_index "current_samples", ["uri"], :name => "index_current_samples_on_uri"
+
+  create_table "current_synset_relations", :force => true do |t|
+    t.integer  "synset1_id",                 :null => false
+    t.integer  "synset2_id",                 :null => false
+    t.integer  "author_id",                  :null => false
+    t.integer  "revision",    :default => 1, :null => false
+    t.integer  "approver_id",                :null => false
+    t.datetime "approved_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+  end
+
+  add_index "current_synset_relations", ["approved_at"], :name => "index_current_synset_relations_on_approved_at"
+  add_index "current_synset_relations", ["approver_id"], :name => "index_current_synset_relations_on_approver_id"
+  add_index "current_synset_relations", ["author_id"], :name => "index_current_synset_relations_on_author_id"
+  add_index "current_synset_relations", ["deleted_at"], :name => "index_current_synset_relations_on_deleted_at"
+  add_index "current_synset_relations", ["revision"], :name => "index_current_synset_relations_on_revision"
+  add_index "current_synset_relations", ["synset1_id"], :name => "index_current_synset_relations_on_synset1_id"
+  add_index "current_synset_relations", ["synset2_id"], :name => "index_current_synset_relations_on_synset2_id"
+  add_index "current_synset_relations", ["updated_at"], :name => "index_current_synset_relations_on_updated_at"
 
   create_table "current_synset_words", :force => true do |t|
     t.integer  "author_id"
@@ -209,6 +229,28 @@ ActiveRecord::Schema.define(:version => 20130708230012) do
   add_index "samples", ["source"], :name => "index_samples_on_source"
   add_index "samples", ["uri"], :name => "index_samples_on_uri"
 
+  create_table "synset_relations", :force => true do |t|
+    t.integer  "synset_relation_id",                :null => false
+    t.integer  "synset1_id",                        :null => false
+    t.integer  "synset2_id",                        :null => false
+    t.integer  "author_id",                         :null => false
+    t.integer  "revision",           :default => 1, :null => false
+    t.integer  "approver_id",                       :null => false
+    t.datetime "approved_at"
+    t.datetime "created_at"
+    t.datetime "deleted_at"
+  end
+
+  add_index "synset_relations", ["approved_at"], :name => "index_synset_relations_on_approved_at"
+  add_index "synset_relations", ["approver_id"], :name => "index_synset_relations_on_approver_id"
+  add_index "synset_relations", ["author_id"], :name => "index_synset_relations_on_author_id"
+  add_index "synset_relations", ["created_at"], :name => "index_synset_relations_on_created_at"
+  add_index "synset_relations", ["deleted_at"], :name => "index_synset_relations_on_deleted_at"
+  add_index "synset_relations", ["revision"], :name => "index_synset_relations_on_revision"
+  add_index "synset_relations", ["synset1_id"], :name => "index_synset_relations_on_synset1_id"
+  add_index "synset_relations", ["synset2_id"], :name => "index_synset_relations_on_synset2_id"
+  add_index "synset_relations", ["synset_relation_id"], :name => "index_synset_relations_on_synset_relation_id"
+
   create_table "synset_words", :force => true do |t|
     t.integer  "author_id"
     t.integer  "approver_id"
@@ -299,6 +341,11 @@ ActiveRecord::Schema.define(:version => 20130708230012) do
   add_foreign_key "current_samples", "users", :name => "current_samples_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "current_samples", "users", :name => "current_samples_author_id_fk", :column => "author_id", :dependent => :delete
 
+  add_foreign_key "current_synset_relations", "current_synsets", :name => "current_synset_relations_synset1_id_fk", :column => "synset1_id", :dependent => :delete
+  add_foreign_key "current_synset_relations", "current_synsets", :name => "current_synset_relations_synset2_id_fk", :column => "synset2_id", :dependent => :delete
+  add_foreign_key "current_synset_relations", "users", :name => "current_synset_relations_approver_id_fk", :column => "approver_id", :dependent => :delete
+  add_foreign_key "current_synset_relations", "users", :name => "current_synset_relations_author_id_fk", :column => "author_id", :dependent => :delete
+
   add_foreign_key "current_synset_words", "current_words", :name => "current_synset_words_word_id_fk", :column => "word_id", :dependent => :delete
   add_foreign_key "current_synset_words", "users", :name => "current_synset_words_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "current_synset_words", "users", :name => "current_synset_words_author_id_fk", :column => "author_id", :dependent => :delete
@@ -323,6 +370,12 @@ ActiveRecord::Schema.define(:version => 20130708230012) do
   add_foreign_key "samples", "current_samples", :name => "samples_sample_id_fk", :column => "sample_id", :dependent => :delete
   add_foreign_key "samples", "users", :name => "samples_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "samples", "users", :name => "samples_author_id_fk", :column => "author_id", :dependent => :delete
+
+  add_foreign_key "synset_relations", "current_synset_relations", :name => "synset_relations_synset_relation_id_fk", :column => "synset_relation_id", :dependent => :delete
+  add_foreign_key "synset_relations", "current_synsets", :name => "synset_relations_synset1_id_fk", :column => "synset1_id", :dependent => :delete
+  add_foreign_key "synset_relations", "current_synsets", :name => "synset_relations_synset2_id_fk", :column => "synset2_id", :dependent => :delete
+  add_foreign_key "synset_relations", "users", :name => "synset_relations_approver_id_fk", :column => "approver_id", :dependent => :delete
+  add_foreign_key "synset_relations", "users", :name => "synset_relations_author_id_fk", :column => "author_id", :dependent => :delete
 
   add_foreign_key "synset_words", "current_synset_words", :name => "synset_words_synset_word_id_fk", :column => "synset_word_id", :dependent => :delete
   add_foreign_key "synset_words", "current_words", :name => "synset_words_word_id_fk", :column => "word_id", :dependent => :delete
