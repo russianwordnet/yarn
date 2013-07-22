@@ -28,6 +28,11 @@ Yarn::Application.routes.draw do
     end
   end
 
+  resources :synsets, only: [:index, :show] do
+    resources :words, controller: 'raw_synset_words', only: [:show] do
+    end
+  end
+
   get 'editor' => 'editor#index', :as => :editor
 
   namespace :editor do
