@@ -21,6 +21,9 @@ Yarn::Application.routes.draw do
     end
   end
 
+  resources :definitions, only: [:index, :show] do
+  end
+
   resources :synsets, only: [:index, :show] do
     resources :definitions, only: [:show]
     resources :words, controller: 'synset_words', only: [:show] do
