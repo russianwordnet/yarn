@@ -9,5 +9,6 @@
   </footer>
 
   <%= javascript_include_tag 'application' %>
+  <%= yield(:javascript) if content_for?(:javascript) %>
   <%= render 'shared/metrika' if Rails.env.production? %>
 </body>

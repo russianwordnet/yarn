@@ -2,49 +2,188 @@
   <%= render 'shared/yarn_logo' %>
 
   <div id="searchbar" class="panel">
-    <%= render 'shared/search' %>
+    <div id="word-search">
+      <%= select_tag "word", options_from_collection_for_select(@words, "id", "word"), :style => 'width: 300px;' %>
+    </div>
   </div>
 
   <div class="row-fluid">
     <div class="span6 panel">
-      <div class="panel-inner">
-        <h3>Определения слова &laquo;<span>Жизнь</span>&raquo;</h3>
-        <h3>Синонимы</h3>
+      <div class="row-fluid">
+        <div class="span11">
+          <div class="panel-inner">
+            <section>
+              <h3>Определения слова &laquo;<span>Жизнь</span>&raquo;</h3>
+              
+              <div class="word-definitions">
+                <ul>
+                  <li>Word definition Word definition Word definition Word definition Word definition Word definition #1</li>
+                  <li>Word definition Word definition Word definition Word definition Word definition Word definition #2</li>
+                  <li class="inactive">Word definition Word definition Word definition Word definition Word definition Word definition #3</li>
+                  <li>Word definition Word definition Word definition Word definition Word definition Word definition #4</li>
+                  <li>Word definition Word definition Word definition Word definition Word definition Word definition #5</li>
+                  <li>Word definition Word definition Word definition Word definition Word definition Word definition #6</li>
+                  <li>Word definition Word definition Word definition Word definition Word definition Word definition #7</li>
+                  <li>Word definition Word definition Word definition Word definition Word definition Word definition #1</li>
+                  <li>Word definition Word definition Word definition Word definition Word definition Word definition #2</li>
+                  <li class="inactive">Word definition Word definition Word definition Word definition Word definition Word definition #3</li>
+                  <li>Word definition Word definition Word definition Word definition Word definition Word definition #4</li>
+                  <li>Word definition Word definition Word definition Word definition Word definition Word definition #5</li>
+                  <li>Word definition Word definition Word definition Word definition Word definition Word definition #6</li>
+                  <li>Word definition Word definition Word definition Word definition Word definition Word definition #7</li>
+                </ul>
+              </div>
+            </section>
 
-        <div class="accordion" id="accordion2">
-          <div class="accordion-group">
-            <div class="accordion-heading">
-              <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                Collapsible Group Item #1
-              </a>
-            </div>
-            <div id="collapseOne" class="accordion-body collapse in">
-              <div class="accordion-inner">
-                Anim pariatur cliche...
+            <section>
+              <h3>Синонимы</h3>
+              <div class="accordion" id="synonymes">
+                <div class="accordion-group">
+                  <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#synonymes" href="#collapse-1">
+                      <i class="icon icon-plus"></i>&nbsp;Бытие
+                    </a>
+                  </div>
+                  <div id="collapse-1" class="accordion-body collapse in">
+                    <div class="accordion-inner">
+                      <div class="word-definitions">
+                        <ul>
+                          <li>Word definition Word definition Word definition Word definition Word definition #1</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #2</li>
+                          <li class="inactive">Word definition Word definition Word definition Word definition Word definition #3</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #4</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #5</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #6</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #7</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #1</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #2</li>
+                          <li class="inactive">Word definition Word definition Word definition Word definition Word definition #3</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #4</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #5</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #6</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #7</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="accordion-group">
+                  <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#synonymes" href="#collapse-2">
+                      <i class="icon icon-plus"></i>&nbsp;Разум
+                    </a>
+                  </div>
+                  <div id="collapse-2" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                      <div class="word-definitions">
+                        <ul>
+                          <li>Word definition Word definition Word definition Word definition Word definition #1</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #2</li>
+                          <li class="inactive">Word definition Word definition Word definition Word definition Word definition #3</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #4</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #5</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #6</li>
+                          <li>Word definition Word definition Word definition Word definition Word definition #7</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="accordion-group">
+                  <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#synonymes" href="#collapse-3">
+                      Дни
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="accordion-group">
-            <div class="accordion-heading">
-              <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                Collapsible Group Item #2
-              </a>
-            </div>
-            <div id="collapseTwo" class="accordion-body collapse">
-              <div class="accordion-inner">
-                Anim pariatur cliche...
-              </div>
-            </div>
+            </section>
+
           </div>
         </div>
+        <div class="span1">
+          <a href="#" class="btn disabled" id="add-to-synset-btn" title="Добавить определение в синсет"><i class="icon icon-chevron-right"></i></a>
 
+          <a href="#" class="btn disabled" id="add-to-current-synset-btn" title="Добавить определение в текущий синсет"><i class="icon icon-chevron-right"></i></a>
+        </div>
       </div>
+
     </div>
     <div class="span6 panel">
       <div class="panel-inner">
-        <h3>Текущий синсет</h3>
+        <section>
+          <h3>Синсеты со словом &laquo;Жизнь&raquo;</h3>
+          <div class="word-definitions">
+            <ul>
+              <li>Word definition Word definition Word definition Word definition Word definition Word definition #1</li>
+              <li>Word definition Word definition Word definition Word definition Word definition Word definition #2</li>
+            </ul>
+          </div>
+
+          <div>
+            <a href="#">Добавить синсет</a>
+          </div>
+
+        </section>
+        <section id="current-synset">
+          <h3>Текущий синсет</h3>
+          <p>Нажимайте на слова и определения, чтобы добавить их в текущий синсет.</p>
+
+          <div id="current-words">
+            <div><span title="Добавить в текущий синсет">Жизнь</span>&nbsp;<i class="icon icon-remove" title="Удалить"></i></div>
+            <div><span title="Добавить в текущий синсет">Разум</span>&nbsp;<i class="icon icon-remove" title="Удалить"></i></div>
+          </div>
+
+          <div class="word-definitions">
+            <ul>
+              <li>Word definition Word definition Word definition Word definition Word definition Word definition #1</li>
+              <li>Word definition Word definition Word definition Word definition Word definition Word definition #2</li>
+            </ul>
+          </div>
+
+          <div>
+            <a href="#">Добавить своё определение</a>
+          </div>
+
+          <div id="done-current-synset-btn">
+            <button class="btn disabled">Синсет готов</button>
+          </div>
+        </section>
       </div>
     </div>
-  </div>  
+  </div>
+  <div id="done-btn" class="panel">
+    <div class="panel-inner">
+      <button class="btn btn-success disabled">Готово</button>
+    </div>
+  </div>
 </div>
 
+<% content_for :javascript do %>
+<script>
+$(function() {
+  $("#searchbar #word").select2({
+    placeholder: "Введите слово",
+    allowClear: true,
+    /*ajax: {
+      url: "/words.json",
+      dataType: 'json',
+      quietMillis: 100,
+      data: function (term, page) {
+        return {
+          q: term,
+          page_limit: 10,
+        };
+      },
+      results: function (data, page) {
+        console.log({ text: data.word, id: data.id })
+        return { results: { text: data.word, id: data.id } }
+      }
+    }*/
+  });
+})
+
+</script>
+<% end %>

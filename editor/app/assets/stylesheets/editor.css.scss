@@ -27,18 +27,142 @@
     }
   }
 
+  section {
+    margin: 0 0 30px 0;
+  }
+
   #searchbar {
     min-height: auto;
     padding: 15px;
     margin-bottom: 20px;
 
-    form {
+    #word-search {
+      width: 300px;
       margin: 0 auto;
-      width: 400px;
-      display: block;
+    }
+  }
 
-      input {
-        width: 320px;
+  .word-definitions {
+    height: 150px;
+    border: 1px inset $base-gray;
+    overflow: auto;
+    @include user-select(none);
+    background: #fff;
+    @include border-radius(3px);
+    @include box-shadow(inset 0 0 16px -6px #000);
+
+    ul {
+      padding: 1px;
+
+      li {
+        padding: 3px;
+        font-size: 90%;
+
+        &:hover, &.active {
+          cursor: pointer;
+          background: $base-blue;
+          color: #fff;
+        }
+
+        &.inactive {
+          background: $base-gray;
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  #done-btn {
+    padding: 10px 0;
+    margin: 20px 0 0 0;
+
+    .panel {
+      min-height: auto;
+    }
+
+    button {
+      width: 100px;
+      font-size: 130%;
+      margin: 0 auto;
+      display: block;
+      padding: 10px;
+    }
+  }
+
+  #add-to-synset-btn, #add-to-current-synset-btn {
+    display: block;
+    cursor: pointer;
+  }
+
+  #add-to-synset-btn { margin-top: 105px; }
+  #add-to-current-synset-btn { margin-top: 215px; }
+
+  // Synonymes
+  #synonymes {
+    .accordion-heading {
+      a {
+        font-weight: bold;
+        font-size: 110%;
+        color: #666;
+        @include background-image(none);
+        background-color: #dedede;
+      }
+
+      .accordion-toggle {
+        padding: 3px 10px;
+      }
+    }
+
+    .accordion-inner {
+      padding: 1px;
+    }
+  }
+
+  // Synsets
+
+  // Current synset
+  #current-synset {
+    background: #dedede;
+    margin: 0 -10px;
+    padding: 10px;
+
+    // Current words as tags
+    #current-words {
+      padding: 5px 0;
+      margin-bottom: 10px;
+
+      div {
+        background: #eee;
+        font-size: 110%;
+        padding: 3px;
+        @include border-radius(3px);
+        @include inline-block;
+
+        span {
+          cursor: pointer;
+          &:hover {
+            color: $base-blue;
+          }
+        }
+
+        i.icon {
+          cursor: pointer;
+
+          &:hover {
+            color: maroon;
+          }
+        }
+      }
+    }
+
+    #done-current-synset-btn {
+      padding: 10px 0 0 0;
+
+      button {
+        width: 150px;
+        font-size: 120%;
+        margin: 0 auto;
+        display: block;
       }
     }
   }
