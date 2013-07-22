@@ -12,6 +12,7 @@ class RawSynsetWordsController < ApplicationController
 
   protected
   def find_raw_synset
+    return unless params[:raw_synset_id].present?
     @raw_synset = RawSynset.find(params[:raw_synset_id])
   end
 

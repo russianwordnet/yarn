@@ -14,6 +14,7 @@ class SynsetWordsController < ApplicationController
 
   protected
   def find_synset
+    return unless params[:synset_id].present?
     @synset = Synset.find(params[:synset_id])
   end
 
