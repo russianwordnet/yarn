@@ -1,6 +1,7 @@
 #= require jquery
 #= require jquery_ujs
 #= require bootstrap
+#= require select2
 
 # Flash messages
 flash_messages = ->
@@ -22,3 +23,7 @@ flash_messages = ->
         $(this).trigger("click")
 
 flash_messages()
+
+$ ->
+  # Activate tooltips
+  $("[data-toggle=tooltip]").tooltip() if $("[data-toggle=tooltip]").length

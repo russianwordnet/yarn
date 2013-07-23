@@ -3,6 +3,7 @@ class EditorController < ApplicationController
   before_filter :extract_query, :only => :search
 
   def index
+    @words = Word.order('frequency DESC').select('id, word').limit(100)
   end
 
   def search

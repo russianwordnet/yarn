@@ -11,13 +11,16 @@ $linkColorHover: $base-blue;
 
 @import "bootstrap";
 @import "bootstrap-responsive";
+@import 'font-awesome';
 @import "normalize";
 @import "compass";
 @import "compass/css3/transition";
 @import "compass/layout/sticky-footer";
 @import "compass/utilities/lists/bullets";
+@import "select2";
 @import "ceaser-easing";
 @import "editor";
+
 
 // Fonts
 @import url(http://fonts.googleapis.com/css?family=Courgette);
