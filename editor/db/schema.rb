@@ -11,7 +11,57 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130720211348) do
+ActiveRecord::Schema.define(:version => 20130730190226) do
+
+  create_table "antonomy_relations", :force => true do |t|
+    t.integer  "antonomy_relation_id",                :null => false
+    t.integer  "synset1_id",                          :null => false
+    t.integer  "synset2_id",                          :null => false
+    t.integer  "word1_id",                            :null => false
+    t.integer  "word2_id",                            :null => false
+    t.integer  "author_id",                           :null => false
+    t.integer  "revision",             :default => 1, :null => false
+    t.integer  "approver_id",                         :null => false
+    t.datetime "approved_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+  end
+
+  add_index "antonomy_relations", ["antonomy_relation_id"], :name => "index_antonomy_relations_on_antonomy_relation_id"
+  add_index "antonomy_relations", ["approved_at"], :name => "index_antonomy_relations_on_approved_at"
+  add_index "antonomy_relations", ["approver_id"], :name => "index_antonomy_relations_on_approver_id"
+  add_index "antonomy_relations", ["author_id"], :name => "index_antonomy_relations_on_author_id"
+  add_index "antonomy_relations", ["deleted_at"], :name => "index_antonomy_relations_on_deleted_at"
+  add_index "antonomy_relations", ["revision"], :name => "index_antonomy_relations_on_revision"
+  add_index "antonomy_relations", ["synset1_id"], :name => "index_antonomy_relations_on_synset1_id"
+  add_index "antonomy_relations", ["synset2_id"], :name => "index_antonomy_relations_on_synset2_id"
+  add_index "antonomy_relations", ["updated_at"], :name => "index_antonomy_relations_on_updated_at"
+  add_index "antonomy_relations", ["word1_id"], :name => "index_antonomy_relations_on_word1_id"
+  add_index "antonomy_relations", ["word2_id"], :name => "index_antonomy_relations_on_word2_id"
+
+  create_table "current_antonomy_relations", :force => true do |t|
+    t.integer  "synset1_id",                 :null => false
+    t.integer  "synset2_id",                 :null => false
+    t.integer  "word1_id",                   :null => false
+    t.integer  "word2_id",                   :null => false
+    t.integer  "author_id",                  :null => false
+    t.integer  "revision",    :default => 1, :null => false
+    t.integer  "approver_id",                :null => false
+    t.datetime "approved_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+  end
+
+  add_index "current_antonomy_relations", ["approved_at"], :name => "index_current_antonomy_relations_on_approved_at"
+  add_index "current_antonomy_relations", ["approver_id"], :name => "index_current_antonomy_relations_on_approver_id"
+  add_index "current_antonomy_relations", ["author_id"], :name => "index_current_antonomy_relations_on_author_id"
+  add_index "current_antonomy_relations", ["deleted_at"], :name => "index_current_antonomy_relations_on_deleted_at"
+  add_index "current_antonomy_relations", ["revision"], :name => "index_current_antonomy_relations_on_revision"
+  add_index "current_antonomy_relations", ["synset1_id"], :name => "index_current_antonomy_relations_on_synset1_id"
+  add_index "current_antonomy_relations", ["synset2_id"], :name => "index_current_antonomy_relations_on_synset2_id"
+  add_index "current_antonomy_relations", ["updated_at"], :name => "index_current_antonomy_relations_on_updated_at"
+  add_index "current_antonomy_relations", ["word1_id"], :name => "index_current_antonomy_relations_on_word1_id"
+  add_index "current_antonomy_relations", ["word2_id"], :name => "index_current_antonomy_relations_on_word2_id"
 
   create_table "current_definitions", :force => true do |t|
     t.integer  "author_id"
@@ -376,6 +426,21 @@ ActiveRecord::Schema.define(:version => 20130720211348) do
   add_index "words", ["uris"], :name => "index_words_on_uris"
   add_index "words", ["word"], :name => "index_words_on_word"
   add_index "words", ["word_id"], :name => "index_words_on_word_id"
+
+  add_foreign_key "antonomy_relations", "current_antonomy_relations", :name => "antonomy_relations_antonomy_relation_id_fk", :column => "antonomy_relation_id", :dependent => :delete
+  add_foreign_key "antonomy_relations", "current_synsets", :name => "antonomy_relations_synset1_id_fk", :column => "synset1_id", :dependent => :delete
+  add_foreign_key "antonomy_relations", "current_synsets", :name => "antonomy_relations_synset2_id_fk", :column => "synset2_id", :dependent => :delete
+  add_foreign_key "antonomy_relations", "current_words", :name => "antonomy_relations_word1_id_fk", :column => "word1_id", :dependent => :delete
+  add_foreign_key "antonomy_relations", "current_words", :name => "antonomy_relations_word2_id_fk", :column => "word2_id", :dependent => :delete
+  add_foreign_key "antonomy_relations", "users", :name => "antonomy_relations_approver_id_fk", :column => "approver_id", :dependent => :delete
+  add_foreign_key "antonomy_relations", "users", :name => "antonomy_relations_author_id_fk", :column => "author_id", :dependent => :delete
+
+  add_foreign_key "current_antonomy_relations", "current_synsets", :name => "current_antonomy_relations_synset1_id_fk", :column => "synset1_id", :dependent => :delete
+  add_foreign_key "current_antonomy_relations", "current_synsets", :name => "current_antonomy_relations_synset2_id_fk", :column => "synset2_id", :dependent => :delete
+  add_foreign_key "current_antonomy_relations", "current_words", :name => "current_antonomy_relations_word1_id_fk", :column => "word1_id", :dependent => :delete
+  add_foreign_key "current_antonomy_relations", "current_words", :name => "current_antonomy_relations_word2_id_fk", :column => "word2_id", :dependent => :delete
+  add_foreign_key "current_antonomy_relations", "users", :name => "current_antonomy_relations_approver_id_fk", :column => "approver_id", :dependent => :delete
+  add_foreign_key "current_antonomy_relations", "users", :name => "current_antonomy_relations_author_id_fk", :column => "author_id", :dependent => :delete
 
   add_foreign_key "current_definitions", "users", :name => "current_definitions_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "current_definitions", "users", :name => "current_definitions_author_id_fk", :column => "author_id", :dependent => :delete
