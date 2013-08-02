@@ -2,6 +2,9 @@
 #= require jquery_ujs
 #= require bootstrap
 #= require select2
+#= require jquery.color
+#= require mustache
+#= require editor
 
 # Flash messages
 flash_messages = ->
