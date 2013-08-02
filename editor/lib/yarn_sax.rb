@@ -48,8 +48,59 @@ class SynsetsSAX
   elements :synsetEntry, :as => :entries, class: SynsetEntrySAX
 end
 
+class SynsetRelationEntrySAX
+  include SAXMachine
+  attribute :id
+  attribute :synset1, :as => :synset1_id
+  attribute :synset2, :as => :synset2_id
+  attribute :type
+end
+
+class SynsetRelationsSAX
+  include SAXMachine
+  elements :synsetRelations, :as => :relations, class: SynsetRelationEntrySAX
+end
+
+class WordRelationEntrySAX
+  include SAXMachine
+  attribute :id
+  attribute :word1, :as => :word1_id
+  attribute :word2, :as => :word2_id
+  attribute :type
+end
+
+class WordRelationsSAX
+  include SAXMachine
+  elements :wordRelations, :as => :relations, class: WordRelationEntrySAX
+end
+
+class AntonomyRelationEntrySAX
+  include SAXMachine
+  attribute :id
+  attribute :synset1, :as => :synset1_id
+  attribute :synset2, :as => :synset2_id
+  attribute :word1, :as => :word1_id
+  attribute :word2, :as => :word2_id
+  attribute :type
+end
+
+class AntonomyRelationsSAX
+  include SAXMachine
+  elements :antonymyRelations, :as => :relations, class: AntonomyRelationEntrySAX
+end
+
+class InterlinkEntrySAX
+  include SAXMachine
+  attribute :id
+  attribute :YARNSynset, :as => :synset_id
+  attribute :PWNSynset, :as => :pwn
+end
+
 class YarnSAX
   include SAXMachine
   element :words, class: WordsSAX
   element :synsets, class: SynsetsSAX
+  element :synset_relations, class: SynsetRelationsSAX
+  element :word_relations, class: WordRelationsSAX
+  element :antonomy_relations, class: AntonomyRelationsSAX
 end

@@ -1,5 +1,6 @@
 class SynsetsController < ApplicationController
   before_filter :find_synset, :only => :show
+  before_filter :find_word, :only => :search
   before_filter :set_top_bar_synset, :only => :show
 
   def index
@@ -20,9 +21,22 @@ class SynsetsController < ApplicationController
     end
   end
 
+  def search
+    @synsets = @word.synset_words.map(&:synsets).flatten.uniq
+
+    respond_to do |format|
+      format.xml { render xml: @synsets }
+      format.json { render json: @synsets }
+    end
+  end
+
   protected
   def find_synset
     @synset = Synset.find(params[:id])
+  end
+
+  def find_word
+    @word = Word.find_by_word(params[:word])
   end
 
   def set_top_bar_synset

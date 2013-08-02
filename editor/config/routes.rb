@@ -21,10 +21,30 @@ Yarn::Application.routes.draw do
     end
   end
 
+  resources :definitions, only: [:index, :show] do
+  end
+
+  resources :synset_words, only: [:show]
+
   resources :synsets, only: [:index, :show] do
     resources :definitions, only: [:show]
     resources :words, controller: 'synset_words', only: [:show] do
       resources :samples, only: [:show]
+    end
+
+    collection do
+      get :search
+    end
+  end
+
+  resources :raw_synset_words, only: [:show]
+
+  resources :raw_synsets, only: [:index, :show] do
+    resources :words, controller: 'raw_synset_words', only: [:show] do
+    end
+
+    collection do
+      get :search
     end
   end
 
