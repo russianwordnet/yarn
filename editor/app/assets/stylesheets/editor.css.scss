@@ -42,9 +42,9 @@
     }
   }
 
-  .word-definitions {
-    height: 150px;
-    border: 1px inset $base-gray;
+  .listing {
+    height: 250px;
+    border: 1px inset #ddd;
     overflow: auto;
     @include user-select(none);
     background: #fff;
@@ -72,7 +72,7 @@
     }
   }
 
-  #done-btn {
+  #action-pane {
     padding: 10px 0;
     margin: 20px 0 0 0;
 
@@ -89,13 +89,26 @@
     }
   }
 
-  #add-to-synset-btn, #add-to-current-synset-btn {
-    display: block;
-    cursor: pointer;
+  .dashed-link {
+    border-bottom: 1px dashed rgba(0, 96, 192, 0.25);
+    @include background-image(none);
   }
 
-  #add-to-synset-btn { margin-top: 105px; }
-  #add-to-current-synset-btn { margin-top: 215px; }
+  #add-to-current-synset {
+    overflow: hidden;
+    height: 100%;
+
+    #add-to-current-synset-btn {
+      cursor: pointer;
+      height: 600px;
+      background: #FFF9CD asset-url("add-icon.png", image) no-repeat 50% 50%;
+
+      &.disabled {
+        cursor: default;
+        background: none;
+      }
+    }
+  }
 
   // Synonymes
   #synonymes {
@@ -110,6 +123,19 @@
 
       .accordion-toggle {
         padding: 3px 10px;
+      }
+
+      .add-word {
+        @extend .pull-right;
+        visibility: hidden;
+
+        &:hover {
+          color: $base-blue;
+        }
+      }
+
+      &:hover {
+        .add-word { visibility: visible; }
       }
     }
 
@@ -126,15 +152,25 @@
     margin: 0 -10px;
     padding: 10px;
 
+    &.active {
+      background: #FFF9CD;
+    }
+
     // Current words as tags
     #current-words {
-      padding: 5px 0;
+      padding: 0 3px 3px 3px;
       margin-bottom: 10px;
+      min-height: 29px;
+
+      &.active {
+        background: #FFF9CD;
+      }
 
       div {
         background: #eee;
         font-size: 110%;
         padding: 3px;
+        margin: 3px 3px 0 0;
         @include border-radius(3px);
         @include inline-block;
 
@@ -147,6 +183,7 @@
 
         i.icon {
           cursor: pointer;
+          margin-left: 3px;
 
           &:hover {
             color: maroon;
