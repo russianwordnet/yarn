@@ -1,0 +1,5 @@
+<div id="searchbar" class="panel">
+  <div id="word-search">
+    <%= select_tag "word", options_from_collection_for_select(words, "id", "word"), :style => 'width: 300px;' %>
+  </div>
+</div>
