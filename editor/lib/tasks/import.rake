@@ -130,7 +130,7 @@ namespace :yarn do
     antonomy_relations_count, interlinks_count = 0, 0
 
     words_offset = Word.maximum(:id) || 0
-    synsets_offset = Synset.maximum(:id) || 0
+    synsets_offset = RawSynset.maximum(:id) || 0
 
     puts 'Initializing "%s"' % ENV['xml']
     yarn = YarnSAX.parse(File.open(ENV['xml']))
