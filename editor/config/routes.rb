@@ -56,6 +56,7 @@ Yarn::Application.routes.draw do
     get 'synonymes', :as => :synonymes
     get 'append_word', :as => :append_word
     get 'append_definition', :as => :append_definition
+    get 'word', :as => :word
   end
 
   root to: 'high_voltage/pages#show', id: 'index'

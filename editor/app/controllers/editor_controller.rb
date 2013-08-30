@@ -1,6 +1,10 @@
+# encoding: utf-8
+
 class EditorController < ApplicationController
   layout 'editor'
   before_filter :extract_query, :only => :search
+
+  respond_to :html, :json
 
   def index
     @words = Word.order('frequency DESC').select('id, word').limit(100)
@@ -64,5 +68,39 @@ class EditorController < ApplicationController
     end
 
     @query = params[:q].split.map! { |s| '%s%%' % s }.join ' '
+  end
+
+  # Получить данные для левой колонки редактора по слову
+  # Формат данных такой:
+  #
+  # definitions
+  #   definition1
+  #   definition2
+  #   definition3
+  # synonymes
+  #   synonym1
+  #     definition1
+  #     definition2
+  #     definition3
+  #   synonym2
+  #     definition1
+  #     definition2
+  #     definition3
+  #   synonym2
+  #     definition1
+  #     definition2
+  #     definition3
+  # 
+  def word
+    # Список определений слова
+    @word = Word.find(params[:word_id])
+    @synsets = @word.raw_synset_words.map(&:synsets).flatten.uniq
+    @definitions = @synsets.map(&:definitions).flatten.uniq
+
+    # Получить синонимы с определениями
+    @synset_words = @synsets.map(&:words).uniq
+    @synonymes = @synset_words.map(&:word).uniq
+
+    respond_with @word, @definitions, @synonymes
   end
 end
