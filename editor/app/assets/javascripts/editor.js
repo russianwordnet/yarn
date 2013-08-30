@@ -33,8 +33,10 @@ var Editor = {
   actionPane:    $('#action-pane'),
   currentWords:  $('#current-words'),
   currentSynset: $('#current-synset'),
+  currentSynsetDefinitions: $('#current-synset .listing ul'),
   rightColumn:   $('#right-column'),
-  currentDefinition: $('.definitions ul li.active'),
+  editorArea:    $('#editor-area'),
+  currentDefinition: function() { return $('.definitions ul li.active') },
 
   listingTemplate: $('#listing-tpl').text(),
   accordionTemplate: $('#accordion-tpl').text(),
@@ -42,11 +44,14 @@ var Editor = {
   synonymesPlaceholder: $('#synonymes-placeholder'),
   addToCurrentSynsetBtn: $('#add-to-current-synset-btn'),
   synonymes: $('#synonymes'),
+  currentWord: $('.current-word'),
   addWord: function() { return $('.add-word') },
   definitionsLists: function() { return $('.definitions ul') },
 
   // Constructor
   initialize: function(data) {
+    this.editorArea.show()
+    this.updateCurrentWordPlaceholders(data.word)
     this.renderDefinitions(data.definitions)
     this.renderSynonymes(data.synonymes)
     this.setCurrentSynsetBtnHeight()
@@ -66,10 +71,9 @@ var Editor = {
     this.handleDefinitionsLists()
 
     $(document).click($.proxy(function(e) {
-      //alert('Clicked on document!');
-      if (this.currentDefinition != null) {
-        this.currentDefinition.removeClass('active')
-        this.currentDefinition = null
+      if (this.currentDefinition() != null) {
+        this.currentDefinition().removeClass('active')
+        //this.currentDefinition() = null
       }
 
       this.addToCurrentSynsetBtn.addClass('disabled')
@@ -196,14 +200,22 @@ var Editor = {
 
   // Handle click on add-to-current-synset-btn
   handleCurrentSynsetBtn: function() {
+    currentDefinition = this.currentDefinition()
+    currentSynsetDefinitions = this.currentSynsetDefinitions
+
     this.addToCurrentSynsetBtn.click(function(e) {
       e.stopPropagation()
+
+      if (currentSynsetDefinitions.find('[data-id="' + currentDefinition.data('id') + '"]').length == 0) {
+        newDefinition = currentDefinition.clone().removeClass('active')
+        currentSynsetDefinitions.append(newDefinition)
+      }
     })
   },
 
   // Handle word definitions lists
   handleDefinitionsLists: function() {
-    currentDefinition = this.currentDefinition
+    currentDefinition = this.currentDefinition()
     addToCurrentSynsetBtn = this.addToCurrentSynsetBtn
     
     this.definitionsLists().on('click', 'li', function(e) {
@@ -218,6 +230,11 @@ var Editor = {
       // Make add-to-current-synset-btn active
       addToCurrentSynsetBtn.removeClass('disabled')
     })
+  },
+
+  // Update current word placeholders
+  updateCurrentWordPlaceholders: function(word) {
+    this.currentWord.html(word)
   }
 }
 

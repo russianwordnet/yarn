@@ -2,12 +2,14 @@
   <%= render 'shared/yarn_logo' %>
   <%= render 'editor/index/searchbar', :words => @words %>
 
-  <div class="row-fluid">
-    <%= render 'editor/index/left_pane' %>
-    <%= render 'editor/index/right_pane' %>
-  </div>
+  <div id="editor-area">
+    <div class="row-fluid">
+      <%= render 'editor/index/left_pane' %>
+      <%= render 'editor/index/right_pane' %>
+    </div>
 
-  <%= render 'editor/index/action_pane' %>
+    <%= render 'editor/index/action_pane' %>
+  </div>
 </div>
 
 <script id="listing-tpl" type="text/html">

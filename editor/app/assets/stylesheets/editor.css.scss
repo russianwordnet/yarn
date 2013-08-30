@@ -1,5 +1,9 @@
 #editor-ui {
   position:relative;
+  @include user-select(none);
+  cursor: default;
+
+  #editor-area { display: none; }
 
   .yarn-logo {
     height: 60px;
@@ -46,7 +50,6 @@
     height: 250px;
     border: 1px inset #ddd;
     overflow: auto;
-    @include user-select(none);
     background: #fff;
     @include border-radius(3px);
     @include box-shadow(inset 0 0 16px -6px #000);
