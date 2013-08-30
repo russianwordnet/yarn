@@ -94,11 +94,11 @@ class EditorController < ApplicationController
   def word
     # Список определений слова
     @word = Word.find(params[:word_id])
-    @synsets = @word.raw_synset_words.map(&:synsets).flatten.uniq
-    @definitions = @synsets.map(&:definitions).flatten.uniq
+    @raw_synsets = @word.raw_synset_words.map(&:synsets).flatten.uniq
+    @definitions = @raw_synsets.map(&:definitions).flatten.uniq
 
     # Получить синонимы с определениями
-    @synset_words = @synsets.map(&:words).uniq
+    @synset_words = @raw_synsets.map(&:words).flatten.uniq
     @synonymes = @synset_words.map(&:word).uniq
 
     respond_with @word, @definitions, @synonymes
