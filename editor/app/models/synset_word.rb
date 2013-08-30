@@ -5,7 +5,7 @@ class SynsetWord < ActiveRecord::Base
 
   belongs_to :author, class_name: 'User'
 
-  belongs_to :word
+  belongs_to :word, :inverse_of => :synset_words
 
   has_many :old_synset_words, :order => :revision,
     :inverse_of => :origin

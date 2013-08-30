@@ -3,7 +3,7 @@ class RawSynsetWord < ActiveRecord::Base
 
   belongs_to :author, class_name: 'User'
 
-  belongs_to :word
+  belongs_to :word, :inverse_of => :synset_words
 
   has_many :synsets, :inverse_of => :words, finder_sql: proc {
     %Q{SELECT * FROM raw_synsets WHERE words_ids @> '{#{id}}';} },
