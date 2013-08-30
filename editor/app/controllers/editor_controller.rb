@@ -70,36 +70,15 @@ class EditorController < ApplicationController
     @query = params[:q].split.map! { |s| '%s%%' % s }.join ' '
   end
 
-  # Получить данные для левой колонки редактора по слову
-  # Формат данных такой:
-  #
-  # definitions
-  #   definition1
-  #   definition2
-  #   definition3
-  # synonymes
-  #   synonym1
-  #     definition1
-  #     definition2
-  #     definition3
-  #   synonym2
-  #     definition1
-  #     definition2
-  #     definition3
-  #   synonym2
-  #     definition1
-  #     definition2
-  #     definition3
-  # 
   def word
-    # Список определений слова
     @word = Word.find(params[:word_id])
+
     @raw_synsets = @word.raw_synset_words.map(&:synsets).flatten.uniq
     @definitions = @raw_synsets.map(&:definitions).flatten.uniq
-
-    # Получить синонимы с определениями
     @synset_words = @raw_synsets.map(&:words).flatten.uniq
     @synonymes = @synset_words.map(&:word).uniq
+
+    @synsets = @word.synset_words.map(&:synsets).flatten.uniq
 
     respond_with @word, @definitions, @synonymes
   end
