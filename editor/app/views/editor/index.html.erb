@@ -2,19 +2,21 @@
   <%= render 'shared/yarn_logo' %>
   <%= render 'editor/index/searchbar', :words => @words %>
 
-  <div class="row-fluid">
-    <%= render 'editor/index/left_pane' %>
-    <%= render 'editor/index/right_pane' %>
-  </div>
+  <div id="editor-area">
+    <div class="row-fluid">
+      <%= render 'editor/index/left_pane' %>
+      <%= render 'editor/index/right_pane' %>
+    </div>
 
-  <%= render 'editor/index/action_pane' %>
+    <%= render 'editor/index/action_pane' %>
+  </div>
 </div>
 
 <script id="listing-tpl" type="text/html">
   <div class="listing definitions">
     <ul>
       {{#definitions}}
-        <li>{{.}}</li>
+        <li data-id="{{id}}">{{text}}</li>
       {{/definitions}}
     </ul>
   </div>
@@ -26,7 +28,7 @@
       <!-- {{#count}}{{/count}} -->
       <div class="accordion-group">
         <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#synonymes" href="#collapse-{{word_id}}">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#synonymes" href="#collapse-{{id}}">
             {{#hasDefinitions}}
               {{#expandFirst}}<i class="icon icon-minus"></i>{{/expandFirst}}
               {{^expandFirst}}<i class="icon icon-plus"></i>{{/expandFirst}}
@@ -41,7 +43,7 @@
           </a>
         </div>
         {{#hasDefinitions}}
-          <div id="collapse-{{word_id}}" class="accordion-body collapse {{#expandFirst}}in{{/expandFirst}}">
+          <div id="collapse-{{id}}" class="accordion-body collapse {{#expandFirst}}in{{/expandFirst}}">
             <div class="accordion-inner">
               {{>definitions}}
             </div>
