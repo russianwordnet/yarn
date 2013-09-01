@@ -17,3 +17,12 @@ json.synonymes @synonymes do |synonym|
     json.text definition.text
   end
 end
+
+json.synsets @synsets do |synset|
+  json.id synset.id
+
+  json.definitions synset.definitions do |definition|
+    json.id   definition.id
+    json.text definition.text
+  end
+end

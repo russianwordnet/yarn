@@ -80,6 +80,6 @@ class EditorController < ApplicationController
 
     @synsets = @word.synset_words.map(&:synsets).flatten.uniq
 
-    respond_with @word, @definitions, @synonymes
+    respond_with @word, @definitions, @synonymes, @synsets
   end
 end

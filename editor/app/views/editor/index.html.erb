@@ -22,6 +22,16 @@
   </div>
 </script>
 
+<script id="synsets-tpl" type="text/html">
+  <div class="listing">
+    <ul>
+      {{#definitions}}
+        <li data-id="{{id}}">{{text}}</li>
+      {{/definitions}}
+    </ul>
+  </div>
+</script>
+
 <script id="accordion-tpl" type="text/html">
   <div class="accordion" id="synonymes">
     {{#synonymes}}
@@ -57,10 +67,3 @@
     <a href="#" class="dashed-link"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить синоним</a>
   </div>
 </script>
-
-<!-- counter http://stackoverflow.com/questions/4592491/is-there-a-way-to-set-a-counter-in-a-mustache-iteration -->
-<script id="accordion-group-tpl" type="text/html">
-
-</script>
-
-

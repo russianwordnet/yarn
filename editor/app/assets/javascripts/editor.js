@@ -40,10 +40,13 @@ var Editor = {
 
   listingTemplate: $('#listing-tpl').text(),
   accordionTemplate: $('#accordion-tpl').text(),
+  synsetsTemplate: $('#synsets-tpl').text(),
   wordDefinitionsPlaceholder: $('#word-definitions-placeholder'),
   synonymesPlaceholder: $('#synonymes-placeholder'),
+  synsetsPlaceholder: $('#synsets-placeholder'),
   addToCurrentSynsetBtn: $('#add-to-current-synset-btn'),
   synonymes: $('#synonymes'),
+  synsets: $('#synsets'),
   currentWord: $('.current-word'),
   addWord: function() { return $('.add-word') },
   definitionsLists: function() { return $('.definitions ul') },
@@ -54,6 +57,7 @@ var Editor = {
     this.updateCurrentWordPlaceholders(data.word)
     this.renderDefinitions(data.definitions)
     this.renderSynonymes(data.synonymes)
+    this.renderSynsets(data.synsets)
     this.setCurrentSynsetBtnHeight()
 
     this.synonymes.on('show', this.toggleIcon).on('hide', this.toggleIcon)
@@ -69,6 +73,10 @@ var Editor = {
     this.handleCurrentSynsetBtn()
 
     this.handleDefinitionsLists()
+
+    // Handle 'Add synset' btn
+    this.handleAddSynsetBtn()
+    this.handleSynsetsList()
 
     $(document).click($.proxy(function(e) {
       if (this.currentDefinition() != null) {
@@ -101,6 +109,13 @@ var Editor = {
 
     this.synonymesPlaceholder.html(
       Mustache.render(this.accordionTemplate, accordionView, { definitions: this.listingTemplate })
+    )
+  },
+
+  // Render synsets definitions for right-top area
+  renderSynsets: function(synsets) {
+    this.synsetsPlaceholder.html(
+      Mustache.render(this.synsetsTemplate, { definitions: synsets })
     )
   },
 
@@ -213,6 +228,22 @@ var Editor = {
     })
   },
 
+  handleAddSynsetBtn: function() {
+    var btn = this.synsets.find('a')
+    var synsets = this.synsets
+
+    btn.click(function() {
+      $.post('/', {}, function(data) {
+        var li = $(document.createElement('li'))
+          .html('Пустой синсет')
+          .addClass('active')
+
+          synsets.find('.listing li.active').removeClass('active')
+          synsets.find('.listing ul').append(li)
+      })
+    })
+  },
+
   // Handle word definitions lists
   handleDefinitionsLists: function() {
     currentDefinition = this.currentDefinition()
@@ -235,6 +266,23 @@ var Editor = {
   // Update current word placeholders
   updateCurrentWordPlaceholders: function(word) {
     this.currentWord.html(word)
+  },
+
+  handleSynsetsList: function() {
+    var synsets = this.synsets
+    var synsetsList = synsets.find('ul')
+
+    selectedSynset = synsetsList.find('li.active')
+    
+    synsetsList.on('click', 'li', function(e) {
+      e.stopPropagation()
+
+      if (selectedSynset != null) {
+        selectedSynset.removeClass('active')
+      }
+
+      selectedSynset = $(this).addClass('active')
+    })
   }
 }
 
