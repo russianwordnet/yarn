@@ -33,7 +33,7 @@ var Editor = {
   actionPane:    $('#action-pane'),
   currentWords:  $('#current-words'),
   currentSynset: $('#current-synset'),
-  currentSynsetDefinitions: $('#current-synset .listing ul'),
+  currentSynsetDefinitions: $('#current-synset ol'),
   rightColumn:   $('#right-column'),
   editorArea:    $('#editor-area'),
   currentDefinition: function() { return $('.definitions ul li.active') },
