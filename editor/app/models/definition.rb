@@ -11,6 +11,9 @@ class Definition < ActiveRecord::Base
   has_many :synsets, :inverse_of => :definitions, finder_sql: proc {
     %Q{SELECT * FROM current_synsets WHERE definitions_ids @> '{#{id}}';} }
 
+  has_many :raw_synsets, :inverse_of => :definitions, finder_sql: proc {
+    %Q{SELECT * FROM raw_synsets WHERE definitions_ids @> '{#{id}}';} }
+
   def update_from(new_definition)
     Definition.transaction do
       old_definition = OldDefinition.from_definition(self)

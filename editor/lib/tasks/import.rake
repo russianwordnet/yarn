@@ -130,13 +130,13 @@ namespace :yarn do
     antonomy_relations_count, interlinks_count = 0, 0
 
     words_offset = Word.maximum(:id) || 0
-    synsets_offset = Synset.maximum(:id) || 0
+    synsets_offset = RawSynset.maximum(:id) || 0
 
     puts 'Initializing "%s"' % ENV['xml']
     yarn = YarnSAX.parse(File.open(ENV['xml']))
 
     puts 'Started parsing words'
-    yarn.words.entries.each_slice(1228) do |words|
+    (yarn.words.entries || []).each_slice(1228) do |words|
       Word.transaction do
         words.map! do |word|
           next if duplicates.has_key? word.id
@@ -148,7 +148,7 @@ namespace :yarn do
     puts 'Finished parsing words'
 
     puts 'Started parsing synsets'
-    yarn.synsets.entries.each_slice(228) do |synsets|
+    (yarn.synsets.entries || []).each_slice(228) do |synsets|
       synsets.map! do |synset|
         Definition.transaction do
           synset.definitions.map! do |definition|
@@ -183,7 +183,7 @@ namespace :yarn do
     puts 'Finished parsing synsets'
 
     puts 'Started parsing synset relations'
-    yarn.synset_relations.each_slice(1228) do |relations|
+    (yarn.synset_relations || []).each_slice(1228) do |relations|
       SynsetRelation.transaction do
         relations.map! do |relation|
           new_synset_relation(relation, author_id).tap(&:save!)
@@ -194,7 +194,7 @@ namespace :yarn do
     puts 'Finished parsing synset relations'
 
     puts 'Started parsing word relations'
-    yarn.word_relations.each_slice(1228) do |relations|
+    (yarn.word_relations || []).each_slice(1228) do |relations|
       WordRelation.transaction do
         relations.map! do |relation|
           new_word_relation(relation, author_id).tap(&:save!)
@@ -205,7 +205,7 @@ namespace :yarn do
     puts 'Finished parsing word relations'
 
     puts 'Started parsing antonomy relations'
-    yarn.antonomy_relations.each_slice(1228) do |relations|
+    (yarn.antonomy_relations || []).each_slice(1228) do |relations|
       AntonomyRelation.transaction do
         relations.map! do |relation|
           new_antonomy_relation(relation, author_id).tap(&:save!)

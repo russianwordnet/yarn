@@ -5,15 +5,15 @@ class SynsetWord < ActiveRecord::Base
 
   belongs_to :author, class_name: 'User'
 
-  belongs_to :word
+  belongs_to :word, :inverse_of => :synset_words
 
   has_many :old_synset_words, :order => :revision,
     :inverse_of => :origin
 
-  has_many :synsets, :inverse_of => :words, finder_sql: proc {
+  has_many :synsets, finder_sql: proc {
     %Q{SELECT * FROM current_synsets WHERE words_ids @> '{#{id}}';} }
 
-  has_many :samples, :inverse_of => :synset_words, finder_sql: proc {
+  has_many :samples, finder_sql: proc {
     %Q{SELECT * FROM current_samples WHERE id IN
         (SELECT unnest(samples_ids) FROM current_synset_words
           WHERE id = #{id});} }

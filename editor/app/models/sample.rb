@@ -8,7 +8,7 @@ class Sample < ActiveRecord::Base
   has_many :old_samples, :order => :revision,
     :inverse_of => :origin
 
-  has_many :synset_words, :inverse_of => :samples, finder_sql: proc {
+  has_many :synset_words, finder_sql: proc {
     %Q{SELECT * FROM current_synset_words WHERE samples_ids @> '{#{id}}';} }
 
   def update_from(new_sample)

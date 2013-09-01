@@ -8,9 +8,12 @@ namespace :yarn do
   desc 'Find such words in a dictionary in the YARN format that already exist in the current lexicon'
   task :duplicates => :environment do
     raise 'Missing ENV["xml"]' unless ENV['xml']
+
     output = ENV['output'] || ENV['xml'] + '.duplicates.csv'
 
     xml = Nokogiri::XML(File.open(ENV['xml']))
+
+    duplicates = {}
 
     puts 'Hey, there are %d words in "%s".' % [
       xml.xpath('//wordEntry').size,
@@ -30,9 +33,12 @@ namespace :yarn do
     end
 
     CSV.open(output, 'w') do |csv|
-      duplicates.each do |*values|
-        csv << values
+      duplicates.each do |entry_id, word_id, _|
+        csv << [entry_id, word_id]
       end
     end
+
+    puts 'Output of %d duplicates is written to "%s"' %
+      [duplicates.size, output]
   end
 end
