@@ -1,8 +1,10 @@
 # encoding: utf-8
 
 class EditorController < ApplicationController
-  layout 'editor'
+  before_filter :authenticate_user!
   before_filter :extract_query, :only => :search
+
+  layout 'editor'
 
   respond_to :html, :json
 
