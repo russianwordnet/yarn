@@ -84,4 +84,24 @@ class EditorController < ApplicationController
 
     respond_with @word, @definitions, @synonymes
   end
+
+  def create_synset
+    @word = Word.find(params[:word_id])
+
+    @synset_word = SynsetWord.new(word: @word)
+    @synset = Synset.new
+
+    Synset.transaction do
+      @synset_word.author = current_user
+      @synset_word.save!
+
+      @synset.author = current_user
+      @synset.words_ids << @synset_word.id
+      @synset.save!
+    end
+
+    @synsets = @word.synset_words.map(&:synsets).flatten.uniq
+
+    respond_with @synsets
+  end
 end
