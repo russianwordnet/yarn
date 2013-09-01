@@ -1,8 +1,10 @@
 # encoding: utf-8
 
 class EditorController < ApplicationController
-  layout 'editor'
+  before_filter :authenticate_user!
   before_filter :extract_query, :only => :search
+
+  layout 'editor'
 
   respond_to :html, :json
 
@@ -81,5 +83,25 @@ class EditorController < ApplicationController
     @synsets = @word.synset_words.map(&:synsets).flatten.uniq
 
     respond_with @word, @definitions, @synonymes, @synsets
+  end
+
+  def create_synset
+    @word = Word.find(params[:word_id])
+
+    @synset_word = SynsetWord.new(word: @word)
+    @synset = Synset.new
+
+    Synset.transaction do
+      @synset_word.author = current_user
+      @synset_word.save!
+
+      @synset.author = current_user
+      @synset.words_ids << @synset_word.id
+      @synset.save!
+    end
+
+    @synsets = @word.synset_words.map(&:synsets).flatten.uniq
+
+    respond_with @synsets
   end
 end
