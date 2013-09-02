@@ -58,8 +58,8 @@ Yarn::Application.routes.draw do
     get 'append_definition', :as => :append_definition
     get 'word', :as => :word
 
+    get 'show_synset', :as => :show_synset
     post 'create_synset', :as => :create_synset
-    post 'show_synset', :as => :show_synset
     post 'create_defintion', :as => :create_defintion
   end
 
