@@ -9,6 +9,7 @@
     </div>
 
     <%= render 'editor/index/action_pane' %>
+    <%= render 'editor/index/add_definition_modal' %>
   </div>
 </div>
 
@@ -16,8 +17,18 @@
   <div class="listing definitions">
     <ul>
       {{#definitions}}
-        <li data-id="{{id}}">{{text}}</li>
+        <li data-id="{{id}}" data-word="{{word}}">{{text}}</li>
       {{/definitions}}
+    </ul>
+  </div>
+</script>
+
+<script id="synsets-tpl" type="text/html">
+  <div class="listing">
+    <ul>
+      {{#synsets}}
+        <li data-id="{{id}}">{{text}}</li>
+      {{/synsets}}
     </ul>
   </div>
 </script>
@@ -37,8 +48,8 @@
 
             {{word}}
 
-            <span class="add-word" data-word="{{word}}" title="Добавить слово в текущий синсет">
-              <i class="icon icon-plus-sign-alt"></i>
+            <span class="add-word" title="Добавить слово в текущий синсет">
+              <i class="icon icon-plus-sign-alt" data-word="{{word}}"></i>
             </span>
           </a>
         </div>
@@ -57,10 +68,3 @@
     <a href="#" class="dashed-link"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить синоним</a>
   </div>
 </script>
-
-<!-- counter http://stackoverflow.com/questions/4592491/is-there-a-way-to-set-a-counter-in-a-mustache-iteration -->
-<script id="accordion-group-tpl" type="text/html">
-
-</script>
-
-
