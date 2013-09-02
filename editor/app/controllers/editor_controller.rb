@@ -106,7 +106,7 @@ class EditorController < ApplicationController
   end
 
   def create_definition
-    @synset = Word.find(params[:synset_id])
+    @synset = Synset.find(params[:synset_id])
 
     Synset.transaction do
       @definition = Definition.new(params[:definition])
