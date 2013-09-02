@@ -122,4 +122,13 @@ class EditorController < ApplicationController
 
     respond_with @synset, @definitions, @words
   end
+
+  def show_synset
+    @synset = Synset.find(params[:synset_id])
+
+    @definitions = @synset.definitions
+    @words = @synset.synset_words.map(&:word)
+
+    respond_with @synset, @definitions, @words
+  end
 end
