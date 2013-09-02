@@ -2,7 +2,7 @@
   <%= render 'shared/yarn_logo' %>
   <%= render 'editor/index/searchbar', :words => @words %>
   <div id="spinner"></div>
-  
+
   <div id="editor-area">
     <div class="row-fluid">
       <%= render 'editor/index/left_pane' %>
@@ -49,8 +49,8 @@
 
             {{word}}
 
-            <span class="add-word" title="Добавить слово в текущий синсет">
-              <i class="icon icon-plus-sign-alt" data-word="{{word}}"></i>
+            <span class="add-word" title="Добавить слово в текущий синсет" data-word="{{word}}">
+              <i class="icon icon-plus-sign-alt"></i>
             </span>
           </a>
         </div>
