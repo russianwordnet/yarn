@@ -46,6 +46,16 @@
     }
   }
 
+  #spinner {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 22px;
+    right: 20px;
+    background: asset-url("select2-spinner.gif", image) no-repeat 50% 50%;
+    display: none;
+  }
+
   i.icon-remove {
     cursor: pointer;
     margin-left: 3px;
