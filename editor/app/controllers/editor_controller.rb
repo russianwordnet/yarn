@@ -120,6 +120,6 @@ class EditorController < ApplicationController
     @definitions = @synset.definitions
     @words = @synset.synset_words.map(&:word)
 
-    respond_with @definitions, @words
+    respond_with @synset, @definitions, @words
   end
 end
