@@ -4,6 +4,10 @@
 #= require select2
 #= require jquery.color
 #= require mustache
+#= require bootbox
+#= require jquery.validate
+#= require jquery.validate.additional-methods
+#= require jquery.validate.localization/messages_ru
 #= require editor
 
 # Flash messages

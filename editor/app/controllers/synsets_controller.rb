@@ -3,6 +3,8 @@ class SynsetsController < ApplicationController
   before_filter :find_word, :only => :search
   before_filter :set_top_bar_synset, :only => :show
 
+  respond_to :html, :json
+
   def index
     @synsets = Synset.order('updated_at DESC').page params[:page]
 
@@ -14,11 +16,7 @@ class SynsetsController < ApplicationController
   end
 
   def show
-    respond_to do |format|
-      format.html
-      format.xml { render xml: @synset }
-      format.json { render json: @synset }
-    end
+    respond_with @synsets
   end
 
   def search

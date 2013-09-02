@@ -9,6 +9,7 @@
     </div>
 
     <%= render 'editor/index/action_pane' %>
+    <%= render 'editor/index/add_definition_modal' %>
   </div>
 </div>
 
@@ -16,7 +17,7 @@
   <div class="listing definitions">
     <ul>
       {{#definitions}}
-        <li data-id="{{id}}">{{text}}</li>
+        <li data-id="{{id}}" data-word="{{word}}">{{text}}</li>
       {{/definitions}}
     </ul>
   </div>
@@ -25,9 +26,9 @@
 <script id="synsets-tpl" type="text/html">
   <div class="listing">
     <ul>
-      {{#definitions}}
+      {{#synsets}}
         <li data-id="{{id}}">{{text}}</li>
-      {{/definitions}}
+      {{/synsets}}
     </ul>
   </div>
 </script>
@@ -47,8 +48,8 @@
 
             {{word}}
 
-            <span class="add-word" data-word="{{word}}" title="Добавить слово в текущий синсет">
-              <i class="icon icon-plus-sign-alt"></i>
+            <span class="add-word" title="Добавить слово в текущий синсет">
+              <i class="icon icon-plus-sign-alt" data-word="{{word}}"></i>
             </span>
           </a>
         </div>

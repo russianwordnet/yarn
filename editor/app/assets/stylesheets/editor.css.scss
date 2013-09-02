@@ -46,6 +46,15 @@
     }
   }
 
+  i.icon-remove {
+    cursor: pointer;
+    margin-left: 3px;
+
+    &:hover {
+      color: maroon;
+    }
+  }
+
   .listing {
     height: 250px;
     border: 1px inset #ddd;
@@ -184,15 +193,6 @@
             color: $base-blue;
           }
         }
-
-        i.icon {
-          cursor: pointer;
-          margin-left: 3px;
-
-          &:hover {
-            color: maroon;
-          }
-        }
       }
     }
 
@@ -205,6 +205,22 @@
         margin: 0 auto;
         display: block;
       }
+    }
+  }
+
+  // Add definition form
+  #add-definition-form {
+    &.form-horizontal {
+      .controls {
+        margin-left: 70px;
+      }
+
+      .control-label {
+        width: 50px;
+      }
+
+      textarea, input[type=text] { width: 440px; }
+      textarea { height: 150px; }
     }
   }
 }

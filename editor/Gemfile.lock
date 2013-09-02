@@ -37,6 +37,8 @@ GEM
     arel (3.0.2)
     bcrypt-ruby (3.1.1)
     bcrypt-ruby (3.1.1-java)
+    bootbox-rails (0.1.0)
+      railties (>= 3.1.0)
     bootstrap-sass (2.3.2.1)
       sass (~> 3.2)
     builder (3.0.4)
@@ -101,6 +103,8 @@ GEM
     jquery-rails (3.0.4)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
+    jquery-validation-rails (1.11.1)
+      thor (~> 0.14)
     json (1.8.0)
     json (1.8.0-java)
     jwt (0.1.8)
@@ -222,6 +226,7 @@ PLATFORMS
 DEPENDENCIES
   active_link_to
   activerecord-jdbcpostgresql-adapter
+  bootbox-rails
   bootstrap-sass (~> 2.3.2.0)
   ceaser-easing
   cells
@@ -238,6 +243,7 @@ DEPENDENCIES
   high_voltage
   jbuilder
   jquery-rails
+  jquery-validation-rails
   kaminari
   kramdown
   nokogiri
