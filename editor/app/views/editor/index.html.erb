@@ -18,7 +18,7 @@
   <div class="listing definitions">
     <ul>
       {{#definitions}}
-        <li data-id="{{id}}" data-word="{{word}}">{{text}}</li>
+        <li data-id="{{id}}" data-word="{{word}}" data-word-id="{{word_id}}">{{text}}</li>
       {{/definitions}}
     </ul>
   </div>
@@ -40,7 +40,7 @@
       <!-- {{#count}}{{/count}} -->
       <div class="accordion-group">
         <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#synonymes" href="#collapse-{{id}}">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#synonymes" href="#collapse-{{word_id}}">
             {{#hasDefinitions}}
               {{#expandFirst}}<i class="icon icon-minus"></i>{{/expandFirst}}
               {{^expandFirst}}<i class="icon icon-plus"></i>{{/expandFirst}}
@@ -49,13 +49,13 @@
 
             {{word}}
 
-            <span class="add-word" title="Добавить слово в текущий синсет" data-word="{{word}}">
+            <span class="add-word" title="Добавить слово в текущий синсет" data-word="{{word}}" data-word-id="{{word_id}}" >
               <i class="icon icon-plus-sign-alt"></i>
             </span>
           </a>
         </div>
         {{#hasDefinitions}}
-          <div id="collapse-{{id}}" class="accordion-body collapse {{#expandFirst}}in{{/expandFirst}}">
+          <div id="collapse-{{word_id}}" class="accordion-body collapse {{#expandFirst}}in{{/expandFirst}}">
             <div class="accordion-inner">
               {{>definitions}}
             </div>
@@ -68,4 +68,53 @@
   <div>
     <a href="#" class="dashed-link"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить синоним</a>
   </div>
+</script>
+
+<script id="current-synset-tpl" type="text/html">
+  <section id="current-synset">
+    <h3>Текущий синсет</h3>
+    <p>Нажимайте на слова и определения, чтобы добавить их в текущий синсет.</p>
+
+    <div id="current-words">
+      {{#words}}
+        <div data-id="{{id}}">
+          <span title="Добавить в текущий синсет">{{word}}</span>
+          <i title="Удалить" class="icon icon-remove"></i>
+        </div>
+      {{/words}}
+    </div>
+
+    <div>
+      <ol>
+        {{#definitions}}
+          <li data-id="{{id}}" data-word="{{word}}">
+            {{text}}
+            <i title="Удалить" class="icon icon-remove"></i>
+          </li>
+        {{/definitions}}
+      </ol>
+    </div>
+
+    <div>
+      <a href="#add-definition-modal" data-toggle="modal" class="dashed-link"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить своё определение</a>
+    </div>
+
+    <div id="done-current-synset-btn">
+      <button class="btn disabled">Сохранить</button>
+    </div>
+  </section>
+</script>
+
+<script id="word-tpl" type="text/html">
+  <div data-id="{{id}}">
+    <span title="Добавить в текущий синсет">{{word}}</span>
+    <i title="Удалить" class="icon icon-remove"></i>
+  </div>
+</script>
+
+<script id="definition-tpl" type="text/html">
+  <li data-id="{{id}}">
+    {{text}}
+    <i title="Удалить" class="icon icon-remove"></i>
+  </li>
 </script>

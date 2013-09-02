@@ -5,9 +5,10 @@
       definitionsTemplate : $('#listing-tpl').text(),
       accordionTemplate   : $('#accordion-tpl').text(),
       onExpandAccordion   : function(accordion) { },
-      onAddWordBtnOver    : function(word) { },
-      onAddWordBtnOut     : function(word) { },
+      onAddWordBtnOver    : function(e) { },
+      onAddWordBtnOut     : function(e) { },
       onAddWordClick      : function(word) { },
+      onAfterRender       : function() {}
     }, o)
 
     this.initialize(data, o)
@@ -20,7 +21,9 @@
     initialize: function(data, o) {
       this.data = data
       this.o    = o
+
       this.render()
+      this.o.onAfterRender()
 
       this.accordion
         .on('show', this.toggleIcon)
@@ -62,12 +65,16 @@
     // Handle add-word mouse interaction
     addWordMouseInteraction: function() {
       this.accordion.find('.add-word').hover(
-        $.proxy(function(e) { this.o.onAddWordBtnOver($(e.currentTarget).data('word'))}, this),
-        $.proxy(function(e) { this.o.onAddWordBtnOut($(e.currentTarget).data('word'))}, this)
+        $.proxy(function(e) { this.o.onAddWordBtnOver(e) }, this),
+        $.proxy(function(e) { this.o.onAddWordBtnOut(e) }, this)
       ).on('click', $.proxy(function(e) {
         e.stopPropagation()
         e.preventDefault()
-        this.o.onAddWordBtnClick($(e.currentTarget).data('word'))
+
+        this.o.onAddWordBtnClick({
+          id   : $(e.currentTarget).data('word-id'),
+          word : $(e.currentTarget).data('word')
+        })
       }, this))
     },
 

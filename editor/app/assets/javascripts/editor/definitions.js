@@ -1,8 +1,9 @@
 (function( $ ) {
   $.fn.EditorDefinitions = function(data, o) {
     var o = $.extend({
-      placeholder : $('#word-definitions-placeholder'),
-      template    : $('#listing-tpl').text()
+      placeholder   : $('#word-definitions-placeholder'),
+      template      : $('#listing-tpl').text(),
+      onAfterRender : function() {}
     }, o)
 
     this.initialize(data, o)
@@ -15,6 +16,7 @@
       this.data = data
       this.o    = o
       this.render()
+      this.o.onAfterRender()
     },
 
     render: function() {

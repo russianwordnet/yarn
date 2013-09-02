@@ -77,12 +77,10 @@ class EditorController < ApplicationController
 
     @raw_synsets = @word.raw_synset_words.map(&:synsets).flatten.uniq
     @definitions = @raw_synsets.map(&:definitions).flatten.uniq
-    @synset_words = @raw_synsets.map(&:words).flatten.uniq
-    @synonymes = @synset_words.map(&:word).uniq
-
+    @synset_words = @raw_synsets.map(&:words).flatten.uniq # FIXME Нужно сделать уникальными - щас не работает, есть дубли
     @synsets = @word.synset_words.map(&:synsets).flatten.uniq
 
-    respond_with @word, @definitions, @synonymes, @synsets
+    respond_with @word, @definitions, @synsets
   end
 
   def create_synset

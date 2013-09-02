@@ -11,7 +11,9 @@
   - Удалено определение из тек. синсета
 */
 
+//= require editor/add_to_current_synset_button
 //= require editor/definitions
+//= require editor/definition
 //= require editor/synonymes
 //= require editor/synsets
 //= require editor/current_synset
@@ -20,9 +22,12 @@
   $.fn.editor = function(o) {
     // Editor options
     var o = $.extend({
-      definitions : $.fn.EditorDefinitions,
-      synonymes   : $.fn.EditorSynonymes,
-      synsets     : $.fn.EditorSynsets,
+      definitions   : $.fn.EditorDefinitions,
+      definition    : $.fn.EditorDefinition,
+      synonymes     : $.fn.EditorSynonymes,
+      synsets       : $.fn.EditorSynsets,
+      currentSynset : $.fn.EditorCurrentSynset,
+      addToCurrentSynsetButton: $.fn.EditorAddToCurrentSynsetButton,
       options : {
         placeholder: "Введите слово",
         allowClear:  true,
@@ -41,10 +46,15 @@
     $.fn.editor = function(el) { this.initialize(el) }
 
     $.fn.editor.prototype = {
-      definitions : null,
-      editorUi    : null,
-      word        : null,
-      data        : null,
+      addToCurrentSynsetButton : null,
+      definitions   : null,
+      definition    : null,
+      synonymes     : null,
+      synsets       : null,
+      currentSynset : null,
+      editorUi      : null,
+      word          : null,
+      data          : null,
 
       // Initialize editor
       initialize: function(editorUi) {
@@ -65,35 +75,66 @@
         this.wordId = data.id
         this.data   = data
 
+        this.enable()
+
+        // Current synset area
+        this.currentSynset = new o.currentSynset({})
+
+        // Big 'addToCurrentSynsetButton' button
+        this.addToCurrentSynsetButton = new o.addToCurrentSynsetButton({
+          onClick: $.proxy(function() {
+            this.currentSynset.addDefinition(this.definition.current())
+          }, this)
+        })
+
         // Create definitions area
-        this.definitions = new o.definitions(this.data)
+        this.definitions = new o.definitions(this.data, {
+          onAfterRender: $.proxy(function() {
+            this.addToCurrentSynsetButton.adjustHeight()
+          }, this)
+        })
 
         // Create synonymes area
         this.synonymes = new o.synonymes(this.data, {
           onExpandAccordion : $.proxy(function(accordion) {
-            // TODO set button height here
-            console.log(accordion)
+            this.addToCurrentSynsetButton.adjustHeight()
           }, this),
-          onAddWordBtnOver : $.proxy(function(word) {
-            console.log(word)
+          onAddWordBtnOver: $.proxy(function(e) {
+            this.currentSynset.highlightWords()
           }, this),
-          onAddWordBtnOut : $.proxy(function(word) {
-            console.log(word)
+          onAddWordBtnOut: $.proxy(function(e) {
+            this.currentSynset.highlightWords()
           }, this),
-          onAddWordBtnClick : $.proxy(function(word) {
-            console.log(word)
+          onAddWordBtnClick: $.proxy(function(word) {
+            this.currentSynset.addWord(word)
           }, this),
+          onAfterRender: $.proxy(function() {
+            this.addToCurrentSynsetButton.adjustHeight()
+          }, this)
         })
 
         // Create synsets area
-        this.synsets = new o.synsets(this.data)
+        this.synsets = new o.synsets(this.data, {
+          onAdd: $.proxy(function(data, newSynset) {
+            this.currentSynset.render(data)
+          }, this)
+        })
+
+        // Handle current definition
+        this.definition = new o.definition({
+          onSelect: $.proxy(function(definition) {
+            this.addToCurrentSynsetButton.enable()
+          }, this),
+          onBlur: $.proxy(function(definition) {
+            this.addToCurrentSynsetButton.disable()
+          }, this)
+        })
 
         o.onDataLoad(this.data)
         this.updateCurrentWordPlaceholders()
-        this.show()
       },
 
-      show: function() {
+      enable: function() {
         o.options.editorArea.show()
       },
 
@@ -138,174 +179,6 @@ var Editor = {
   addWord: function() { return $('.add-word') },
   definitionsLists: function() { return $('.definitions ul') },
 
-  // Constructor
-  initialize: function(wordId, data) {
-    this.wordId = wordId
-
-    this.editorArea.show()
-    this.updateCurrentWordPlaceholders(data.word)
-    this.renderDefinitions(data.definitions)
-    this.renderSynonymes(data.synonymes)
-    this.renderSynsets(data.synsets)
-    this.setCurrentSynsetBtnHeight()
-
-    this.synonymes().on('show', this.toggleIcon).on('hide', this.toggleIcon)
-    this.synonymes().on('shown', this.setCurrentSynsetBtnHeight).on('hidden', this.setCurrentSynsetBtnHeight)
-
-    // TODO: Move to separate object
-    this.handleAddWordHover()
-    this.handleAddWord()
-    this.handleRemoveWord()
-
-    // TODO: Move to separate object
-    this.handleCurrentSynsetBtnHover()
-    this.handleCurrentSynsetBtn()
-
-    this.handleDefinitionsLists()
-
-    // Handle 'Add synset' btn
-    this.handleAddSynsetBtn()
-    this.handleSynsetsList()
-
-    this.handleAddDefinitionModal()
-
-    $(document).click($.proxy(function(e) {
-      if (this.currentDefinition() != null) {
-        this.currentDefinition().removeClass('active')
-        //this.currentDefinition() = null
-      }
-
-      this.addToCurrentSynsetBtn.addClass('disabled')
-    }, this))
-  },
-
-  // Handle add definition to current synset btn
-  handleAddDefinitionModal: function() {
-    $('#add-definition-modal').find('button.btn-primary').click(function() {
-      $('#add-definition-form').validate({
-        rules: {
-          text: {
-            required: true
-          }
-        },
-        highlight: function(element) {
-          $(element).closest('.control-group').removeClass('success').addClass('error');
-        },
-        success: function(element) {
-          element.addClass('valid')
-          .closest('.control-group').removeClass('error')
-        }
-      })
-
-      $('#add-definition-form').submit()
-    })
-  },
-
-  // Left column: render current word definitions list
-  renderDefinitions: function(definitions) {
-    this.wordDefinitionsPlaceholder.html(
-      Mustache.render(this.listingTemplate, { definitions: definitions })
-    )
-  },
-
-  // Left column: render current word synonymes with its definitions
-  renderSynonymes: function(synonymes) {
-    var counter = 0
-    var accordionView = {
-      count: function() {
-        return function (text, render) { return counter++ }
-      },
-      hasDefinitions: function() { return this.definitions.length > 0 },
-      expandFirst: function() { return counter == 1 },
-      synonymes: synonymes
-    }
-
-    this.synonymesPlaceholder.html(
-      Mustache.render(this.accordionTemplate, accordionView, { definitions: this.listingTemplate })
-    )
-  },
-
-  // Render synsets definitions for right-top area
-  renderSynsets: function(synsets) {
-    this.synsetsPlaceholder.html(
-      Mustache.render(this.synsetsTemplate, { synsets: synsets })
-    )
-  },
-
-  // Set current cynset button height
-  setCurrentSynsetBtnHeight: function() {
-    if (this.rightColumn) {
-      this.addToCurrentSynsetBtn.css('height', this.rightColumn.height())
-    }
-  },
-
-
-  // Handle add-word hover
-  handleAddWordHover: function() {
-    currentWords = this.currentWords
-
-    this.addWord().hover(function() {
-      currentWords.addClass('active')
-    }, function() {
-      currentWords.removeClass('active')
-    })
-  },
-
-  // Click on 'add-word' button
-  handleAddWord: function() {
-    $('#synonymes .add-word').on('click', $.proxy(function(e) {
-      e.stopPropagation()
-      e.preventDefault()
-      this.createWord($(e.target).data('word'))
-    }, this))
-  },
-
-  createWord: function(word) {
-    // Do not add new word if already exists
-    if ($.inArray(word, this.selectedWords) !== -1) {
-      return
-    }
-
-    this.isCurrentSynsetChanged = true
-
-    var wrapper = $(document.createElement('div'))
-      .data('word', word)
-
-    var span = $(document.createElement('span'))
-      .attr('title', 'Добавить в текущий синсет')
-      .html(word)
-
-    var icon = $(document.createElement('i'))
-      .attr('title', 'Удалить')
-      .addClass('icon icon-remove')
-
-    $('#current-words').append(
-      wrapper.append(span, icon)
-    )
-
-    // Add new word to data attributes
-    this.selectedWords.push(word)
-
-    // Highlite insertion
-    wrapper
-      .css('background-color', '#38B2E5')
-      .animate({
-        backgroundColor: '#eeeeee',
-      }, { duration: 700 })
-  },
-
-  // Remove word from current synset
-  handleRemoveWord: function() {
-    selectedWords = this.selectedWords//.data('words').split(/\s+/) || []
-    this.isCurrentSynsetChanged = true
-
-    this.currentWords.on('click', 'i.icon', function() {
-      var wrapper = $(this).closest('div')
-      selectedWords.splice($.inArray(wrapper.data('word'), selectedWords), 1)
-      wrapper.remove()
-    })
-  },
-
   // Handle hover on add-to-current-synset-btn
   handleCurrentSynsetBtnHover: function() {
     currentSynset = this.currentSynset
@@ -346,26 +219,6 @@ var Editor = {
     })
   },
 
-  handleAddSynsetBtn: function() {
-    var that = this
-
-    this.synsets.find('a').click(function(e) {
-      e.preventDefault()
-
-      $.post('/editor/create_synset', { word_id: that.wordId }, function(data) {
-        that.renderSynsets(data.synsets)
-        that.currentSynset.show()
-        that.handleSynsetsList()
-
-        // Highligth new synset
-        var synsetsList = that.synsets.find('ul')
-        var synsetsWrapper = that.synsets.find('ul').closest('div')
-        synsetsList.find('[data-id="' + data.id + '"]').addClass('active')
-        synsetsWrapper[0].scrollTop = synsetsWrapper[0].scrollHeight
-      })
-    })
-  },
-
   // Handle word definitions lists
   handleDefinitionsLists: function() {
     currentDefinition = this.currentDefinition()
@@ -385,25 +238,6 @@ var Editor = {
     })
   },
 
-  // Update current word placeholders
-  updateCurrentWordPlaceholders: function(word) {
-    this.currentWord.html(word)
-  },
-
-  handleSynsetsList: function() {
-    var synsetsList = this.synsets.find('ul')
-    selectedSynset = synsetsList.find('li.active')
-    
-    synsetsList.on('click', 'li', function(e) {
-      e.stopPropagation()
-
-      if (selectedSynset != null) {
-        selectedSynset.removeClass('active')
-      }
-
-      selectedSynset = $(this).addClass('active')
-    })
-  },
 
   notifyCurrentSynsetChanged: function() {
     if (this.isCurrentSynsetChanged) {
