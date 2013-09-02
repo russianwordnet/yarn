@@ -82,7 +82,7 @@ class EditorController < ApplicationController
 
     @synsets = @word.synset_words.map(&:synsets).flatten.uniq
 
-    respond_with @word, @definitions, @synonymes
+    respond_with @word, @definitions, @synonymes, @synsets
   end
 
   def create_synset
@@ -102,6 +102,6 @@ class EditorController < ApplicationController
 
     @synsets = @word.synset_words.map(&:synsets).flatten.uniq
 
-    respond_with @synsets
+    render 'create_synset'
   end
 end
