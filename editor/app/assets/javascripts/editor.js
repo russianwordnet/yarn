@@ -1,33 +1,16 @@
-//////////////////////////////////////////////////////////////////////////
-// Variables
+//= require spinner
+//= require ajax_setup
 
+var wordInput = $("#searchbar #word")
 
-//////////////////////////////////////////////////////////////////////////
-$("#searchbar #word").select2({
+wordInput.select2({
   placeholder: "Введите слово",
-  allowClear: true,
-  /*ajax: {
-    url: "/words.json",
-    dataType: 'json',
-    quietMillis: 100,
-    data: function (term, page) {
-      return {
-        q: term,
-        page_limit: 10,
-      };
-    },
-    results: function (data, page) {
-      console.log({ text: data.word, id: data.id })
-      return { results: { text: data.word, id: data.id } }
-    }
-  }*/
+  allowClear: true
 }).on("change", function(e) { // When select a word
-  var wordId = $("#searchbar #word").val()
-  $.getJSON('/editor/word.json', { word_id: wordId }, function(data) {
-    Editor.initialize(wordId, data)
+  $.getJSON('/editor/word.json', { word_id: wordInput.val() }, function(data) {
+    Editor.initialize(wordInput.val(), data)
   })
 })
-
 
 
 var Editor = {
@@ -37,6 +20,7 @@ var Editor = {
   actionPane:    $('#action-pane'),
   currentWords:  $('#current-words'),
   selectedWords: [],
+  isCurrentSynsetChanged: false,
   currentSynset: $('#current-synset'),
   currentSynsetDefinitions: $('#current-synset ol'),
   rightColumn:   $('#right-column'),
@@ -86,7 +70,7 @@ var Editor = {
     this.handleAddSynsetBtn()
     this.handleSynsetsList()
 
-    this.handleAddDefinitionModal();
+    this.handleAddDefinitionModal()
 
     $(document).click($.proxy(function(e) {
       if (this.currentDefinition() != null) {
@@ -190,14 +174,12 @@ var Editor = {
   },
 
   createWord: function(word) {
-    //existentWords = $('#current-words').data('words').split(/[\s+/) //|| []
-    //console.log($('#current-words').data('words'))
-    //console.log(word)
-    
     // Do not add new word if already exists
     if ($.inArray(word, this.selectedWords) !== -1) {
       return
     }
+
+    this.isCurrentSynsetChanged = true
 
     var wrapper = $(document.createElement('div'))
       .data('word', word)
@@ -216,7 +198,6 @@ var Editor = {
 
     // Add new word to data attributes
     this.selectedWords.push(word)
-    //$('#current-words').attr('data-words', this.selectedWords.join(' '))
 
     // Highlite insertion
     wrapper
@@ -229,6 +210,7 @@ var Editor = {
   // Remove word from current synset
   handleRemoveWord: function() {
     selectedWords = this.selectedWords//.data('words').split(/\s+/) || []
+    this.isCurrentSynsetChanged = true
 
     this.currentWords.on('click', 'i.icon', function() {
       var wrapper = $(this).closest('div')
@@ -272,6 +254,7 @@ var Editor = {
 
         that.createWord(newDefinition.data('word'))
         currentSynsetDefinitions.append(newDefinition)
+        this.isCurrentSynsetChanged = true
       }
     })
   },
@@ -322,7 +305,6 @@ var Editor = {
 
   handleSynsetsList: function() {
     var synsetsList = this.synsets.find('ul')
-
     selectedSynset = synsetsList.find('li.active')
     
     synsetsList.on('click', 'li', function(e) {
@@ -334,6 +316,12 @@ var Editor = {
 
       selectedSynset = $(this).addClass('active')
     })
+  },
+
+  notifyCurrentSynsetChanged: function() {
+    if (this.isCurrentSynsetChanged) {
+      bootbox.alert('Текущий синсет был изменён. Необходимо сохранить изменения.')
+    }
   }
 }
 
