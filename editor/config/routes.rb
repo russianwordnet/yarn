@@ -58,7 +58,8 @@ Yarn::Application.routes.draw do
     get 'append_definition', :as => :append_definition
     get 'word', :as => :word
 
-    post 'create_synset', :as => :new_synset
+    post 'create_synset', :as => :create_synset
+    post 'create_defintion', :as => :create_defintion
   end
 
   root to: 'high_voltage/pages#show', id: 'index'

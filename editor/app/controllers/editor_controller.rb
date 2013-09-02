@@ -104,4 +104,22 @@ class EditorController < ApplicationController
 
     render 'create_synset'
   end
+
+  def create_definition
+    @synset = Word.find(params[:synset_id])
+
+    Synset.transaction do
+      @definition = Definition.new(params[:definition])
+      @definition.author = current_user
+      @definition.save!
+
+      @synset.definitions_ids << @definition.id
+      @synset.save!
+    end
+
+    @definitions = @synset.definitions
+    @words = @synset.synset_words.map(&:word)
+
+    respond_with @definitions, @words
+  end
 end
