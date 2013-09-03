@@ -111,14 +111,10 @@ class EditorController < ApplicationController
       @definition.author = current_user
       @definition.save!
 
-      @synset.definitions_ids.push @definition.id
+      @synset.definitions_ids += [@definition.id]
       @synset.save!
     end
 
-    #@definitions = @synset.definitions
-    #@words = @synset.synset_words.map(&:word)
-
-    #respond_with @definition#@synset, @definitions, @words
     render 'create_definition'
   end
 
