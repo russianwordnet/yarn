@@ -56,7 +56,7 @@
       this.currentDefinition.removeClass('active').addClass('inactive')
 
       // Make same definitions inactive in all listings
-      this.inactivateDefinition(this.currentDefinition.data('id'))
+      this.inactivateDefinitions(this.currentDefinition.data('id'))
       this.currentDefinition = null
     },
 
@@ -68,8 +68,12 @@
       this.o.lists.find('li[data-id=' + definitionId + ']').removeClass('inactive')      
     },
 
-    inactivateDefinition: function(definitionId) {
-      this.o.lists.find('li[data-id=' + definitionId + ']').addClass('inactive')
+    inactivateDefinitions: function(definitionIds) {
+      if (!(definitionIds instanceof Array)) definitionIds = [definitionIds]
+
+      $.each(definitionIds, $.proxy(function(index, definitionId) {
+        this.o.lists.find('li[data-id=' + definitionId + ']').addClass('inactive')
+      }, this))
     },
 
     clear: function() {
