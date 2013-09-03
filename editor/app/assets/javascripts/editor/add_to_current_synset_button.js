@@ -1,9 +1,11 @@
 (function( $ ) {
   $.fn.EditorAddToCurrentSynsetButton = function(o) {
     var o = $.extend({
-      selector : $('#add-to-current-synset-btn'),
-      column   : $('#right-column'),
-      onClick  : function() {}
+      selector  : $('#add-to-current-synset-btn'),
+      column    : $('#right-column'),
+      onClick   : function() {},
+      onBtnOver : function(e) {},
+      onBtnOut  : function(e) {}
     }, o)
 
     this.initialize(o)
@@ -20,7 +22,10 @@
           e.stopPropagation()
           this.o.onClick()
         }
-      }, this))
+      }, this)).hover(
+        $.proxy(function(e) { if (this.isEnabled()) this.o.onBtnOver(e) }, this),
+        $.proxy(function(e) { if (this.isEnabled()) this.o.onBtnOut(e) }, this)
+      )
     },
 
     enable: function() {

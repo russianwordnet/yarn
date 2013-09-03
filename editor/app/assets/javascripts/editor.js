@@ -10,6 +10,23 @@
   - Добавлено определение в тек. синсет
   - Удалено определение из тек. синсета
 */
+/*
+  + Текущий синсет можно сохранить тогда, когда у него есть хоть одно слово и определение.
+  + Если он валиден, то кнопка Сохранить становится активной
+  + При наведении на кнопку доб в тек синсет - тек синсет подсвечивается
+  - Поиск и добавление синонима
+  - Сохранение текущего слова и переход к другому слову (тут надо понять что и как делать)
+  + Выбор и рендеринг синсета из списка
+  + В тек синсете делать активной кнопку отмена только если синсет был изменен (добавлены или удалены слова/определения)
+  !- Создание определения при добавлении его в тек синсет editor#create_definition
+  - Его можно отменить. При сбросе тек синсета надо брать данные с сервера
+  - При сохранении тек синсета получать с сервера данные и рендерить их заново в тек. синсете.
+  - Если текущий синсет не показывается, то кнопка добавления в него не активируется.
+  - Походу, не надо создавать на сервере определения тек синсета при добавлении их в синсет, т.к.
+    при сбросе синсета привязанное к нему определение не отвяжется.
+  - При сохранении синсета отвязывать от него все ранее привязанные слова и определения. И привязывать те,
+    которые пришли от клиента.
+*/
 
 //= require editor/add_to_current_synset_button
 //= require editor/definitions
@@ -84,7 +101,13 @@
         this.addToCurrentSynsetButton = new o.addToCurrentSynsetButton({
           onClick: $.proxy(function() {
             this.currentSynset.addDefinition(this.definition.current())
-          }, this)
+          }, this),
+          onBtnOver: $.proxy(function() {
+            this.currentSynset.highlight()
+          }, this),
+          onBtnOut: $.proxy(function() {
+            this.currentSynset.highlight()
+          }, this),
         })
 
         // Create definitions area
@@ -115,7 +138,10 @@
 
         // Create synsets area
         this.synsets = new o.synsets(this.data, {
-          onAdd: $.proxy(function(data, newSynset) {
+          onAdd: $.proxy(function(data, synset) {
+            this.currentSynset.render(data)
+          }, this),
+          onSelect: $.proxy(function(data, synset) {
             this.currentSynset.render(data)
           }, this)
         })
@@ -148,102 +174,3 @@
     })
   }
 })(jQuery);
-
-
-/*
-var Editor = {
-  wordId:        null,
-  leftPane:      $('#left-pane'),
-  rightPane:     $('#right-pane'),
-  actionPane:    $('#action-pane'),
-  currentWords:  $('#current-words'),
-  selectedWords: [],
-  isCurrentSynsetChanged: false,
-  currentSynset: $('#current-synset'),
-  currentSynsetDefinitions: $('#current-synset ol'),
-  rightColumn:   $('#right-column'),
-  editorArea:    $('#editor-area'),
-  currentDefinition: function() { return $('.definitions ul li.active') },
-
-  listingTemplate: $('#listing-tpl').text(),
-  accordionTemplate: $('#accordion-tpl').text(),
-  synsetsTemplate: $('#synsets-tpl').text(),
-  addDefinitionFormTemplate: $('#add-definition-form-tpl').text(),
-  wordDefinitionsPlaceholder: $('#word-definitions-placeholder'),
-  synonymesPlaceholder: $('#synonymes-placeholder'),
-  synsetsPlaceholder: $('#synsets-placeholder'),
-  addToCurrentSynsetBtn: $('#add-to-current-synset-btn'),
-  synonymes: function() { return $('#synonymes') },
-  synsets: $('#synsets'),
-  currentWord: $('.current-word'),
-  addWord: function() { return $('.add-word') },
-  definitionsLists: function() { return $('.definitions ul') },
-
-  // Handle hover on add-to-current-synset-btn
-  handleCurrentSynsetBtnHover: function() {
-    currentSynset = this.currentSynset
-
-    this.addToCurrentSynsetBtn.hover(function(e) {
-      if (!$(this).hasClass('disabled')) currentSynset.addClass('active')
-    }, function() {
-      currentSynset.removeClass('active')
-    })
-  },
-
-  // Handle click on add-to-current-synset-btn
-  handleCurrentSynsetBtn: function() {
-    var that = this
-    currentDefinition = this.currentDefinition()
-    currentSynsetDefinitions = this.currentSynsetDefinitions
-
-    this.addToCurrentSynsetBtn.click(function(e) {
-      e.stopPropagation()
-
-      if (currentSynsetDefinitions.find('[data-id="' + currentDefinition.data('id') + '"]').length == 0) {
-        var icon = $(document.createElement('i'))
-          .attr('title', 'Удалить')
-          .addClass('icon icon-remove')
-          .click(function() {
-            $(this).closest('li').remove()
-          })
-
-        newDefinition = currentDefinition
-          .clone()
-          .removeClass('active')
-          .append(icon)
-
-        that.createWord(newDefinition.data('word'))
-        currentSynsetDefinitions.append(newDefinition)
-        this.isCurrentSynsetChanged = true
-      }
-    })
-  },
-
-  // Handle word definitions lists
-  handleDefinitionsLists: function() {
-    currentDefinition = this.currentDefinition()
-    addToCurrentSynsetBtn = this.addToCurrentSynsetBtn
-    
-    this.definitionsLists().on('click', 'li', function(e) {
-      e.stopPropagation()
-
-      if (currentDefinition != null) {
-        currentDefinition.removeClass('active')
-      }
-
-      currentDefinition = $(this).addClass('active')
-
-      // Make add-to-current-synset-btn active
-      addToCurrentSynsetBtn.removeClass('disabled')
-    })
-  },
-
-
-  notifyCurrentSynsetChanged: function() {
-    if (this.isCurrentSynsetChanged) {
-      bootbox.alert('Текущий синсет был изменён. Необходимо сохранить изменения.')
-    }
-  }
-}
-
-*/

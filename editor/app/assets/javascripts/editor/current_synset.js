@@ -1,16 +1,10 @@
-/*
-  - Текущий синсет можно сохранить тогда, когда у него есть хоть одно слово и определение.
-  - Его можно отменить. Тогда ему делается remove()
-  - Если он валиден, то кнопка Сохранить становится активной
-*/
-
 (function( $ ) {
   $.fn.EditorCurrentSynset = function(o) {
     var o = $.extend({
       template           : $('#current-synset-tpl').text(),
       wordTemplate       : $('#word-tpl').text(),
       definitionTemplate : $('#definition-tpl').text(),
-      //onBlur   : function(definition) {},
+      //onValid            : function(definition) {}
     }, o)
 
     this.initialize(o)
@@ -20,41 +14,71 @@
     currentSynset       : null,
     selectedWords       : [],
     selectedDefinitions : [],
-    isPersisted         : false,
+    savedData           : null,
+    changed             : false,
 
     initialize: function(o) {
       this.o = o
-
       this.handleAddCustomDefinition()
     },
 
     render: function(data) {
-      this.selectedWords = data.words
-      console.log(this.selectedWords)
-      this.currentSynset = $(Mustache.render(this.o.template, data))
+      $('#current-synset').remove()
+
+      this.changed             = false
+      this.selectedWords       = []
+      this.selectedDefinitions = []
+      this.savedData           = data
+      this.selectedWords       = data.words
+      this.currentSynset       = $(Mustache.render(this.o.template, data))
 
       $('#synsets').append(this.currentSynset)
       this.handleRemoveWord()
       this.handleRemoveDefinition()
+      this.handleApprove()
+      this.handleCancel()
+      this.validate()
     },
 
     handleAddCustomDefinition: function() {
-      $('#add-definition-modal').find('button.btn-primary').click(function() {
-        $('#add-definition-form').validate({
-          rules: {
-            text: {
-              required: true
-            }
-          },
-          highlight: function(element) {
-            $(element).closest('.control-group').removeClass('success').addClass('error');
-          },
-          success: function(element) {
-            element.addClass('valid').closest('.control-group').removeClass('error')
-          }
-        })
+      var modal = $('#add-definition-modal')
+      var form  = $('#add-definition-form')
 
-        $('#add-definition-form').submit()
+      // Reset modal form
+      modal.on('hidden', function() {
+        form[0].reset()
+      })
+
+      // Add validators and its callbacks
+      form.validate({
+        rules: {
+          text: {
+            required: true
+          }
+        },
+        highlight: function(element) {
+          $(element).closest('.control-group').removeClass('success').addClass('error');
+        },
+        success: function(element) {
+          element.addClass('valid').closest('.control-group').removeClass('error')
+        }
+      })
+
+      // What to do on submit
+      form.on('submit', $.proxy(function(e) {
+        e.preventDefault()
+        
+        if (form.valid()) {
+          modal.modal('hide')
+          console.log( $(e.currentTarget).serializeObject() )
+          this.validate()
+          this.change()
+        }
+      }, this))
+
+      // Submit form on click on dialog primary button
+      modal.find('button.btn-primary').click(function() {
+        form.submit()
       })
     },
 
@@ -76,6 +100,8 @@
 
       $('#current-words').append(newWord)
       this.handleRemoveWord()
+      this.validate()
+      this.change()
     },
 
     handleRemoveWord: function() {
@@ -87,7 +113,13 @@
         })
 
         item.remove()
+        this.validate()
+        this.change()
       }, this))
+    },
+
+    highlight: function() {
+      $('#current-synset').toggleClass('active')
     },
 
     highlightWords: function() {
@@ -107,6 +139,8 @@
 
       $('#current-synset ol').append(newDefinition)
       this.handleRemoveDefinition()
+      this.validate()
+      this.change()
     },
 
     handleRemoveDefinition: function() {
@@ -118,6 +152,64 @@
         })
 
         item.remove()
+        this.validate()
+        this.change()
+      }, this))
+    },
+
+    isChanged: function() {
+      return this.changed
+    },
+
+    isValid: function() {
+      return this.valid
+    },
+
+    change: function() {
+      this.changed = true
+      this.toggleCancelButton()
+    },
+
+    validate: function() {
+      this.valid = this.selectedWords.length > 0 && this.selectedDefinitions.length > 0
+      this.toggleApproveButton()
+    },
+
+    toggleCancelButton: function() {
+      var btn = $('#current-synset .btn-cancel')
+
+      if (this.isChanged()) {
+        btn.removeClass('disabled')
+      } else {
+        btn.addClass('disabled')
+      }
+    },
+
+    toggleApproveButton: function() {
+      var btn = $('#current-synset .btn-approve')
+
+      if (this.isValid()) {
+        btn.removeClass('disabled')
+      } else {
+        btn.addClass('disabled')
+      }
+    },
+
+    handleApprove: function() {
+      $('#current-synset').on('click', '.btn-approve', $.proxy(function(e) {
+        if (!this.isValid()) return
+        console.log('save synset!')
+      }, this))
+    },
+
+    // Need TODO: М.б. просто удалять текущий синсет вообще?
+    handleCancel: function() {
+      $('#current-synset').on('click', '.btn-cancel', $.proxy(function(e) {
+        bootbox.confirm("Сбросить все изменения в текущем синсете?", "Нет, не надо", "Сбросить изменения", $.proxy(function(result) {
+          if (result) { // Reset all changings in current synset
+            this.render(this.savedData)
+          }
+        }, this))
       }, this))
     }
   }

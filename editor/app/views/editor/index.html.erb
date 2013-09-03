@@ -78,7 +78,7 @@
     <div id="current-words">
       {{#words}}
         <div data-id="{{id}}">
-          <span title="Добавить в текущий синсет">{{word}}</span>
+          <span>{{word}}</span>
           <i title="Удалить" class="icon icon-remove"></i>
         </div>
       {{/words}}
@@ -100,7 +100,8 @@
     </div>
 
     <div id="done-current-synset-btn">
-      <button class="btn disabled">Сохранить</button>
+      <button class="btn btn-primary btn-approve disabled">Сохранить</button>
+      <button class="btn btn-cancel disabled">Отмена</button>
     </div>
   </section>
 </script>
