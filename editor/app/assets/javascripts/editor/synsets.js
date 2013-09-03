@@ -30,7 +30,7 @@
     },
 
     handleAdd: function() {
-      $('#synsets').off('click', '**').on('click', 'a', $.proxy(function(e) {
+      $('#synsets section:first-child').off('click', '**').on('click', 'a', $.proxy(function(e) {
         e.preventDefault()
 
         $.post('/editor/create_synset.json', { word_id: this.wordId }, $.proxy(function(data) {
