@@ -21,6 +21,7 @@
         if (this.isEnabled()) {
           e.stopPropagation()
           this.o.onClick()
+          this.disable()
         }
       }, this)).hover(
         $.proxy(function(e) { if (this.isEnabled()) this.o.onBtnOver(e) }, this),

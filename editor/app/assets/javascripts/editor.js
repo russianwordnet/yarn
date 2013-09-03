@@ -14,14 +14,15 @@
   + Текущий синсет можно сохранить тогда, когда у него есть хоть одно слово и определение.
   + Если он валиден, то кнопка Сохранить становится активной
   + При наведении на кнопку доб в тек синсет - тек синсет подсвечивается
-  - Поиск и добавление синонима
+  + После добавление в тек синсет тек. определение сбрасывается, кнопка становится неактивной
+  3 Поиск и добавление синонима
   - Сохранение текущего слова и переход к другому слову (тут надо понять что и как делать)
   + Выбор и рендеринг синсета из списка
   + В тек синсете делать активной кнопку отмена только если синсет был изменен (добавлены или удалены слова/определения)
   !- Создание определения при добавлении его в тек синсет editor#create_definition
-  - Его можно отменить. При сбросе тек синсета надо брать данные с сервера
+  1- Его можно отменить. При сбросе тек синсета надо брать данные с сервера
   - При сохранении тек синсета получать с сервера данные и рендерить их заново в тек. синсете.
-  - Если текущий синсет не показывается, то кнопка добавления в него не активируется.
+  2- Если текущий синсет не показывается, то кнопка добавления в него не активируется.
   - Походу, не надо создавать на сервере определения тек синсета при добавлении их в синсет, т.к.
     при сбросе синсета привязанное к нему определение не отвяжется.
   - При сохранении синсета отвязывать от него все ранее привязанные слова и определения. И привязывать те,
@@ -94,13 +95,17 @@
 
         this.enable()
 
-        // Current synset area
-        this.currentSynset = new o.currentSynset({})
+        this.currentSynset = new o.currentSynset({
+          onCancel: $.proxy(function() {
+            this.definition.resetInactive()
+          }, this),
+        })
 
         // Big 'addToCurrentSynsetButton' button
         this.addToCurrentSynsetButton = new o.addToCurrentSynsetButton({
           onClick: $.proxy(function() {
             this.currentSynset.addDefinition(this.definition.current())
+            this.definition.reset()
           }, this),
           onBtnOver: $.proxy(function() {
             this.currentSynset.highlight()
@@ -119,7 +124,7 @@
 
         // Create synonymes area
         this.synonymes = new o.synonymes(this.data, {
-          onExpandAccordion : $.proxy(function(accordion) {
+          onExpandAccordion: $.proxy(function(accordion) {
             this.addToCurrentSynsetButton.adjustHeight()
           }, this),
           onAddWordBtnOver: $.proxy(function(e) {
@@ -141,8 +146,9 @@
           onAdd: $.proxy(function(data, synset) {
             this.currentSynset.render(data)
           }, this),
-          onSelect: $.proxy(function(data, synset) {
-            this.currentSynset.render(data)
+          onSelect: $.proxy(function(synsetId) {
+            this.currentSynset.load(synsetId)
+            this.definition.resetInactive()
           }, this)
         })
 

@@ -87,8 +87,19 @@
         }
 
         &.inactive {
-          background: $base-gray;
-          color: #fff;
+          background: #eee;
+          color: #999;
+        }
+      }
+    }
+  }
+
+  .listing-synsets {
+    ul {
+      li {
+        &:hover, &.active {
+          background: #FFF9CD;
+          color: #222;
         }
       }
     }

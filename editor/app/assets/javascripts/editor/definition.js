@@ -50,6 +50,19 @@
         word_id : this.currentDefinition.data('word-id'),
         word    : this.currentDefinition.data('word')
       }
+    },
+
+    reset: function() {
+      this.currentDefinition.removeClass('active').addClass('inactive')
+
+      // Make same definitions inactive in all listings
+      this.o.lists.find('li[data-id=' + this.currentDefinition.data('id') + ']').addClass('inactive')
+
+      this.currentDefinition = null
+    },
+
+    resetInactive: function() {
+      this.o.lists.find('li.inactive').removeClass('inactive')
     }
   }
 })(jQuery);

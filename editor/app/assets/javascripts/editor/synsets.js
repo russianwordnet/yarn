@@ -4,7 +4,7 @@
       placeholder : $('#synsets-placeholder'),
       template    : $('#synsets-tpl').text(),
       onAdd       : function(data, synset) {},
-      onSelect    : function(data, synset) {},
+      onSelect    : function(synsetId) {},
     }, o)
 
     this.initialize(data, o)
@@ -58,9 +58,10 @@
 
         this.selectedSynset = $(e.currentTarget).addClass('active')
 
-        $.getJSON('/synsets/' + this.selectedSynset.data('id') + '.json', $.proxy(function(data) {
-          this.o.onSelect(data, this.selectedSynset)
-        }, this))
+        //$.getJSON('/synsets/' + this.selectedSynset.data('id') + '.json', $.proxy(function(data) {
+        //  this.o.onSelect(data, this.selectedSynset)
+        //}, this))
+        this.o.onSelect(this.selectedSynset.data('id'))
       }, this))
     }
   }

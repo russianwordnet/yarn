@@ -4,17 +4,18 @@
       template           : $('#current-synset-tpl').text(),
       wordTemplate       : $('#word-tpl').text(),
       definitionTemplate : $('#definition-tpl').text(),
-      //onValid            : function(definition) {}
+      onCancel           : function() {}
     }, o)
 
     this.initialize(o)
   }
   
   $.fn.EditorCurrentSynset.prototype = {
+    currentSynsetId     : null,
     currentSynset       : null,
     selectedWords       : [],
     selectedDefinitions : [],
-    savedData           : null,
+    //savedData           : null,
     changed             : false,
 
     initialize: function(o) {
@@ -28,9 +29,10 @@
       this.changed             = false
       this.selectedWords       = []
       this.selectedDefinitions = []
-      this.savedData           = data
+      //this.savedData           = data
       this.selectedWords       = data.words
       this.currentSynset       = $(Mustache.render(this.o.template, data))
+      this.currentSynsetId     = data.id
 
       $('#synsets').append(this.currentSynset)
       this.handleRemoveWord()
@@ -70,7 +72,14 @@
         
         if (form.valid()) {
           modal.modal('hide')
-          console.log( $(e.currentTarget).serializeObject() )
+
+          params = {
+            definition : $(e.currentTarget).serializeObject(),
+            synset_id  : this.currentSynsetId
+          }
+
+          console.log( params )
+          //this.addDefinition({})
           this.validate()
           this.change()
         }
@@ -207,10 +216,21 @@
       $('#current-synset').on('click', '.btn-cancel', $.proxy(function(e) {
         bootbox.confirm("Сбросить все изменения в текущем синсете?", "Нет, не надо", "Сбросить изменения", $.proxy(function(result) {
           if (result) { // Reset all changings in current synset
-            this.render(this.savedData)
+            this.reload()
+            this.o.onCancel()
           }
         }, this))
       }, this))
+    },
+
+    load: function(synsetId) {
+      $.getJSON('/synsets/' + synsetId + '.json', $.proxy(function(data) {
+        this.render(data)
+      }, this))
+    },
+
+    reload: function() {
+      this.load(this.currentSynsetId)
     }
   }
 })(jQuery);
