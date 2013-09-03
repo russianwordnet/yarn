@@ -26,6 +26,7 @@
 
     render: function(data) {
       this.remove()
+      $('#current-synset').off('click')
 
       this.displayed           = true
       this.changed             = false
@@ -130,8 +131,12 @@
       }, this))
     },
 
-    highlight: function() {
-      $('#current-synset').toggleClass('active')
+    highlightOn: function() {
+      $('#current-synset').addClass('active')
+    },
+
+    highlightOff: function() {
+      $('#current-synset').removeClass('active')
     },
 
     highlightWords: function() {
@@ -195,9 +200,11 @@
     },
 
     save: function() {
+      console.log('before save')
       if (!this.isValid()) return
-
+        console.log(' save')
       var params = {
+        _method        : 'put',
         synset_id      : this.currentSynsetId,
         definition_ids : this.definitionIds(),
         lexemes_ids    : this.wordIds()
@@ -230,14 +237,15 @@
     },
 
     handleApprove: function() {
-      $('#current-synset').off('click', '**').on('click', '.btn-approve', $.proxy(function(e) {
+      $('#current-synset').on('click', '.btn-approve', $.proxy(function(e) {
+        console.log('handleApprove')
         this.save()
       }, this))
     },
 
     // Need TODO: М.б. просто удалять текущий синсет вообще?
     handleReset: function() {
-      $('#current-synset').off('click', '**').on('click', '.btn-reset', $.proxy(function(e) {
+      $('#current-synset').on('click', '.btn-reset', $.proxy(function(e) {
         bootbox.confirm("Сбросить все изменения в текущем синсете?", "Нет, не надо", "Сбросить изменения", $.proxy(function(result) {
           if (result) { // Reset all changings in current synset
             this.reload()

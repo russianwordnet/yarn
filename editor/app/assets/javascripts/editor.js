@@ -88,14 +88,17 @@
           onClick: $.proxy(function() {
             if (this.currentSynset.isDisplayed()) {
               this.currentSynset.addDefinition(this.definition.current())
+              this.currentSynset.highlightOff()
               this.definition.reset()
             }
           }, this),
           onBtnOver: $.proxy(function() {
-            if (this.currentSynset.isDisplayed()) this.currentSynset.highlight()
+            if (this.currentSynset.isDisplayed())
+              this.currentSynset.highlightOn()
           }, this),
           onBtnOut: $.proxy(function() {
-            if (this.currentSynset.isDisplayed()) this.currentSynset.highlight()
+            if (this.currentSynset.isDisplayed())
+              this.currentSynset.highlightOff()
           }, this),
         })
 
