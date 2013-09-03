@@ -126,4 +126,48 @@ class EditorController < ApplicationController
 
     respond_with @synset, @definitions, @words
   end
+
+  #   .-´¯¯¯`-.
+  # ,´         `.
+  # |            \
+  # |             \
+  # \           _  \
+  # ,\  _    ,´¯,/¯)\
+  # ( q \ \,´ ,´ ,´¯)
+  #  `._,)     -´,-´)
+  #    \/         ,´/
+  #     )        / /
+  #    /       ,´-´
+  #
+  def save
+    @synset = Synset.find(params[:synset_id])
+    @new_synset = @synset.dup
+
+    @new_synset.definitions_ids = params[:definitions_ids]
+    @new_synset.words_ids = []
+
+    # retrieve existent word associations
+    words_mapping = @synset.words.inject({}) do |h, sw|
+      h[sw.word_id] = sw; h
+    end
+
+    # the word 'lexeme' is used to distinguish `synset_word` from `word`
+    lexemes_ids = params[:lexemes_ids].map(&:to_i)
+
+    lexemes_ids.each do |word_id|
+      if words_mapping[word_id]
+        @new_synset.words_ids += [words_mapping[word_id].id]
+      else
+        synset_word = SynsetWord.new(word: @word)
+        synset_word.author = current_user
+        synset_word.save!
+
+        @new_synset.words_ids += [synset_word.id]
+      end
+    end
+
+    @synset.update_from(@new_synset)
+
+    render 'create_synset'
+  end
 end
