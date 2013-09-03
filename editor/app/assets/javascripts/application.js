@@ -8,6 +8,7 @@
 //= require jquery.validate
 //= require jquery.validate.additional-methods
 //= require jquery.validate.localization/messages_ru
+//= require nprogress
 
 // Editor
 //= require editor
@@ -41,17 +42,6 @@
 
   flash_messages();
 
-  // Spinner ajax indicator
-  var Spinner = {
-    show: function() {
-      $('#spinner').show()
-    },
-
-    hide: function() {
-      $('#spinner').hide()
-    }
-  }
-
   // Setup ajax error handling & callbacks
   $.ajaxSetup({
     error: function(jqXHR, exception) {
@@ -72,10 +62,10 @@
       }
     },
     beforeSend: function() {
-      Spinner.show()
+      NProgress.start();
     },
     complete: function(){
-      Spinner.hide()
+      NProgress.done();
     },
   })
 
@@ -96,6 +86,9 @@
      });
      return o;
   };
+
+  // Nprogress
+  NProgress.configure({ showSpinner: false });
 
   // Initialize editor
   var editorUi = $('#editor-ui')

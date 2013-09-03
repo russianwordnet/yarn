@@ -1,3 +1,55 @@
+#editor-bar {
+  min-height: auto;
+  padding: 10px;
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: 9;
+  background: $bgcolor;
+
+  h2 {
+    font-size: 27px;
+    line-height: 27px;
+    margin: 0;
+    color: #555;
+    float: left;
+  }
+
+  .yarn-logo {
+    height: 24px;
+    top: 0px;
+    left: -12px;
+    z-index: 10;
+    margin: 0;
+
+    a {
+      width: 24px;
+      height: 24px;
+      font-size: 46%;
+      padding: 10px 13px 10px 7px;
+      line-height: 24px;
+
+      &:hover {
+        padding: 10px 13px 10px 7px;
+        margin: 0;
+        font-size: 46%;
+      }
+    }
+
+    &:hover {
+      left: 20px;
+    }
+  }
+
+  #searchbar {
+    #word-search {
+      width: 300px;
+      margin: 0 auto;
+    }
+  }
+}
+
 #editor-ui {
   position:relative;
   @include user-select(none);
@@ -10,45 +62,8 @@
     font-size: 19px;
   }
 
-  .yarn-logo {
-    height: 60px;
-    position: absolute;
-    top: -26px;
-    left: -56px;
-
-    a {
-      width: 50px;
-      height: 50px;
-      font-size: 60%;
-      padding: 10px;
-      line-height: 54px;
-
-      &:hover {
-        padding: 10 + 7px;
-        margin-top: -(10/2);
-        font-size: 80%;
-      }
-    }
-
-    &:hover {
-      @include single-transition(all, 0.2s, ceaser($easeInOutExpo), 0);
-      left: -62px;
-    }
-  }
-
   section {
     margin: 0 0 30px 0;
-  }
-
-  #searchbar {
-    min-height: auto;
-    padding: 15px;
-    margin-bottom: 20px;
-
-    #word-search {
-      width: 300px;
-      margin: 0 auto;
-    }
   }
 
   #spinner {
@@ -115,6 +130,7 @@
   #action-pane {
     padding: 10px 0;
     margin: 20px 0 0 0;
+    min-height: auto;
 
     .panel {
       min-height: auto;
@@ -214,13 +230,6 @@
         margin: 3px 3px 0 0;
         @include border-radius(3px);
         @include inline-block;
-
-        span {
-          cursor: pointer;
-          &:hover {
-            color: $base-blue;
-          }
-        }
       }
     }
 
