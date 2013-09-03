@@ -24,8 +24,8 @@ end
 
 json.synsets @synsets do |synset|
   json.id   synset.id
-  if synset.words.any?
-    json.text synset.words.map(&:word).uniq.map(&:word).join ', '
+  if (synset_words = synset.words.to_a).any?
+    json.text synset_words.uniq(&:word_id).map(&:word).map(&:word).join ', '
   else
     json.text "Пустой синсет №#{synset.id}"
   end
