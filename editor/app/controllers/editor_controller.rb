@@ -154,11 +154,15 @@ class EditorController < ApplicationController
     # the word 'lexeme' is used to distinguish `synset_word` from `word`
     lexemes_ids = params[:lexemes_ids].map(&:to_i)
 
+    lexemes_mapping = Word.find(lexemes_ids).inject({}) do |h, w|
+      h[w.id] = w; h
+    end
+
     lexemes_ids.each do |word_id|
       if words_mapping[word_id]
         @new_synset.words_ids += [words_mapping[word_id].id]
       else
-        synset_word = SynsetWord.new(word: word_id)
+        synset_word = SynsetWord.new(word: lexemes_mapping[word_id])
         synset_word.author = current_user
         synset_word.save!
 
