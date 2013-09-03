@@ -20,17 +20,17 @@
       this.wordId = data.id
 
       this.render(data)
+      this.handleAdd()
     },
 
     render: function(data) {
       this.synsets = $(Mustache.render(this.o.template, { synsets: data.synsets }))
       this.o.placeholder.html(this.synsets)
-      this.handleAdd()
       this.handleList()
     },
 
     handleAdd: function() {
-      $('#synsets').find('a').click($.proxy(function(e) {
+      $('#synsets').off('click', '**').on('click', 'a', $.proxy(function(e) {
         e.preventDefault()
 
         $.post('/editor/create_synset.json', { word_id: this.wordId }, $.proxy(function(data) {
@@ -49,7 +49,7 @@
     handleList: function() {
       this.selectedSynset = this.synsets.find('li.active')
       
-      this.synsets.find('ul').on('click', 'li', $.proxy(function(e) {
+      this.synsets.find('ul').off('click', '**').on('click', 'li', $.proxy(function(e) {
         e.stopPropagation()
 
         if (this.selectedSynset != null) {
@@ -57,10 +57,6 @@
         }
 
         this.selectedSynset = $(e.currentTarget).addClass('active')
-
-        //$.getJSON('/synsets/' + this.selectedSynset.data('id') + '.json', $.proxy(function(data) {
-        //  this.o.onSelect(data, this.selectedSynset)
-        //}, this))
         this.o.onSelect(this.selectedSynset.data('id'))
       }, this))
     }

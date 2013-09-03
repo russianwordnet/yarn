@@ -1,8 +1,12 @@
-<div id="editor-ui">
-  <%= render 'shared/yarn_logo' %>
-  <%= render 'editor/index/searchbar', :words => @words %>
-  <div id="spinner"></div>
+<div id="editor-bar">
+  <div class="container">
+    <h2>Редактор синсетов</h2>
+    <%#= render 'shared/yarn_logo' %>
+    <%= render 'editor/index/searchbar', :words => @words %>
+  </div>
+</div>
 
+<div id="editor-ui">
   <div id="editor-area">
     <div class="row-fluid">
       <%= render 'editor/index/left_pane' %>
@@ -73,7 +77,7 @@
 <script id="current-synset-tpl" type="text/html">
   <section id="current-synset">
     <h3>Текущий синсет</h3>
-    <p>Нажимайте на слова и определения, чтобы добавить их в текущий синсет.</p>
+    <p>Нажимайте на слова и определения слева, чтобы добавить их в текущий синсет.</p>
 
     <div id="current-words">
       {{#words}}

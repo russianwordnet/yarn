@@ -124,6 +124,7 @@ GEM
       mini_portile (~> 0.5.0)
     nokogiri (1.6.0-java)
       mini_portile (~> 0.5.0)
+    nprogress-rails (0.1.2.2)
     oauth2 (0.8.1)
       faraday (~> 0.8)
       httpauth (~> 0.1)
@@ -247,6 +248,7 @@ DEPENDENCIES
   kaminari
   kramdown
   nokogiri
+  nprogress-rails
   omniauth-facebook
   pg
   postgres_ext
