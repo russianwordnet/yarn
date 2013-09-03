@@ -115,10 +115,11 @@ class EditorController < ApplicationController
       @synset.save!
     end
 
-    @definitions = @synset.definitions
-    @words = @synset.synset_words.map(&:word)
+    #@definitions = @synset.definitions
+    #@words = @synset.synset_words.map(&:word)
 
-    respond_with @synset, @definitions, @words
+    #respond_with @definition#@synset, @definitions, @words
+    render 'create_definition'
   end
 
   def show_synset
