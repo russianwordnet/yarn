@@ -118,6 +118,15 @@ class EditorController < ApplicationController
     render 'create_definition'
   end
 
+  def delete_definition
+    @synset = Synset.find(params[:synset_id])
+    @definition = Definition.find(params[:definition_Id])
+    @synset.definitions_ids.delete(@definition.id)
+    @synset.save!
+
+    render 'create_definition'
+  end
+
   def show_synset
     @synset = Synset.find(params[:synset_id])
 
