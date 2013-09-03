@@ -67,7 +67,7 @@
       this.accordion.find('.add-word').hover(
         $.proxy(function(e) { this.o.onAddWordBtnOver(e) }, this),
         $.proxy(function(e) { this.o.onAddWordBtnOut(e) }, this)
-      ).on('click', $.proxy(function(e) {
+      ).off('click', '**').on('click', $.proxy(function(e) {
         e.stopPropagation()
         e.preventDefault()
 

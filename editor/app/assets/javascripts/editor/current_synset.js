@@ -25,7 +25,8 @@
     },
 
     render: function(data) {
-      $('#current-synset').remove()
+      this.remove()
+      $('#current-synset').off('click')
 
       this.displayed           = true
       this.changed             = false
@@ -41,6 +42,10 @@
       this.handleApprove()
       this.handleReset()
       this.validate()
+    },
+
+    remove: function() {
+      $('#current-synset').remove()
     },
 
     handleAddCustomDefinition: function() {
@@ -68,7 +73,7 @@
       })
 
       // What to do on submit
-      form.on('submit', $.proxy(function(e) {
+      form.off().on('submit', $.proxy(function(e) {
         e.preventDefault()
         if (!form.valid()) return
 
@@ -85,7 +90,7 @@
       }, this))
 
       // Submit form on click on dialog primary button
-      modal.find('button.btn-primary').click(function() {
+      modal.find('button.btn-primary').off().click(function() {
         form.submit()
       })
     },
@@ -113,7 +118,7 @@
     },
 
     handleRemoveWord: function() {
-      $('#current-words').on('click', 'i.icon', $.proxy(function(e) {
+      $('#current-words').off('click', '**').on('click', 'i.icon', $.proxy(function(e) {
         var item = $(e.currentTarget).closest('div')
 
         this.selectedWords = $.grep(this.selectedWords, function(obj) {
@@ -126,8 +131,12 @@
       }, this))
     },
 
-    highlight: function() {
-      $('#current-synset').toggleClass('active')
+    highlightOn: function() {
+      $('#current-synset').addClass('active')
+    },
+
+    highlightOff: function() {
+      $('#current-synset').removeClass('active')
     },
 
     highlightWords: function() {
@@ -154,7 +163,7 @@
     },
 
     handleRemoveDefinition: function() {
-      this.currentSynset.find('li .icon-remove').click($.proxy(function(e) {
+      this.currentSynset.find('li .icon-remove').off('click', '**').click($.proxy(function(e) {
         var item = $(e.currentTarget).closest('li')
 
         this.selectedDefinitions = $.grep(this.selectedDefinitions, function(obj) {
@@ -191,15 +200,19 @@
     },
 
     save: function() {
+      console.log('before save')
       if (!this.isValid()) return
+        console.log(' save')
+      var params = {
+        _method        : 'put',
+        synset_id      : this.currentSynsetId,
+        definition_ids : this.definitionIds(),
+        lexemes_ids    : this.wordIds()
+      }
 
-      var params = {}
-
-      $.post('/editor/suxx.json', params, $.proxy(function(data) {
-        this.changed = false
+      $.post('/editor/save.json', params, $.proxy(function(data) {
         this.toggleResetButton()
         this.render(data)
-        console.log('save synset!')
       }, this))
     },
 
@@ -225,6 +238,7 @@
 
     handleApprove: function() {
       $('#current-synset').on('click', '.btn-approve', $.proxy(function(e) {
+        console.log('handleApprove')
         this.save()
       }, this))
     },
@@ -249,6 +263,14 @@
 
     reload: function() {
       this.load(this.currentSynsetId)
+    },
+
+    definitionIds: function() {
+      return $.map(this.selectedDefinitions, function(n, i) { return n.id })
+    },
+
+    wordIds: function() {
+      return $.map(this.selectedWords, function(n, i) { return n.id })
     }
   }
 })(jQuery);

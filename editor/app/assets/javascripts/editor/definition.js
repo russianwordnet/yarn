@@ -21,7 +21,7 @@
     },
 
     handleLists: function() {
-      this.o.lists.on('click', 'li', $.proxy(function(e) {
+      this.o.lists.off('click', '**').on('click', 'li', $.proxy(function(e) {
         e.stopPropagation()
 
         if (this.currentDefinition != null) {
