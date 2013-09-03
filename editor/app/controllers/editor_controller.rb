@@ -106,14 +106,14 @@ class EditorController < ApplicationController
   def create_definition
     @synset = Synset.find(params[:synset_id])
 
-    Synset.transaction do
-      @definition = Definition.new(params[:definition])
-      @definition.author = current_user
-      @definition.save!
+    @definition = Definition.new(params[:definition])
+    @definition.author = current_user
+    @definition.save!
 
-      @synset.definitions_ids += [@definition.id]
-      @synset.save!
-    end
+    @new_synset = @synset.dup
+    @new_synset.definitions_ids += [@definition.id]
+
+    @synset.update_from(@new_synset, :save!)
 
     render 'create_definition'
   end
@@ -166,7 +166,7 @@ class EditorController < ApplicationController
       end
     end
 
-    @synset.update_from(@new_synset)
+    @synset.update_from(@new_synset, :save!)
 
     render 'create_synset'
   end
