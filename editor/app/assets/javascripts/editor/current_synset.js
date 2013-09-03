@@ -101,7 +101,6 @@
       })
     },
 
-    // TODO word should be a hash
     addWord: function(word) {
       // Do not add new word if already exists
       if ($.grep(this.selectedWords, function(obj, i) { return obj.id == word.id }).length) {
