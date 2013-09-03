@@ -65,7 +65,7 @@
     },
 
     resetInactiveDefinition: function(definitionId) {
-      this.o.lists.find('li[data-id=' +definitionId + ']').removeClass('inactive')      
+      this.o.lists.find('li[data-id=' + definitionId + ']').removeClass('inactive')      
     },
 
     inactivateDefinition: function(definitionId) {

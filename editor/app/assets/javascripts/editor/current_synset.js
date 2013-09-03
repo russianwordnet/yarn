@@ -70,20 +70,18 @@
       // What to do on submit
       form.on('submit', $.proxy(function(e) {
         e.preventDefault()
-        
-        if (form.valid()) {
-          modal.modal('hide')
+        if (!form.valid()) return
 
-          params = {
-            definition : $(e.currentTarget).serializeObject(),
-            synset_id  : this.currentSynsetId
-          }
-
-          console.log( params )
-          //this.addDefinition({})
-          this.validate()
-          this.change()
+        var params = {
+          definition : $(e.currentTarget).serializeObject(),
+          synset_id  : this.currentSynsetId
         }
+
+        // Add new definition
+        $.post('/editor/create_definition.json', params, $.proxy(function(data) {
+          this.addDefinition(data)
+          modal.modal('hide')
+        }, this))
       }, this))
 
       // Submit form on click on dialog primary button
@@ -141,9 +139,11 @@
         return
       }
 
-      // Add new definition
       this.selectedDefinitions.push(definition)
-      this.addWord({ id :definition.word_id, word : definition.word })
+
+      if (definition.word) {
+        this.addWord({ id :definition.word_id, word : definition.word })
+      }
 
       var newDefinition = $(Mustache.render(this.o.definitionTemplate, definition))
 
@@ -190,6 +190,19 @@
       this.toggleApproveButton()
     },
 
+    save: function() {
+      if (!this.isValid()) return
+
+      var params = {}
+
+      $.post('/editor/suxx.json', params, $.proxy(function(data) {
+        this.changed = false
+        this.toggleResetButton()
+        this.render(data)
+        console.log('save synset!')
+      }, this))
+    },
+
     toggleResetButton: function() {
       var btn = $('#current-synset .btn-reset')
 
@@ -212,8 +225,7 @@
 
     handleApprove: function() {
       $('#current-synset').on('click', '.btn-approve', $.proxy(function(e) {
-        if (!this.isValid()) return
-        console.log('save synset!')
+        this.save()
       }, this))
     },
 
