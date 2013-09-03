@@ -61,7 +61,6 @@ Yarn::Application.routes.draw do
     get 'show_synset', :as => :show_synset
     post 'create_synset', :as => :create_synset
     post 'create_definition', :as => :create_definition
-    delete 'delete_definition', :as => :delete_definition
   end
 
   root to: 'high_voltage/pages#show', id: 'index'
