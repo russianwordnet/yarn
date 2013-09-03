@@ -171,6 +171,7 @@ class EditorController < ApplicationController
     end
 
     @synset.update_from(@new_synset, :save!)
+    @synset.reload
 
     render 'create_synset'
   end
