@@ -56,13 +56,25 @@
       this.currentDefinition.removeClass('active').addClass('inactive')
 
       // Make same definitions inactive in all listings
-      this.o.lists.find('li[data-id=' + this.currentDefinition.data('id') + ']').addClass('inactive')
-
+      this.inactivateDefinition(this.currentDefinition.data('id'))
       this.currentDefinition = null
     },
 
     resetInactive: function() {
       this.o.lists.find('li.inactive').removeClass('inactive')
+    },
+
+    resetInactiveDefinition: function(definitionId) {
+      this.o.lists.find('li[data-id=' +definitionId + ']').removeClass('inactive')      
+    },
+
+    inactivateDefinition: function(definitionId) {
+      this.o.lists.find('li[data-id=' + definitionId + ']').addClass('inactive')
+    },
+
+    clear: function() {
+      this.o.lists.find('li.active').removeClass('active')
+      this.currentDefinition = null
     }
   }
 })(jQuery);

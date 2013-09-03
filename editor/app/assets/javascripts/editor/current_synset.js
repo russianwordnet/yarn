@@ -4,7 +4,8 @@
       template           : $('#current-synset-tpl').text(),
       wordTemplate       : $('#word-tpl').text(),
       definitionTemplate : $('#definition-tpl').text(),
-      onCancel           : function() {}
+      onReset            : function() {},
+      onRemoveDefinition : function(definitionId) {},
     }, o)
 
     this.initialize(o)
@@ -15,8 +16,8 @@
     currentSynset       : null,
     selectedWords       : [],
     selectedDefinitions : [],
-    //savedData           : null,
     changed             : false,
+    displayed           : false,
 
     initialize: function(o) {
       this.o = o
@@ -26,10 +27,10 @@
     render: function(data) {
       $('#current-synset').remove()
 
+      this.displayed           = true
       this.changed             = false
       this.selectedWords       = []
       this.selectedDefinitions = []
-      //this.savedData           = data
       this.selectedWords       = data.words
       this.currentSynset       = $(Mustache.render(this.o.template, data))
       this.currentSynsetId     = data.id
@@ -38,7 +39,7 @@
       this.handleRemoveWord()
       this.handleRemoveDefinition()
       this.handleApprove()
-      this.handleCancel()
+      this.handleReset()
       this.validate()
     },
 
@@ -160,10 +161,15 @@
           return obj.id != item.data('id')
         })
 
+        this.o.onRemoveDefinition(item.data('id'))
         item.remove()
         this.validate()
         this.change()
       }, this))
+    },
+
+    isDisplayed: function() {
+      return this.displayed
     },
 
     isChanged: function() {
@@ -176,7 +182,7 @@
 
     change: function() {
       this.changed = true
-      this.toggleCancelButton()
+      this.toggleResetButton()
     },
 
     validate: function() {
@@ -184,8 +190,8 @@
       this.toggleApproveButton()
     },
 
-    toggleCancelButton: function() {
-      var btn = $('#current-synset .btn-cancel')
+    toggleResetButton: function() {
+      var btn = $('#current-synset .btn-reset')
 
       if (this.isChanged()) {
         btn.removeClass('disabled')
@@ -212,12 +218,12 @@
     },
 
     // Need TODO: М.б. просто удалять текущий синсет вообще?
-    handleCancel: function() {
-      $('#current-synset').on('click', '.btn-cancel', $.proxy(function(e) {
+    handleReset: function() {
+      $('#current-synset').on('click', '.btn-reset', $.proxy(function(e) {
         bootbox.confirm("Сбросить все изменения в текущем синсете?", "Нет, не надо", "Сбросить изменения", $.proxy(function(result) {
           if (result) { // Reset all changings in current synset
             this.reload()
-            this.o.onCancel()
+            this.o.onReset()
           }
         }, this))
       }, this))

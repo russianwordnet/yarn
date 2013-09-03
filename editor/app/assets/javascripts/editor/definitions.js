@@ -23,10 +23,6 @@
       this.o.placeholder.html(
         Mustache.render(this.o.template, { definitions: this.data.definitions })
       )
-    },
-
-    handle: function() {
-      
     }
   }
 })(jQuery);

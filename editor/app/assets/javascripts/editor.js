@@ -15,12 +15,13 @@
   + Если он валиден, то кнопка Сохранить становится активной
   + При наведении на кнопку доб в тек синсет - тек синсет подсвечивается
   + После добавление в тек синсет тек. определение сбрасывается, кнопка становится неактивной
+  + При удалении определения их тек ассета убирать его неаутивность в списках
   3 Поиск и добавление синонима
   - Сохранение текущего слова и переход к другому слову (тут надо понять что и как делать)
   + Выбор и рендеринг синсета из списка
   + В тек синсете делать активной кнопку отмена только если синсет был изменен (добавлены или удалены слова/определения)
   !- Создание определения при добавлении его в тек синсет editor#create_definition
-  1- Его можно отменить. При сбросе тек синсета надо брать данные с сервера
+  + Его можно отменить. При сбросе тек синсета надо брать данные с сервера
   - При сохранении тек синсета получать с сервера данные и рендерить их заново в тек. синсете.
   2- Если текущий синсет не показывается, то кнопка добавления в него не активируется.
   - Походу, не надо создавать на сервере определения тек синсета при добавлении их в синсет, т.к.
@@ -96,22 +97,27 @@
         this.enable()
 
         this.currentSynset = new o.currentSynset({
-          onCancel: $.proxy(function() {
+          onReset: $.proxy(function() {
             this.definition.resetInactive()
+          }, this),
+          onRemoveDefinition: $.proxy(function(definitionId) {
+            this.definition.resetInactiveDefinition(definitionId)
           }, this),
         })
 
         // Big 'addToCurrentSynsetButton' button
         this.addToCurrentSynsetButton = new o.addToCurrentSynsetButton({
           onClick: $.proxy(function() {
-            this.currentSynset.addDefinition(this.definition.current())
-            this.definition.reset()
+            if (this.currentSynset.isDisplayed()) {
+              this.currentSynset.addDefinition(this.definition.current())
+              this.definition.reset()
+            }
           }, this),
           onBtnOver: $.proxy(function() {
-            this.currentSynset.highlight()
+            if (this.currentSynset.isDisplayed()) this.currentSynset.highlight()
           }, this),
           onBtnOut: $.proxy(function() {
-            this.currentSynset.highlight()
+            if (this.currentSynset.isDisplayed()) this.currentSynset.highlight()
           }, this),
         })
 
@@ -128,13 +134,16 @@
             this.addToCurrentSynsetButton.adjustHeight()
           }, this),
           onAddWordBtnOver: $.proxy(function(e) {
-            this.currentSynset.highlightWords()
+            if (this.currentSynset.isDisplayed())
+              this.currentSynset.highlightWords()
           }, this),
           onAddWordBtnOut: $.proxy(function(e) {
-            this.currentSynset.highlightWords()
+            if (this.currentSynset.isDisplayed())
+              this.currentSynset.highlightWords()
           }, this),
           onAddWordBtnClick: $.proxy(function(word) {
-            this.currentSynset.addWord(word)
+            if (this.currentSynset.isDisplayed())
+              this.currentSynset.addWord(word)
           }, this),
           onAfterRender: $.proxy(function() {
             this.addToCurrentSynsetButton.adjustHeight()
@@ -155,10 +164,15 @@
         // Handle current definition
         this.definition = new o.definition({
           onSelect: $.proxy(function(definition) {
-            this.addToCurrentSynsetButton.enable()
+            if (this.currentSynset.isDisplayed()) {
+              this.addToCurrentSynsetButton.enable()
+            } else {
+              this.definition.clear()
+            }
           }, this),
           onBlur: $.proxy(function(definition) {
-            this.addToCurrentSynsetButton.disable()
+            if (this.currentSynset.isDisplayed())
+              this.addToCurrentSynsetButton.disable()
           }, this)
         })
 
