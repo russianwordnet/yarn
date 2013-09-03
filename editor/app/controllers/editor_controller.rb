@@ -94,7 +94,7 @@ class EditorController < ApplicationController
       @synset_word.save!
 
       @synset.author = current_user
-      @synset.words_ids.push @synset_word.id
+      @synset.words_ids += [@synset_word.id]
       @synset.save!
     end
 
