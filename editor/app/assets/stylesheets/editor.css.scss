@@ -87,8 +87,19 @@
         }
 
         &.inactive {
-          background: $base-gray;
-          color: #fff;
+          background: #eee;
+          color: #999;
+        }
+      }
+    }
+  }
+
+  .listing-synsets {
+    ul {
+      li {
+        &:hover, &.active {
+          background: #FFF9CD;
+          color: #222;
         }
       }
     }
@@ -173,7 +184,7 @@
     background: #dedede;
     margin: 0 -10px;
     padding: 10px;
-    display: none;
+    //display: none;
 
     &.active {
       background: #FFF9CD;
@@ -210,10 +221,12 @@
       padding: 10px 0 0 0;
 
       button {
-        width: 150px;
+        width: 100px;
         font-size: 120%;
-        margin: 0 auto;
-        display: block;
+
+        &.btn-primary {
+          width: 150px;
+        }
       }
     }
   }
