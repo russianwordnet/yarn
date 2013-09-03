@@ -204,7 +204,6 @@
       }
 
       $.post('/editor/save.json', params, $.proxy(function(data) {
-        this.changed = false
         this.toggleResetButton()
         this.render(data)
       }, this))
