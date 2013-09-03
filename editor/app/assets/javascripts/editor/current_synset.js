@@ -1,3 +1,8 @@
+/*
+  Добавляем определение в синсет, сохраняем. Добавляем еще одно, сохраняем - первое добавленное определение
+  убирается из синсета.
+*/
+
 (function( $ ) {
   $.fn.EditorCurrentSynset = function(o) {
     var o = $.extend({
@@ -30,8 +35,7 @@
 
       this.displayed           = true
       this.changed             = false
-      this.selectedWords       = []
-      this.selectedDefinitions = []
+      this.selectedDefinitions = data.definitions
       this.selectedWords       = data.words
       this.currentSynset       = $(Mustache.render(this.o.template, data))
       this.currentSynsetId     = data.id
@@ -200,14 +204,13 @@
     },
 
     save: function() {
-      console.log('before save')
       if (!this.isValid()) return
-        console.log(' save')
+
       var params = {
-        _method        : 'put',
-        synset_id      : this.currentSynsetId,
-        definition_ids : this.definitionIds(),
-        lexemes_ids    : this.wordIds()
+        _method         : 'put',
+        synset_id       : this.currentSynsetId,
+        definitions_ids : this.definitionIds(),
+        lexemes_ids     : this.wordIds()
       }
 
       $.post('/editor/save.json', params, $.proxy(function(data) {
@@ -238,7 +241,6 @@
 
     handleApprove: function() {
       $('#current-synset').on('click', '.btn-approve', $.proxy(function(e) {
-        console.log('handleApprove')
         this.save()
       }, this))
     },

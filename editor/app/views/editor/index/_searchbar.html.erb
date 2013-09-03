@@ -1,6 +1,6 @@
 <div id="searchbar">
   <div id="word-search">
-    <%= select_tag "word", options_from_collection_for_select(words, "id", "word"), :style => 'width: 300px;' %>
+    <div style="display: inline-block"><%= select_tag "word", options_from_collection_for_select(words, "id", "word"), :style => 'width: 200px;' %></div>
+    <a href="" class="btn disabled">Готово</a>
   </div>
-  <div id="spinner"></div>
 </div>
