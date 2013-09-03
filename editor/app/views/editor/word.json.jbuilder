@@ -3,20 +3,22 @@ json.(@word, :id, :word)
 json.definitions @definitions do |definition|
   json.id   definition.id
   json.text definition.text
-  json.word @word.word
+  json.word_id @word.id
+  json.word    @word.word
 end
 
-json.synonymes @synonymes do |synonym|
-  json.id   synonym.id
-  json.word synonym.word
+json.synonymes @synset_words do |synset_word|
+  json.word_id synset_word.word.id
+  json.word    synset_word.word.word
 
-  synsets     = synonym.raw_synset_words.map(&:synsets).flatten.uniq
+  synsets     = synset_word.word.raw_synset_words.map(&:synsets).flatten.uniq
   definitions = synsets.map(&:definitions).flatten.uniq
 
   json.definitions definitions do |definition|
-    json.id   definition.id
-    json.text definition.text
-    json.word synonym.word
+    json.id      definition.id
+    json.text    definition.text
+    json.word_id synset_word.word.id
+    json.word    synset_word.word.word
   end
 end
 
