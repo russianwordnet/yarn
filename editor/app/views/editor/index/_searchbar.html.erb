@@ -1,6 +1,15 @@
+<%
+  options = options_from_collection_for_select(words, "id", "word")
+  options = raw "<option></option>#{options}"
+%>
+
 <div id="searchbar">
   <div id="word-search">
-    <div style="display: inline-block"><%= select_tag "word", options_from_collection_for_select(words, "id", "word"), :style => 'width: 200px;' %></div>
+    <div style="display: inline-block">
+      <%= select_tag "word", options, :style => 'width: 230px;' %>
+    </div>
+    <!--
     <a href="" class="btn disabled">Готово</a>
+    -->
   </div>
 </div>

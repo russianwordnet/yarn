@@ -22,7 +22,6 @@
       currentSynset : $.fn.EditorCurrentSynset,
       addToCurrentSynsetButton: $.fn.EditorAddToCurrentSynsetButton,
       options : {
-        placeholder: "Введите слово",
         allowClear:  true,
         uri:         '/editor/word.json',
         wordInput:   $("#searchbar #word"),
@@ -44,8 +43,8 @@
         this.editorUi = $(editorUi)
 
         o.options.wordInput.select2({
-          placeholder: o.options.placeholder,
-          allowClear:  o.options.allowClear
+          placeholder: "Введите или выберите слово",
+          allowClear:  false
         }).on("change", $.proxy(function(e) { // When select a word
           $.getJSON(o.options.uri, { word_id: o.options.wordInput.val() }, $.proxy(function(data) {
             this.build(data)
