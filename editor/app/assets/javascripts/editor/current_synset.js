@@ -200,10 +200,10 @@
       var params = {
         synset_id      : this.currentSynsetId,
         definition_ids : this.definitionIds(),
-        word_ids       : this.wordIds()
+        lexemes_ids    : this.wordIds()
       }
 
-      $.post('/editor/suxx.json', params, $.proxy(function(data) {
+      $.post('/editor/save.json', params, $.proxy(function(data) {
         this.changed = false
         this.toggleResetButton()
         this.render(data)
