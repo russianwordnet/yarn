@@ -30,7 +30,7 @@ class Synset < ActiveRecord::Base
       self.author_id = new_synset.author_id
       self.revision += 1
 
-      method(save_method).call
+      method(save_method).tap { |result| self.reload if result }
     end
   end
 end
