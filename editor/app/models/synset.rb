@@ -20,7 +20,7 @@ class Synset < ActiveRecord::Base
         (SELECT unnest(words_ids) FROM current_synsets
           WHERE id = #{id});} }, class_name: 'SynsetWord'
 
-  def update_from(new_synset)
+  def update_from(new_synset, save_method = :save)
     Synset.transaction do
       old_synset = OldSynset.from_synset(self)
       old_synset.save!
@@ -30,7 +30,7 @@ class Synset < ActiveRecord::Base
       self.author_id = new_synset.author_id
       self.revision += 1
 
-      save
+      method(save_method).call
     end
   end
 end
