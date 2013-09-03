@@ -22,7 +22,6 @@
       currentSynset : $.fn.EditorCurrentSynset,
       addToCurrentSynsetButton: $.fn.EditorAddToCurrentSynsetButton,
       options : {
-        allowClear:  true,
         uri:         '/editor/word.json',
         wordInput:   $("#searchbar #word"),
         editorArea:  $('#editor-area'),
@@ -73,6 +72,9 @@
           }, this),
           onRemoveDefinition: $.proxy(function(definitionId) {
             this.definition.resetInactiveDefinition(definitionId)
+          }, this),
+          onAfterRender: $.proxy(function() {
+            this.definition.inactivateDefinitions(this.currentSynset.definitionIds())
           }, this),
         })
 
