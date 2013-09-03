@@ -158,7 +158,7 @@ class EditorController < ApplicationController
       if words_mapping[word_id]
         @new_synset.words_ids += [words_mapping[word_id].id]
       else
-        synset_word = SynsetWord.new(word: @word)
+        synset_word = SynsetWord.new(word: word_id)
         synset_word.author = current_user
         synset_word.save!
 
