@@ -5,7 +5,10 @@ json.words @synset.words do |synset_word|
   json.word synset_word.word.word
 end
 
-json.definitions []
+json.definitions @synset.definitions do |definition|
+  json.id   definition.id
+  json.text definition.text
+end
 
 json.synsets @synsets do |synset|
   json.id   synset.id

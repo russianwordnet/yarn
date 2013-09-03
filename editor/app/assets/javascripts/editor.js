@@ -10,14 +10,11 @@
   + Его можно отменить. При сбросе тек синсета надо брать данные с сервера
   - Не показывать кнопку добавления слова в тек синсет если он не виден
   - При сохранении тек синсета получать с сервера данные и рендерить их заново в тек. синсете.
-  - Создание определения при добавлении его в тек синсет editor#create_definition
+  + Создание определения при добавлении его в тек синсет editor#create_definition
   - Если тек синсет был изменен но не сохранен, не давать переходить к другим синсетам. После сохранения синсета сбрасывать флаг changed.
   3 Поиск и добавление синонима
   - Сохранение текущего слова и переход к другому слову (тут надо понять что и как делать)
-  - Походу, не надо создавать на сервере определения тек синсета при добавлении их в синсет, т.к.
-    при сбросе синсета привязанное к нему определение не отвяжется.
-  - При сохранении синсета отвязывать от него все ранее привязанные слова и определения. И привязывать те,
-    которые пришли от клиента.
+  - Очищать рабочую область при выборе другого слова
 */
 
 //= require editor/add_to_current_synset_button
@@ -55,16 +52,6 @@
     $.fn.editor = function(el) { this.initialize(el) }
 
     $.fn.editor.prototype = {
-      addToCurrentSynsetButton : null,
-      definitions   : null,
-      definition    : null,
-      synonymes     : null,
-      synsets       : null,
-      currentSynset : null,
-      editorUi      : null,
-      word          : null,
-      data          : null,
-
       // Initialize editor
       initialize: function(editorUi) {
         this.editorUi = $(editorUi)
@@ -79,7 +66,15 @@
         }, this))
       },
 
+      // TODO: Тут надо как-то по другому
       build: function(data) {
+        this.addToCurrentSynsetButton = null
+        this.definitions   = null
+        this.definition    = null
+        this.synonymes     = null
+        this.synsets       = null
+        this.currentSynset = null
+        
         this.word   = data.word
         this.wordId = data.id
         this.data   = data
@@ -115,6 +110,7 @@
         this.definitions = new o.definitions(this.data, {
           onAfterRender: $.proxy(function() {
             this.addToCurrentSynsetButton.adjustHeight()
+            this.currentSynset.remove()
           }, this)
         })
 

@@ -5,6 +5,11 @@
 
   #editor-area { display: none; }
 
+  h3 {
+    line-height: 20px;
+    font-size: 19px;
+  }
+
   .yarn-logo {
     height: 60px;
     position: absolute;
@@ -79,6 +84,8 @@
       li {
         padding: 3px;
         font-size: 90%;
+
+        &:nth-child(even) { background-color: #f9f9f9; }
 
         &:hover, &.active {
           cursor: pointer;
