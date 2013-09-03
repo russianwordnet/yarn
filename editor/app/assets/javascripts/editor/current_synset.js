@@ -32,7 +32,7 @@
 
     render: function(data) {
       this.remove()
-      //$('#current-synset').off('click')
+      $('#current-synset').off('click')
 
       this.displayed           = true
       this.changed             = false
