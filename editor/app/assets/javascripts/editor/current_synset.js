@@ -11,7 +11,7 @@
       definitionTemplate : $('#definition-tpl').text(),
       onReset            : function() {},
       onRemoveDefinition : function(definitionId) {},
-      onAfterRender      : function() {},
+      onAfterRender      : function(data) {},
     }, o)
 
     this.initialize(o)
@@ -47,7 +47,7 @@
       this.handleApprove()
       this.handleReset()
       this.validate()
-      this.o.onAfterRender()
+      this.o.onAfterRender(data)
     },
 
     remove: function() {
