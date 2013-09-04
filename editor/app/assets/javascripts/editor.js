@@ -51,7 +51,6 @@
         }, this))
       },
 
-      // TODO: Тут надо как-то по другому
       build: function(data) {
         this.addToCurrentSynsetButton = null
         this.definitions   = null
@@ -73,8 +72,9 @@
           onRemoveDefinition: $.proxy(function(definitionId) {
             this.definition.resetInactiveDefinition(definitionId)
           }, this),
-          onAfterRender: $.proxy(function() {
+          onAfterRender: $.proxy(function(data) {
             this.definition.inactivateDefinitions(this.currentSynset.definitionIds())
+            this.synsets.updateSelected(data)
           }, this),
         })
 
