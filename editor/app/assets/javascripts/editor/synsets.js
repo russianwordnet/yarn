@@ -59,6 +59,11 @@
         this.selectedSynset = $(e.currentTarget).addClass('active')
         this.o.onSelect(this.selectedSynset.data('id'))
       }, this))
+    },
+
+    updateSelected: function(data) {
+      var words = $.map(data.words, function(n, i) { return n.word }).join(', ')
+      this.selectedSynset.html(words)
     }
   }
 })(jQuery);
