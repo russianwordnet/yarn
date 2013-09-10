@@ -4,12 +4,31 @@ class EditorController < ApplicationController
   before_filter :authenticate_user!
   before_filter :extract_query, :only => :search
 
-  layout 'editor'
-
+  layout proc {|controller| controller.request.xhr? ? false : "editor" }
   respond_to :html, :json
 
   def index
-    @words = Word.order('frequency DESC').select('id, word').limit(100)
+    @words = Word.order('frequency DESC').select('id, word')
+
+    if params.key?(:word) && !params[:word].empty?
+      field  = Word.arel_table[:word]
+      query  = params[:word].split.map! { |s| '%s%%' % s }.join ' '
+      @words = @words.where(field.matches(query))
+    end
+
+    @words = @words.page params[:page]
+
+    respond_with @words do |format|
+      format.html do
+        options = if request.xhr?
+          { :partial => 'editor/index/word_picker_listing', :locals => { :words => @words } }
+        else
+          'index'
+        end
+
+        render options
+      end
+    end
   end
 
   def search
