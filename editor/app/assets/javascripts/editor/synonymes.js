@@ -53,7 +53,6 @@
       this.handleAddSynonym()
     },
 
-    // TODO Походу лучше перерендить все синонимы
     add: function(data) {
       this.data.synonymes.push({
         word_id     : data.id,
