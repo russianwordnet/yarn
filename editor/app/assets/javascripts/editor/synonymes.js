@@ -23,15 +23,6 @@
       this.o    = o
 
       this.render()
-      this.o.onAfterRender()
-
-      this.accordion
-        .on('show', this.toggleIcon)
-        .on('hide', this.toggleIcon)
-        .on('shown', $.proxy(this.fireOnExpandAccordion, this))
-        .on('hidden', $.proxy(this.fireOnExpandAccordion, this))
-
-      this.addWordMouseInteraction()
     },
 
     render: function() {
@@ -50,6 +41,26 @@
       }))
 
       this.o.placeholder.html(this.accordion)
+      this.o.onAfterRender()
+
+      this.accordion
+        .on('show', this.toggleIcon)
+        .on('hide', this.toggleIcon)
+        .on('shown', $.proxy(this.fireOnExpandAccordion, this))
+        .on('hidden', $.proxy(this.fireOnExpandAccordion, this))
+
+      this.addWordMouseInteraction()
+      this.handleAddSynonym()
+    },
+
+    add: function(data) {
+      this.data.synonymes.push({
+        word_id     : data.id,
+        word        : data.word,
+        definitions : data.definitions
+      })
+
+      this.render()
     },
 
     toggleIcon: function(e) {
@@ -80,6 +91,22 @@
 
     fireOnExpandAccordion: function() {
       this.o.onExpandAccordion(this.accordion)
+    },
+
+    handleAddSynonym: function() {
+      $('#add-synonym').on('click', $.proxy(function(e) {
+        e.preventDefault()
+        
+        var wordPicker = new $.fn.WordPicker($('.synonym-picker-modal'), {
+          onPickWord: $.proxy(function(word, wordId) {
+            $.getJSON('/editor/word.json', { word_id: wordId }, $.proxy(function(data) {
+              this.add(data)
+            }, this))
+          }, this)
+        })
+
+        wordPicker.show()
+      }, this))
     }
   }
 })(jQuery);

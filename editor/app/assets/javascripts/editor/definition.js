@@ -1,7 +1,7 @@
 (function( $ ) {
   $.fn.EditorDefinition = function(o) {
     var o = $.extend({
-      lists         : $('.definitions'),
+      lists         : $('#editor-area .definitions'),
       current       : $('.definitions li.active'),
       onSelect      : function(definition) {},
       onBlur        : function(definition) {}
@@ -21,7 +21,7 @@
     },
 
     handleLists: function() {
-      this.o.lists.off('click', '**').on('click', 'li', $.proxy(function(e) {
+      $('#editor-area').on('click', '.definitions li', $.proxy(function(e) {
         e.stopPropagation()
 
         if (this.currentDefinition != null) {
