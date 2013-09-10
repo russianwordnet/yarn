@@ -1,0 +1,17 @@
+<div class="<%= html_class %> modal hide fade" tabindex="-1" role="dialog" aria-labelledby="word-picker-modal-label" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="word-picker-modal-label">Поиск и выбор слова</h3>
+  </div>
+  <div class="modal-body">
+    <%= render 'shared/search' %>
+
+    <div class="word-picker-content">
+      <%= render 'editor/index/word_picker_listing', :words => words %>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Отменить</button>
+    <button class="btn btn-primary disabled">Выбрать слово</button>
+  </div>
+</div>

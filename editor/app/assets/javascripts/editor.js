@@ -2,8 +2,30 @@
   Доделать:
   - Поиск и добавление синонима
   - Сохранение текущего слова и переход к другому слову (тут надо понять что и как делать)
-*/
 
+1) нужно как-нибудь подсветить автора синсета в списках, поскольку мы заводим отдельных юзеров для словарей
+2) я сделал чтобы показывались id синсетов в окошке справа сверху, но какая-то скриптовая часть убирает id
+при выделении
+3) нужно сделать ссылочку на строчке с определением, которая отправит в новой вкладке браузера 
+редактировать это определение
+4) закончить ссылку "Добавить синоним". её никто не хочет обсуждать, но все хотят чтобы она работала.
+такие молодцы все просто
+
+
+$('#pick-word').on('click', $.proxy(function(e) {
+  e.preventDefault()
+  $('#word-picker-modal').modal('show')
+}, this))
+
+$('#word-picker-content').on('click', '.pagination a', $.proxy(function(e) {
+  e.preventDefault()
+  
+  $.get($(e.currentTarget).attr('href'), $.proxy(function(data) {
+    $('#word-picker-content').html(data)
+  }, this))
+}, this))
+*/
+//= require editor/word_picker
 //= require editor/add_to_current_synset_button
 //= require editor/definitions
 //= require editor/definition
@@ -15,6 +37,7 @@
   $.fn.editor = function(o) {
     // Editor options
     var o = $.extend({
+      wordPicker    : $.fn.WordPicker,
       definitions   : $.fn.EditorDefinitions,
       definition    : $.fn.EditorDefinition,
       synonymes     : $.fn.EditorSynonymes,
@@ -40,15 +63,8 @@
       // Initialize editor
       initialize: function(editorUi) {
         this.editorUi = $(editorUi)
-
-        o.options.wordInput.select2({
-          placeholder: "Введите или выберите слово",
-          allowClear:  false
-        }).on("change", $.proxy(function(e) { // When select a word
-          $.getJSON(o.options.uri, { word_id: o.options.wordInput.val() }, $.proxy(function(data) {
-            this.build(data)
-          }, this))
-        }, this))
+        this.pickWord()
+        this.handlePickWordBtn()
       },
 
       build: function(data) {
@@ -58,6 +74,7 @@
         this.synonymes     = null
         this.synsets       = null
         this.currentSynset = null
+        this.wordPicker    = null
 
         this.word   = data.word
         this.wordId = data.id
@@ -159,11 +176,31 @@
 
       enable: function() {
         o.options.editorArea.show()
+        $('#word-search').show()
       },
 
       updateCurrentWordPlaceholders: function() {
         o.options.currentWord.html(this.word)
       },
+
+      handlePickWordBtn: function() {
+        $('#pick-word').on('click', $.proxy(function(e) {
+          e.preventDefault()
+          this.pickWord()
+        }, this))
+      },
+
+      pickWord: function() {
+        this.wordPicker = new o.wordPicker($('.word-picker-modal'), {
+          onPickWord: $.proxy(function(word, wordId) {
+            $.getJSON(o.options.uri, { word_id: wordId }, $.proxy(function(data) {
+              this.build(data)
+            }, this))
+          }, this)
+        })
+
+        this.wordPicker.show()
+      }
     }
 
     return this.each(function() {

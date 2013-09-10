@@ -59,6 +59,26 @@ a {
   }
 }
 
+#search {
+  position: relative;
+  margin: 45px 0 20px;
+
+  input {
+    @include box-sizing(border-box);
+    width: 100%;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+
+  button {
+    position: absolute;
+    right: 0;
+    border: 0;
+    background: none;
+    top: 1px;
+  }
+}
+
 ul.triple-columns {
   overflow: hidden;
   margin: 0;
@@ -224,26 +244,6 @@ body {
   }
 
   aside#sidebar {
-    #search {
-      position: relative;
-      margin: 45px 0 20px;
-
-      input {
-        @include box-sizing(border-box);
-        width: 100%;
-        padding-top: 14px;
-        padding-bottom: 14px;
-      }
-
-      button {
-        position: absolute;
-        right: 0;
-        border: 0;
-        background: none;
-        top: 1px;
-      }
-    }
-
     .nav > li > a {
       @include border-radius(3px);
       font-size: 120%;

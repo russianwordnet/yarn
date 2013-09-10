@@ -1,15 +1,8 @@
-<%
-  options = options_from_collection_for_select(words, "id", "word")
-  options = raw "<option></option>#{options}"
-%>
-
 <div id="searchbar">
   <div id="word-search">
     <div style="display: inline-block">
-      <%= select_tag "word", options, :style => 'width: 230px;' %>
+      <span id="picked-word">&laquo;<span class="current-word"></span>&raquo;</span>
     </div>
-    <!--
-    <a href="" class="btn disabled">Готово</a>
-    -->
+    <a href="#" id="pick-word" class="btn">Выбрать слово</a>
   </div>
 </div>
