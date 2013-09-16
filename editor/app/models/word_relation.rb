@@ -1,4 +1,4 @@
-class SynsetRelation < ActiveRecord::Base
+class WordRelation < ActiveRecord::Base
   self.table_name = 'current_word_relations'
 
   belongs_to :author, class_name: 'User'
