@@ -12,7 +12,9 @@ class EditorController < ApplicationController
 
     if params.key?(:word) && !params[:word].empty?
       field  = Word.arel_table[:word]
-      query  = params[:word].split.map! { |s| '%s%%' % s }.join ' '
+      query  = params[:word].split.map! { |s| ('%s%%' % s).
+        gsub('ё', '(её)').
+        gsub('Ё', '(ЕЁ)') }.join ' '
       @words = @words.where(field.matches(query))
     end
 
@@ -88,7 +90,9 @@ class EditorController < ApplicationController
       return false
     end
 
-    @query = params[:q].split.map! { |s| '%s%%' % s }.join ' '
+    @query = params[:q].split.map! { |s| ('%s%%' % s).
+      gsub('ё', '(её)').
+      gsub('Ё', '(ЕЁ)') }.join ' '
   end
 
   def word
