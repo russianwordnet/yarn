@@ -20,7 +20,7 @@ class WordsController < ApplicationController
 
   def search
     field = Word.arel_table[:word]
-    @words = Word.where(field.matches(@query)).
+    @words = Word.where('word SIMILAR TO ?', @query).
       order('frequency DESC', 'word').page params[:page]
 
     respond_to do |format|
@@ -138,8 +138,8 @@ class WordsController < ApplicationController
     end
 
     @query = params[:q].split.map! { |s| ('%s%%' % s).
-      gsub('ё', '(её)').
-      gsub('Ё', '(ЕЁ)') }.join ' '
+      gsub('ё', '(е|ё)').
+      gsub(/[ЕЁ]/, '(Е|Ё)') }.join ' '
   end
 
   def prepare_revert

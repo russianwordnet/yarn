@@ -11,11 +11,10 @@ class EditorController < ApplicationController
     @words = Word.order('frequency DESC').select('id, word')
 
     if params.key?(:word) && !params[:word].empty?
-      field  = Word.arel_table[:word]
       query  = params[:word].split.map! { |s| ('%s%%' % s).
-        gsub('ё', '(её)').
-        gsub('Ё', '(ЕЁ)') }.join ' '
-      @words = @words.where(field.matches(query))
+        gsub(/[её]/, '(е|ё)').
+        gsub(/[ЕЁ]/, '(Е|Ё)') }.join ' '
+      @words = @words.where('word SIMILAR TO ?', query)
     end
 
     @words = @words.page params[:page]
@@ -34,8 +33,7 @@ class EditorController < ApplicationController
   end
 
   def search
-    field = Word.arel_table[:word]
-    @words = Word.where(field.matches(@query)).
+    @words = Word.where('word SIMILAR TO ?', @query).
       order('frequency DESC', 'word').page params[:page]
 
     respond_to do |format|
@@ -91,8 +89,8 @@ class EditorController < ApplicationController
     end
 
     @query = params[:q].split.map! { |s| ('%s%%' % s).
-      gsub('ё', '(её)').
-      gsub('Ё', '(ЕЁ)') }.join ' '
+      gsub('ё', '(е|ё)').
+      gsub(/[ЕЁ]/, '(Е|Ё)') }.join ' '
   end
 
   def word
