@@ -89,7 +89,7 @@ class EditorController < ApplicationController
     end
 
     @query = params[:q].split.map! { |s| ('%s%%' % s).
-      gsub('ё', '(е|ё)').
+      gsub(/[её]/, '(е|ё)').
       gsub(/[ЕЁ]/, '(Е|Ё)') }.join ' '
   end
 
