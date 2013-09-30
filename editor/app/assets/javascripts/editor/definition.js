@@ -4,6 +4,7 @@
       lists         : $('#editor-area .definitions'),
       current       : $('.definitions li.active'),
       onSelect      : function(definition) {},
+      onChange      : function(definition) {},
       onBlur        : function(definition) {}
     }, o)
 
@@ -30,6 +31,11 @@
 
         this.currentDefinition = $(e.currentTarget).addClass('active')
         this.o.onSelect(this.currentDefinition)
+      }, this))
+
+      $('#editor-area').on('dblclick', '.definitions li', $.proxy(function(e) {
+        e.stopPropagation()
+        this.o.onChange(this.currentDefinition)
       }, this))
     },
 

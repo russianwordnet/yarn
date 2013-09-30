@@ -66,8 +66,8 @@ a {
   input {
     @include box-sizing(border-box);
     width: 100%;
-    padding-top: 14px;
-    padding-bottom: 14px;
+    line-height: 30px;
+    height: 30px;
   }
 
   button {

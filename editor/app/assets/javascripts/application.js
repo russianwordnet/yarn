@@ -1,14 +1,13 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
-//= require select2
 //= require jquery.color
 //= require mustache
-//= require bootbox
 //= require jquery.validate
 //= require jquery.validate.additional-methods
 //= require jquery.validate.localization/messages_ru
 //= require nprogress
+//= require jquery.cookie
 
 // Editor
 //= require editor

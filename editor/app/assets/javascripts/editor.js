@@ -1,9 +1,17 @@
 /*
-  1) нужно как-нибудь подсветить автора синсета в списках, поскольку мы заводим отдельных юзеров для словарей
-  2) я сделал чтобы показывались id синсетов в окошке справа сверху, но какая-то скриптовая часть убирает id
-  при выделении
-  3) нужно сделать ссылочку на строчке с определением, которая отправит в новой вкладке браузера 
-  редактировать это определение
+
+[Дима] Слева в разделе синонимов не должно быть самого слова.
+[Дима] Возможность добавить слово, которого пока нет в базе. После этого в базе должен появиться пустой wordEntry.
+
+Показывать в списке синсетов с заданным словом ещё и начало первого определения.
+
+Убрать кнопки сохранить и сбросить. Пусть будет сохранение на каждую операцию. (Возможно, на сервере склеивать последовательные изменения одного синсета за короткий промежуток времени в одну версию, чтобы не плодить большого количества версий)
+ 
+Наверху, рядом со словом сделать кнопку «готово». Она должна быть основная, а кнопка «выбрать другое слово» вспомогательной. Готово работает как написано на прототипе.
+
+Иметь возможность скрывать заведомо бесполезные определения (у самого слова и у синонимов). Иметь возможность вернуть обратно скрытые определения. Кнопкой «показать все» или перезагрузкой страницы.
+ 
+«Добавить определение на основе существующего».
 
 */
 //= require editor/word_picker
@@ -44,7 +52,13 @@
       // Initialize editor
       initialize: function(editorUi) {
         this.editorUi = $(editorUi)
-        this.pickWord()
+
+        if (this.isWordPicked()) {
+          this.loadWord(this.wordCookie())
+        } else {
+          this.wordPickerDialog()
+        }
+
         this.handlePickWordBtn()
       },
 
@@ -145,6 +159,9 @@
               this.definition.clear()
             }
           }, this),
+          onChange: $.proxy(function(definition) {
+            this.currentSynset.addDefinition(this.definition.current())
+          }, this),
           onBlur: $.proxy(function(definition) {
             if (this.currentSynset.isDisplayed())
               this.addToCurrentSynsetButton.disable()
@@ -167,20 +184,37 @@
       handlePickWordBtn: function() {
         $('#pick-word').on('click', $.proxy(function(e) {
           e.preventDefault()
-          this.pickWord()
+          this.wordPickerDialog()
         }, this))
       },
 
-      pickWord: function() {
+      wordPickerDialog: function() {
         this.wordPicker = new o.wordPicker($('.word-picker-modal'), {
-          onPickWord: $.proxy(function(word, wordId) {
-            $.getJSON(o.options.uri, { word_id: wordId }, $.proxy(function(data) {
-              this.build(data)
-            }, this))
+          allowClose : this.allowCloseWordPickerDialog(),
+          onPickWord : $.proxy(function(word, wordId) {
+            this.loadWord(wordId)
           }, this)
         })
 
         this.wordPicker.show()
+      },
+
+      allowCloseWordPickerDialog: function() {
+        return this.wordId != undefined
+      },
+
+      isWordPicked: function() {
+        return this.wordCookie() != undefined
+      },
+
+      wordCookie: function() {
+        return $.cookie('wordId')
+      },
+
+      loadWord: function(wordId) {
+        $.getJSON(o.options.uri, { word_id: wordId }, $.proxy(function(data) {
+          this.build(data)
+        }, this))
       }
     }
 
