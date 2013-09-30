@@ -9,7 +9,6 @@
       template           : $('#current-synset-tpl').text(),
       wordTemplate       : $('#word-tpl').text(),
       definitionTemplate : $('#definition-tpl').text(),
-      onReset            : function() {},
       onRemoveDefinition : function(definitionId) {},
       onAfterRender      : function(data) {},
     }, o)
@@ -22,7 +21,6 @@
     currentSynset       : null,
     selectedWords       : [],
     selectedDefinitions : [],
-    changed             : false,
     displayed           : false,
 
     initialize: function(o) {
@@ -35,7 +33,6 @@
       $('#current-synset').off('click')
 
       this.displayed           = true
-      this.changed             = false
       this.selectedDefinitions = data.definitions
       this.selectedWords       = data.words
       this.currentSynset       = $(Mustache.render(this.o.template, data))
@@ -44,9 +41,7 @@
       $('#synsets').append(this.currentSynset)
       this.handleRemoveWord()
       this.handleRemoveDefinition()
-      this.handleApprove()
-      this.handleReset()
-      this.validate()
+      //this.validate()
       this.o.onAfterRender(data)
     },
 
@@ -118,8 +113,8 @@
 
       $('#current-words').append(newWord)
       this.handleRemoveWord()
-      this.validate()
-      this.change()
+      //this.validate()
+      this.save()
     },
 
     handleRemoveWord: function() {
@@ -131,8 +126,8 @@
         })
 
         item.remove()
-        this.validate()
-        this.change()
+        //this.validate()
+        this.save()
       }, this))
     },
 
@@ -163,8 +158,8 @@
 
       $('#current-synset ol').append(newDefinition)
       this.handleRemoveDefinition()
-      this.validate()
-      this.change()
+      //this.validate()
+      this.save()
     },
 
     handleRemoveDefinition: function() {
@@ -177,8 +172,8 @@
 
         this.o.onRemoveDefinition(item.data('id'))
         item.remove()
-        this.validate()
-        this.change()
+        //this.validate()
+        this.save()
       }, this))
     },
 
@@ -186,23 +181,14 @@
       return this.displayed
     },
 
-    isChanged: function() {
-      return this.changed
-    },
-
     isValid: function() {
-      return this.valid
+      //return this.valid
+      return this.selectedWords.length > 0 && this.selectedDefinitions.length > 0
     },
 
-    change: function() {
-      this.changed = true
-      this.toggleResetButton()
-    },
-
-    validate: function() {
-      this.valid = this.selectedWords.length > 0 && this.selectedDefinitions.length > 0
-      this.toggleApproveButton()
-    },
+    //validate: function() {
+    //  this.valid = this.selectedWords.length > 0 && this.selectedDefinitions.length > 0
+    //},
 
     save: function() {
       if (!this.isValid()) return
@@ -215,46 +201,7 @@
       }
 
       $.post('/editor/save.json', params, $.proxy(function(data) {
-        this.toggleResetButton()
         this.render(data)
-      }, this))
-    },
-
-    toggleResetButton: function() {
-      var btn = $('#current-synset .btn-reset')
-
-      if (this.isChanged()) {
-        btn.removeClass('disabled')
-      } else {
-        btn.addClass('disabled')
-      }
-    },
-
-    toggleApproveButton: function() {
-      var btn = $('#current-synset .btn-approve')
-
-      if (this.isValid()) {
-        btn.removeClass('disabled')
-      } else {
-        btn.addClass('disabled')
-      }
-    },
-
-    handleApprove: function() {
-      $('#current-synset').on('click', '.btn-approve', $.proxy(function(e) {
-        this.save()
-      }, this))
-    },
-
-    // Need TODO: М.б. просто удалять текущий синсет вообще?
-    handleReset: function() {
-      $('#current-synset').on('click', '.btn-reset', $.proxy(function(e) {
-        bootbox.confirm("Сбросить все изменения в текущем синсете?", "Нет, не надо", "Сбросить изменения", $.proxy(function(result) {
-          if (result) { // Reset all changings in current synset
-            this.reload()
-            this.o.onReset()
-          }
-        }, this))
       }, this))
     },
 
@@ -264,9 +211,9 @@
       }, this))
     },
 
-    reload: function() {
-      this.load(this.currentSynsetId)
-    },
+    //reload: function() {
+    //  this.load(this.currentSynsetId)
+    //},
 
     definitionIds: function() {
       return $.map(this.selectedDefinitions, function(n, i) { return n.id })

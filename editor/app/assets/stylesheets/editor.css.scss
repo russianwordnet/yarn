@@ -1,6 +1,6 @@
 .word-picker-modal, .synonym-picker-modal {
-  width: 700px; 
-  margin-left:  -350px !important; 
+  width: 400px; 
+  margin-left: -200px !important; 
 
   .modal-body {
     max-height: 600px;
@@ -8,7 +8,7 @@
     #search { margin: 0 0 15px 0; }
 
     .word-picker-listing {
-      height: 350px;
+      height: 250px;
       border: 1px inset #ddd;
       overflow: auto;
       background: #fff;
@@ -22,17 +22,9 @@
         padding: 0;
 
         li {
-          padding: 0;
-          font-size: 100%;
-          float: left;
-          display: inline;
-          width: 33.333%;
-          line-height: 20px;
-
-          span {
-            display: block;
-            padding: 3px;
-          }
+          display: block;
+          padding: 3px 10px;
+          font-size: 20px;
 
           &:hover, &.active {
             cursor: pointer;
@@ -186,6 +178,10 @@
   }
 
   .listing-synsets {
+    height: auto;
+    max-height: 100px;
+    min-height: 50px;
+
     ul {
       li {
         &:hover, &.active {
@@ -299,19 +295,6 @@
         margin: 3px 3px 0 0;
         @include border-radius(3px);
         @include inline-block;
-      }
-    }
-
-    #done-current-synset-btn {
-      padding: 10px 0 0 0;
-
-      button {
-        width: 100px;
-        font-size: 120%;
-
-        &.btn-primary {
-          width: 150px;
-        }
       }
     }
   }

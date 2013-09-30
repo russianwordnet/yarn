@@ -2,6 +2,7 @@
   $.fn.WordPicker = function(el, o) {
     var o = $.extend({
       asSynonymPicker : false,
+      allowClose      : true,
       onSelectWord    : function(word, wordId) {},
       onPickWord      : function(word, wordId) {}
     }, o)
@@ -30,16 +31,33 @@
       this.handleSeachInput()
       this.handleListing()
       this.handlePrimaryBtn()
+      this.disallowClose()
+    },
+
+    disallowClose: function() {
+      if (!this.o.allowClose) {
+        this.el.find('[data-dismiss=modal]').hide()
+        this.el.modal({
+          backdrop: 'static',
+          keyboard: false
+        })
+      } else {
+        this.el.find('[data-dismiss=modal]').show()
+        this.el.modal({
+          backdrop: true,
+          keyboard: true
+        })
+      }
     },
 
     handleSeachForm: function() {
-      $('#search').on('submit', function(e) {
+      this.el.find('form').on('submit', function(e) {
         e.preventDefault()
       })
     },
 
     handleSeachInput: function() {
-      var input = $('#search .search-query')
+      var input = this.el.find('input.search-query')
 
       input.on('keyup', $.proxy(function(e) {
         var code = (e.keyCode ? e.keyCode : e.which)
@@ -69,6 +87,11 @@
         this.togglePrimaryBtn()
         this.o.onSelectWord(this.currentWord, this.currentWordId)
       }, this))
+
+      this.content.on('dblclick', '.word-picker-listing li', $.proxy(function(e) {
+        e.stopPropagation()
+        this.el.find('.btn-primary').trigger('click')
+      }, this))      
     },
 
     togglePrimaryBtn: function() {
@@ -85,6 +108,7 @@
       this.el.find('.btn-primary').on('click', $.proxy(function() {
         if (this.currentWord) {
           this.o.onPickWord(this.currentWord, this.currentWordId)
+          $.cookie('wordId', this.currentWordId);
           this.el.modal('hide')
         }
       }, this))

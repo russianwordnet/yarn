@@ -25,10 +25,8 @@ gem 'kramdown'
 gem 'puma'
 gem 'pry'
 
-gem "select2-rails"
 gem 'font-awesome-sass-rails', '3.0.2.2'
 gem 'jbuilder'
-gem 'bootbox-rails'
 gem 'jquery-validation-rails'
 gem 'nprogress-rails'
 
