@@ -78,9 +78,6 @@
         this.enable()
 
         this.currentSynset = new o.currentSynset({
-          onReset: $.proxy(function() {
-            this.definition.resetInactive()
-          }, this),
           onRemoveDefinition: $.proxy(function(definitionId) {
             this.definition.resetInactiveDefinition(definitionId)
           }, this),

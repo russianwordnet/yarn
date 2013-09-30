@@ -297,19 +297,6 @@
         @include inline-block;
       }
     }
-
-    #done-current-synset-btn {
-      padding: 10px 0 0 0;
-
-      button {
-        width: 100px;
-        font-size: 120%;
-
-        &.btn-primary {
-          width: 150px;
-        }
-      }
-    }
   }
 
   // Add definition form
