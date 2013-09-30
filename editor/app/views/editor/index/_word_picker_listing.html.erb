@@ -1,9 +1,9 @@
 <div class="word-picker-listing">
   <ul>
     <% words.each do |word| %>
-      <li data-id="<%= word.id %>"><span><%= word.word %></span></li>
+      <li data-id="<%= word.id %>"><%= word.word %></li>
     <% end %>
   </ul>
 </div>
 
-<%= paginate words, :window => 5 %>
+<%= paginate words, :window => 1 %>
