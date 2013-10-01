@@ -18,6 +18,8 @@
       this.o = o
       this.currentDefinition = this.o.current
       this.handleLists()
+      this.handleHideButtons()
+      this.handleExpandHiddenButton()
       this.handleBlur()
     },
 
@@ -36,6 +38,20 @@
       $('#editor-area').on('dblclick', '.definitions li', $.proxy(function(e) {
         e.stopPropagation()
         this.o.onChange(this.currentDefinition)
+      }, this))
+    },
+
+    handleHideButtons: function() {
+      $('#editor-area').on('click', '.definitions li i.icon', $.proxy(function(e) {
+        $(e.target).closest('li').addClass('hide')
+        $('#expand-hidden').show()
+      }, this))
+    },
+
+    handleExpandHiddenButton: function() {
+      $('#expand-hidden').on('click', $.proxy(function(e) {
+        $('#editor-area .definitions li.hide').removeClass('hide')
+        $(e.target).hide()
       }, this))
     },
 

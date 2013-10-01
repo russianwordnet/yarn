@@ -101,13 +101,17 @@
 
   #searchbar {
     #word-search {
-      width: 200px;
+      width: 180px;
       margin: 0 auto;
       display: none;
+      position: relative;
     }
 
     #picked-word {
       display: inline-block;
+    }
+
+    #current-word-wrapper {
       padding: 0 10px;
       margin: 0 10px 0 0;
       line-height: 30px;
@@ -115,9 +119,14 @@
       color: #fff;
       font-weight: bold;
       @include border-radius(15px);
+      text-align: center;
     }
 
-    .btn { margin-right: -100%; }
+    #searchbar-buttons {
+      top: 0;
+      right: -160px;
+      position: absolute;
+    }
   }
 }
 
@@ -131,6 +140,20 @@
   h3 {
     line-height: 20px;
     font-size: 19px;
+    position: relative;
+
+    a {
+      position: absolute;
+      right: 0;
+      font-size: 16px;
+
+      small { color: $linkColor; }
+      &:hover, &:focus {
+        small { color: $linkColorHover; }
+      }
+
+      &#expand-hidden { display: none; }
+    }
   }
 
   section {
@@ -177,6 +200,33 @@
     }
   }
 
+  .definitions {
+    ul {
+      li {
+        position: relative;
+        padding-right: 30px;
+
+        span {
+          position: absolute;
+          top: 3px;
+          right: 5px;
+          height: 100%;
+          visibility: hidden;
+
+          i.icon {
+            &:hover {
+              color: maroon;
+            }
+          }
+        }
+
+        &:hover span {
+          visibility: visible;
+        }
+      }
+    }
+  }
+
   .listing-synsets {
     height: auto;
     max-height: 100px;
@@ -184,10 +234,17 @@
 
     ul {
       li {
+        overflow: hidden;
+        white-space: nowrap;
+        word-wrap: normal; /* IE */ 
+        text-overflow: ellipsis;
+
         &:hover, &.active {
           background: #FFF9CD;
           color: #222;
         }
+
+        strong { font-size: 110%; margin: 0 7px 0 0; }
       }
     }
   }
