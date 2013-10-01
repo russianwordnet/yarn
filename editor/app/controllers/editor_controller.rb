@@ -104,6 +104,14 @@ class EditorController < ApplicationController
     respond_with @word, @definitions, @synsets
   end
 
+  def next_word
+    @word = Word.next_word(params[:word_id])
+    respond_to do |format|
+      format.xml { render xml: @word }
+      format.json { render json: @word }
+    end
+  end
+
   def create_synset
     @word = Word.find(params[:word_id])
 

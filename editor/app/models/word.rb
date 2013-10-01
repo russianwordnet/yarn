@@ -13,6 +13,17 @@ class Word < ActiveRecord::Base
   has_many :synset_words
   has_many :raw_synset_words
 
+  def self.next_word(id)
+    find_by_sql([
+      "SELECT * FROM #{table_name} ORDER BY frequency DESC OFFSET (" \
+        'SELECT position FROM (' \
+          'SELECT id, row_number() OVER () AS position ' \
+            "FROM #{table_name} ORDER BY frequency DESC" \
+        ') AS ordered_words WHERE id = ?' \
+      ') LIMIT 1', id
+    ]).first
+  end
+
   def update_from(new_word)
     Word.transaction do
       old_word = OldWord.from_word(self)
