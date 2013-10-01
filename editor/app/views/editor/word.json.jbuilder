@@ -8,6 +8,8 @@ json.definitions @definitions do |definition|
 end
 
 json.synonymes @synset_words do |synset_word|
+  next if synset_word.word == @word
+
   json.word_id synset_word.word.id
   json.word    synset_word.word.word
 
@@ -25,7 +27,8 @@ end
 json.synsets @synsets do |synset|
   json.id   synset.id
   if (synset_words = synset.words.to_a).any?
-    json.text synset_words.uniq(&:word_id).map(&:word).map(&:word).join ', '
+    content = synset_words.uniq(&:word_id).map(&:word).map(&:word).join ', '
+    json.text 'Синсет №%d: %s' % [synset.id, content]
   else
     json.text "Пустой синсет №#{synset.id}"
   end
