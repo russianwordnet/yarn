@@ -56,6 +56,7 @@
         }
 
         this.handlePickWordBtn()
+        this.handleWordDoneBtn()
       },
 
       build: function(data) {
@@ -181,6 +182,13 @@
         }, this))
       },
 
+      handleWordDoneBtn: function() {
+        $('#word-is-done').on('click', $.proxy(function(e) {
+          e.preventDefault()
+          this.loadWord(this.wordId, true)
+        }, this))
+      },
+
       wordPickerDialog: function() {
         this.wordPicker = new o.wordPicker($('.word-picker-modal'), {
           allowClose : this.allowCloseWordPickerDialog(),
@@ -204,8 +212,16 @@
         return $.cookie('wordId')
       },
 
-      loadWord: function(wordId) {
-        $.getJSON(o.options.uri, { word_id: wordId }, $.proxy(function(data) {
+      loadWord: function(wordId, next) {
+        var params = { word_id: wordId }
+
+        if (next != undefined) {
+          params['next'] = true
+        }
+
+        console.log(params)
+
+        $.getJSON(o.options.uri, params, $.proxy(function(data) {
           this.build(data)
         }, this))
       }
