@@ -3,6 +3,7 @@ class OldSynset < ActiveRecord::Base
 
   attr_accessible :words, :definitions
 
+  belongs_to :author, class_name: 'User'
   belongs_to :origin, class_name: 'Synset', foreign_key: 'synset_id',
     :inverse_of => :old_synsets
 

@@ -5,6 +5,7 @@ class OldSynsetWord < ActiveRecord::Base
 
   belongs_to :word
 
+  belongs_to :author, class_name: 'User'
   belongs_to :origin, class_name: 'SynsetWord', foreign_key: 'synset_word_id',
     :inverse_of => :old_synset_words
 

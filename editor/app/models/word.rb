@@ -28,7 +28,7 @@ class Word < ActiveRecord::Base
     Word.transaction do
       old_words.last and
       old_words.last.created_at > 12.hours.ago and
-      old_words.last.author == new_word.author_id or
+      old_words.last.author_id == new_word.author_id or
       OldWord.from_word(self).save!
 
       self.word = new_word.word

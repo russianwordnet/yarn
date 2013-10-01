@@ -15,7 +15,7 @@ class Sample < ActiveRecord::Base
     Sample.transaction do
       old_samples.last and
       old_samples.last.created_at > 12.hours.ago and
-      old_samples.last.author == new_sample.author_id or
+      old_samples.last.author_id == new_sample.author_id or
       OldSample.from_sample(self).save!
 
       self.text = new_sample.text
