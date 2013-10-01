@@ -13,8 +13,10 @@ class Sample < ActiveRecord::Base
 
   def update_from(new_sample)
     Sample.transaction do
-      old_sample = OldSample.from_sample(self)
-      old_sample.save!
+      old_samples.last and
+      old_samples.last.created_at > 12.hours.ago and
+      old_samples.last.author == new_sample.author_id or
+      OldSample.from_sample(self).save!
 
       self.text = new_sample.text
       self.source = new_sample.source

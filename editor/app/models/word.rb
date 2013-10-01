@@ -26,7 +26,10 @@ class Word < ActiveRecord::Base
 
   def update_from(new_word)
     Word.transaction do
-      old_word = OldWord.from_word(self)
+      old_words.last and
+      old_words.last.created_at > 12.hours.ago and
+      old_words.last.author == new_word.author_id or
+      OldWord.from_word(self).save!
 
       self.word = new_word.word
       self.grammar = new_word.grammar
