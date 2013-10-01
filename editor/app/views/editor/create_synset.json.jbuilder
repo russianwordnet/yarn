@@ -17,5 +17,16 @@ json.synsets @synsets do |synset|
   else
     json.text "Пустой синсет №#{synset.id}"
   end
-  json.first_definition synset.definitions.first.try(:text)
+
+  json.first_definition  synset.definitions.first ? synset.definitions.first.try(:text) : ''
+end
+
+json.selected_synset do
+  json.id @synset.id
+  if (synset_words = @synset.words.to_a).any?
+    json.text synset_words.uniq(&:word_id).map(&:word).map(&:word).join ', '
+  else
+    json.text "Пустой синсет №#{@synset.id}"
+  end
+  json.first_definition @synset.definitions.first.try(:text)
 end
