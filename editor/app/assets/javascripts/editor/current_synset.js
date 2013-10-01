@@ -36,6 +36,7 @@
       $('#synsets').append(this.currentSynset)
       this.handleRemoveWord()
       this.handleRemoveDefinition()
+      this.handleCloneDefinition()
       this.o.onAfterRender(data)
     },
 
@@ -111,7 +112,7 @@
     },
 
     handleRemoveWord: function() {
-      $('#current-words').off('click', '**').on('click', 'i.icon', $.proxy(function(e) {
+      $('#current-words').off('click', '**').on('click', 'i.icon-remove', $.proxy(function(e) {
         var item = $(e.currentTarget).closest('div')
 
         this.selectedWords = $.grep(this.selectedWords, function(obj) {
@@ -164,6 +165,14 @@
         this.o.onRemoveDefinition(item.data('id'))
         item.remove()
         this.save()
+      }, this))
+    },
+
+    handleCloneDefinition: function() {
+      this.currentSynset.find('li .icon-copy').off('click', '**').click($.proxy(function(e) {
+        var definition = $(e.currentTarget).closest('li').find('span').text()
+        $('#current-synset a.dashed-link').trigger('click')
+        $('#add-definition-modal #inputText').val(definition)
       }, this))
     },
 
