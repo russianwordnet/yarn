@@ -1,8 +1,3 @@
-/*
-  Добавляем определение в синсет, сохраняем. Добавляем еще одно, сохраняем - первое добавленное определение
-  убирается из синсета.
-*/
-
 (function( $ ) {
   $.fn.EditorCurrentSynset = function(o) {
     var o = $.extend({
@@ -41,7 +36,6 @@
       $('#synsets').append(this.currentSynset)
       this.handleRemoveWord()
       this.handleRemoveDefinition()
-      //this.validate()
       this.o.onAfterRender(data)
     },
 
@@ -113,7 +107,6 @@
 
       $('#current-words').append(newWord)
       this.handleRemoveWord()
-      //this.validate()
       this.save()
     },
 
@@ -126,7 +119,6 @@
         })
 
         item.remove()
-        //this.validate()
         this.save()
       }, this))
     },
@@ -158,7 +150,6 @@
 
       $('#current-synset ol').append(newDefinition)
       this.handleRemoveDefinition()
-      //this.validate()
       this.save()
     },
 
@@ -172,7 +163,6 @@
 
         this.o.onRemoveDefinition(item.data('id'))
         item.remove()
-        //this.validate()
         this.save()
       }, this))
     },
@@ -182,13 +172,8 @@
     },
 
     isValid: function() {
-      //return this.valid
       return this.selectedWords.length > 0 && this.selectedDefinitions.length > 0
     },
-
-    //validate: function() {
-    //  this.valid = this.selectedWords.length > 0 && this.selectedDefinitions.length > 0
-    //},
 
     save: function() {
       if (!this.isValid()) return
@@ -210,10 +195,6 @@
         this.render(data)
       }, this))
     },
-
-    //reload: function() {
-    //  this.load(this.currentSynsetId)
-    //},
 
     definitionIds: function() {
       return $.map(this.selectedDefinitions, function(n, i) { return n.id })
