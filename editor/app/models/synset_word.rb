@@ -20,8 +20,10 @@ class SynsetWord < ActiveRecord::Base
 
   def update_from(new_synset_word)
     SynsetWord.transaction do
-      old_synset_word = OldSynsetWord.from_synset_word(self)
-      old_synset_word.save!
+      old_synset_words.last and
+      old_synset_words.last.created_at > 12.hours.ago and
+      old_synset_words.last.author == new_synset_word.author_id or
+      OldSynsetWord.from_synset_word(self).save!
 
       self.word = new_synset_word.word
       self.nsg = new_synset_word.nsg

@@ -22,8 +22,10 @@ class Synset < ActiveRecord::Base
 
   def update_from(new_synset, save_method = :save)
     Synset.transaction do
-      old_synset = OldSynset.from_synset(self)
-      old_synset.save!
+      old_synsets.last and
+      old_synsets.last.created_at > 12.hours.ago and
+      old_synsets.last.author == new_synset.author_id or
+      OldSynset.from_synset(self).save!
 
       self.words_ids = new_synset.words_ids
       self.definitions_ids = new_synset.definitions_ids

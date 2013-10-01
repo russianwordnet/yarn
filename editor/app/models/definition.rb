@@ -16,8 +16,10 @@ class Definition < ActiveRecord::Base
 
   def update_from(new_definition)
     Definition.transaction do
-      old_definition = OldDefinition.from_definition(self)
-      old_definition.save!
+      old_definitions.last and
+      old_definitions.last.created_at > 12.hours.ago and
+      old_definitions.last.author == new_definition.author_id or
+      OldDefinition.from_definition(self).save!
 
       self.text = new_definition.text
       self.source = new_definition.source
