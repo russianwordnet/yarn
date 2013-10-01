@@ -8,8 +8,6 @@ json.definitions @definitions do |definition|
 end
 
 json.synonymes @synset_words do |synset_word|
-  next if synset_word.word == @word
-
   json.word_id synset_word.word.id
   json.word    synset_word.word.word
 
