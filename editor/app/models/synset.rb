@@ -24,7 +24,7 @@ class Synset < ActiveRecord::Base
     Synset.transaction do
       old_synsets.last and
       old_synsets.last.created_at > 12.hours.ago and
-      old_synsets.last.author == new_synset.author_id or
+      old_synsets.last.author_id == new_synset.author_id or
       OldSynset.from_synset(self).save!
 
       self.words_ids = new_synset.words_ids

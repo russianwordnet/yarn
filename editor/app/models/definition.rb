@@ -18,7 +18,7 @@ class Definition < ActiveRecord::Base
     Definition.transaction do
       old_definitions.last and
       old_definitions.last.created_at > 12.hours.ago and
-      old_definitions.last.author == new_definition.author_id or
+      old_definitions.last.author_id == new_definition.author_id or
       OldDefinition.from_definition(self).save!
 
       self.text = new_definition.text
