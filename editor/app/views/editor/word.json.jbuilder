@@ -27,8 +27,7 @@ end
 json.synsets @synsets do |synset|
   json.id   synset.id
   if (synset_words = synset.words.to_a).any?
-    content = synset_words.uniq(&:word_id).map(&:word).map(&:word).join ', '
-    json.text 'Синсет №%d: %s' % [synset.id, content]
+    json.text synset_words.uniq(&:word_id).map(&:word).map(&:word).join ', '
   else
     json.text "Пустой синсет №#{synset.id}"
   end
