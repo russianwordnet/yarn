@@ -2,7 +2,7 @@
   <div class="listing definitions">
     <ul>
       {{#definitions}}
-        <li data-id="{{id}}" data-word="{{word}}" data-word-id="{{word_id}}">{{text}}</li>
+        <li data-id="{{id}}" data-word="{{word}}" data-word-id="{{word_id}}">{{text}}<span><i title="Скрыть определение" class="icon icon-eye-close"></i></span></li>
       {{/definitions}}
     </ul>
   </div>
@@ -12,10 +12,14 @@
   <div class="listing listing-synsets">
     <ul>
       {{#synsets}}
-        <li data-id="{{id}}">{{text}}</li>
+        <li data-id="{{id}}"><strong>{{text}}</strong><span>{{first_definition}}</span></li>
       {{/synsets}}
     </ul>
   </div>
+</script>
+
+<script id="selected-synset-tpl" type="text/html">
+  <li data-id="{{id}}"><strong>{{text}}</strong><span>{{first_definition}}</span></li>
 </script>
 
 <script id="accordion-tpl" type="text/html">

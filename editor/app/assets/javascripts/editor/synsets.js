@@ -3,6 +3,7 @@
     var o = $.extend({
       placeholder : $('#synsets-placeholder'),
       template    : $('#synsets-tpl').text(),
+      selectedSynsetTemplate : $('#selected-synset-tpl').text(),
       onAdd       : function(data, synset) {},
       onSelect    : function(synsetId) {},
     }, o)
@@ -62,8 +63,9 @@
     },
 
     updateSelected: function(data) {
-      var words = $.map(data.words, function(n, i) { return n.word }).join(', ')
-      this.selectedSynset.html(words)
+      this.selectedSynset.replaceWith(
+        $(Mustache.render(this.o.selectedSynsetTemplate, data))
+      )
     }
   }
 })(jQuery);

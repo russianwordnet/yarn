@@ -3,10 +3,6 @@
 [Дима] Слева в разделе синонимов не должно быть самого слова.
 [Дима] Возможность добавить слово, которого пока нет в базе. После этого в базе должен появиться пустой wordEntry.
 
-Показывать в списке синсетов с заданным словом ещё и начало первого определения.
-
-Убрать кнопки сохранить и сбросить. Пусть будет сохранение на каждую операцию. (Возможно, на сервере склеивать последовательные изменения одного синсета за короткий промежуток времени в одну версию, чтобы не плодить большого количества версий)
- 
 Наверху, рядом со словом сделать кнопку «готово». Она должна быть основная, а кнопка «выбрать другое слово» вспомогательной. Готово работает как написано на прототипе.
 
 Иметь возможность скрывать заведомо бесполезные определения (у самого слова и у синонимов). Иметь возможность вернуть обратно скрытые определения. Кнопкой «показать все» или перезагрузкой страницы.
@@ -60,6 +56,7 @@
         }
 
         this.handlePickWordBtn()
+        this.handleWordDoneBtn()
       },
 
       build: function(data) {
@@ -83,7 +80,7 @@
           }, this),
           onAfterRender: $.proxy(function(data) {
             this.definition.inactivateDefinitions(this.currentSynset.definitionIds())
-            this.synsets.updateSelected(data)
+            this.synsets.updateSelected(data.selected_synset)
           }, this),
         })
 
@@ -185,6 +182,13 @@
         }, this))
       },
 
+      handleWordDoneBtn: function() {
+        $('#word-is-done').on('click', $.proxy(function(e) {
+          e.preventDefault()
+          this.loadWord(this.wordId, true)
+        }, this))
+      },
+
       wordPickerDialog: function() {
         this.wordPicker = new o.wordPicker($('.word-picker-modal'), {
           allowClose : this.allowCloseWordPickerDialog(),
@@ -208,8 +212,16 @@
         return $.cookie('wordId')
       },
 
-      loadWord: function(wordId) {
-        $.getJSON(o.options.uri, { word_id: wordId }, $.proxy(function(data) {
+      loadWord: function(wordId, next) {
+        var params = { word_id: wordId }
+
+        if (next != undefined) {
+          params['next'] = true
+        }
+
+        console.log(params)
+
+        $.getJSON(o.options.uri, params, $.proxy(function(data) {
           this.build(data)
         }, this))
       }
