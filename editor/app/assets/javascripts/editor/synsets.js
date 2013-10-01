@@ -62,8 +62,10 @@
       }, this))
     },
 
+    // Тут короче фишка в том, что мы заменяем текущий выделенный синсет на шаблон и поэтому на него пропадает ссылка this.selectedSynset
+    // Надо чето придумать
     updateSelected: function(data) {
-      this.selectedSynset.replaceWith(
+      this.selectedSynset.html(
         $(Mustache.render(this.o.selectedSynsetTemplate, data))
       )
     }

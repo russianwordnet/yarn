@@ -1,11 +1,3 @@
-/*
-
-[Дима] Слева в разделе синонимов не должно быть самого слова.
-[Дима] Возможность добавить слово, которого пока нет в базе. После этого в базе должен появиться пустой wordEntry.
-
-«Добавить определение на основе существующего».
-
-*/
 //= require editor/word_picker
 //= require editor/add_to_current_synset_button
 //= require editor/definitions
@@ -68,6 +60,7 @@
         this.wordId = data.id
         this.data   = data
 
+        $.cookie('wordId', this.wordId)
         this.enable()
 
         this.currentSynset = new o.currentSynset({
@@ -214,8 +207,6 @@
         if (next != undefined) {
           params['next'] = true
         }
-
-        console.log(params)
 
         $.getJSON(o.options.uri, params, $.proxy(function(data) {
           this.build(data)
