@@ -94,7 +94,11 @@ class EditorController < ApplicationController
   end
 
   def word
-    @word = Word.find(params[:word_id])
+    @word = if params[:next].present?
+      Word.next_word(params[:word_id])
+    else
+      Word.find(params[:word_id])
+    end
 
     @raw_synsets = @word.raw_synset_words.map(&:synsets).flatten.uniq
     @definitions = @raw_synsets.map(&:definitions).flatten.uniq
@@ -102,14 +106,6 @@ class EditorController < ApplicationController
     @synsets = @word.synset_words.map(&:synsets).flatten.uniq
 
     respond_with @word, @definitions, @synsets
-  end
-
-  def next_word
-    @word = Word.next_word(params[:word_id])
-    respond_to do |format|
-      format.xml { render xml: @word }
-      format.json { render json: @word }
-    end
   end
 
   def create_synset
