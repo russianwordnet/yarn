@@ -60,7 +60,6 @@
         this.wordId = data.id
         this.data   = data
 
-        $.cookie('wordId', this.wordId)
         this.enable()
 
         this.currentSynset = new o.currentSynset({
@@ -210,6 +209,7 @@
 
         $.getJSON(o.options.uri, params, $.proxy(function(data) {
           this.build(data)
+          $.cookie('wordId', data.id)
         }, this))
       }
     }

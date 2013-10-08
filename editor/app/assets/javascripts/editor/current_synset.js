@@ -181,7 +181,7 @@
     },
 
     isValid: function() {
-      return this.selectedWords.length > 0 && this.selectedDefinitions.length > 0
+      return this.selectedDefinitions.length > 0
     },
 
     save: function() {
