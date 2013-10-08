@@ -108,7 +108,6 @@
       this.el.find('.btn-primary').on('click', $.proxy(function() {
         if (this.currentWord) {
           this.o.onPickWord(this.currentWord, this.currentWordId)
-          $.cookie('wordId', this.currentWordId);
           this.el.modal('hide')
         }
       }, this))

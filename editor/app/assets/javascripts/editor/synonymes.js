@@ -54,6 +54,8 @@
     },
 
     add: function(data) {
+      if (this.accordion.find('[data-word-id=' + data.id + ']').length > 0) return;
+
       this.data.synonymes.push({
         word_id     : data.id,
         word        : data.word,
@@ -66,10 +68,10 @@
     toggleIcon: function(e) {
       var icon = $(e.target).prev('.accordion-heading').find('a > i.icon')
 
-      if (icon.hasClass('icon-plus')) {
-        icon.removeClass('icon-plus').addClass('icon-minus')
+      if (icon.hasClass('icon-caret-right')) {
+        icon.removeClass('icon-caret-right').addClass('icon-caret-down')
       } else {
-        icon.removeClass('icon-minus').addClass('icon-plus')
+        icon.removeClass('icon-caret-down').addClass('icon-caret-right')
       }
     },
 
