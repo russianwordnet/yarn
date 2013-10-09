@@ -7,6 +7,8 @@ class Synset < ActiveRecord::Base
 
   belongs_to :author, class_name: 'User'
 
+  has_one :default_definition, class_name: 'Definition'
+
   has_many :old_synsets, :order => :revision,
     :inverse_of => :origin
 
