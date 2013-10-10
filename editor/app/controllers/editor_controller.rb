@@ -153,6 +153,13 @@ class EditorController < ApplicationController
     respond_with @synset, @definitions, @words
   end
 
+  def set_default_definition
+    @synset = Synset.find(params[:synset_id])
+    @defintion = Definition.find(params[:definition_id])
+    @synset.update_attribute(:default_definition, @definition)
+    show_synset
+  end
+
   #   .-´¯¯¯`-.
   # ,´         `.
   # |            \
