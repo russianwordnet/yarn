@@ -7,7 +7,13 @@ class Synset < ActiveRecord::Base
 
   belongs_to :author, class_name: 'User'
 
-  has_one :default_definition, class_name: 'Definition'
+  belongs_to :default_definition, class_name: 'Definition'
+
+  before_save do |synset|
+    unless synset.definitions_ids.include? synset.default_definition_id
+      synset.default_definition_id = nil
+    end
+  end
 
   has_many :old_synsets, :order => :revision,
     :inverse_of => :origin
