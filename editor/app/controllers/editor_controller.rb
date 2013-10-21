@@ -176,7 +176,7 @@ class EditorController < ApplicationController
     @synset = Synset.find(params[:synset_id])
     @new_synset = @synset.dup
 
-    @new_synset.definitions_ids = params[:definitions_ids]
+    @new_synset.definitions_ids = params[:definitions_ids].map(&:to_i)
     @new_synset.words_ids = []
 
     # retrieve existent word associations
@@ -185,22 +185,43 @@ class EditorController < ApplicationController
     end
 
     # the word 'lexeme' is used to distinguish `synset_word` from `word`
-    lexemes_ids = params[:lexemes_ids].map(&:to_i)
+    lexemes_ids = (params[:lexemes_ids] || []).map(&:to_i)
 
     lexemes_mapping = Word.find(lexemes_ids).inject({}) do |h, w|
       h[w.id] = w; h
     end
 
     lexemes_ids.each do |word_id|
-      if words_mapping[word_id]
-        @new_synset.words_ids += [words_mapping[word_id].id]
+      synset_word = if words_mapping[word_id]
+        SynsetWord.find(words_mapping[word_id].id)
       else
         synset_word = SynsetWord.new(word: lexemes_mapping[word_id])
         synset_word.author = current_user
-        synset_word.save!
-
-        @new_synset.words_ids += [synset_word.id]
+        synset_word
       end
+
+      definitions = @new_synset.definitions_ids - @synset.definitions_ids
+
+      unless definitions.empty?
+        synset_words = RawSynsetWord.find_by_content(definitions, word_id)
+        raw_samples = RawSample.find_by_synset_words(synset_words.map(&:id))
+
+        samples = raw_samples.map do |origin|
+          unless sample = Sample.find_by_text_and_source(origin.text, origin.source)
+            sample = Sample.new(text: origin.text, source: origin.source)
+            sample.author = origin.author
+          end
+          sample
+        end.compact
+
+        Sample.transaction { samples.each(&:save!) }
+
+        synset_word.samples_ids = samples.map(&:id)
+      end
+
+      synset_word.save!
+
+      @new_synset.words_ids += [synset_word.id]
     end
 
     @synset.update_from(@new_synset, :save!)
