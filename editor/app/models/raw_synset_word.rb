@@ -6,7 +6,7 @@ class RawSynsetWord < ActiveRecord::Base
   belongs_to :word, :inverse_of => :synset_words
 
   scope :find_by_content, ->(definitions_ids, word_id) {
-    select("DISTINCT(raw_synset_words.id)").
+    select("DISTINCT ON (id) raw_synset_words.*").
     joins("INNER JOIN raw_synsets ON ARRAY[raw_synset_words.id] " \
           "&& raw_synsets.words_ids").
     where("word_id = ? AND definitions_ids @> '{?}'", word_id, definitions_ids)
