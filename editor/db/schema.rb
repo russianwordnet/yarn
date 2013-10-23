@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131009214514) do
+ActiveRecord::Schema.define(:version => 20131023150149) do
 
   create_table "antonomy_relations", :force => true do |t|
     t.integer  "antonomy_relation_id",                :null => false
@@ -105,14 +105,14 @@ ActiveRecord::Schema.define(:version => 20131009214514) do
   add_index "current_interlinks", ["updated_at"], :name => "index_current_interlinks_on_updated_at"
 
   create_table "current_samples", :force => true do |t|
-    t.integer  "author_id"
-    t.integer  "approver_id"
-    t.datetime "approved_at"
-    t.integer  "revision",    :default => 1, :null => false
     t.text     "text",                       :null => false
     t.text     "source"
     t.string   "uri"
-    t.datetime "updated_at"
+    t.integer  "author_id",                  :null => false
+    t.datetime "updated_at",                 :null => false
+    t.integer  "approver_id"
+    t.datetime "approved_at"
+    t.integer  "revision",    :default => 1, :null => false
     t.datetime "deleted_at"
   end
 
@@ -278,19 +278,6 @@ ActiveRecord::Schema.define(:version => 20131009214514) do
   add_index "interlinks", ["revision"], :name => "index_interlinks_on_revision"
   add_index "interlinks", ["synset_id"], :name => "index_interlinks_on_synset_id"
   add_index "interlinks", ["updated_at"], :name => "index_interlinks_on_updated_at"
-
-  create_table "raw_samples", :force => true do |t|
-    t.text     "text",       :null => false
-    t.text     "source"
-    t.string   "uri"
-    t.integer  "author_id",  :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "raw_samples", ["author_id"], :name => "index_raw_samples_on_author_id"
-  add_index "raw_samples", ["source"], :name => "index_raw_samples_on_source"
-  add_index "raw_samples", ["uri"], :name => "index_raw_samples_on_uri"
 
   create_table "raw_synset_words", :force => true do |t|
     t.integer  "word_id",                     :null => false
@@ -525,8 +512,6 @@ ActiveRecord::Schema.define(:version => 20131009214514) do
   add_foreign_key "interlinks", "current_synsets", :name => "interlinks_synset_id_fk", :column => "synset_id", :dependent => :delete
   add_foreign_key "interlinks", "users", :name => "interlinks_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "interlinks", "users", :name => "interlinks_author_id_fk", :column => "author_id", :dependent => :delete
-
-  add_foreign_key "raw_samples", "users", :name => "raw_samples_author_id_fk", :column => "author_id", :dependent => :delete
 
   add_foreign_key "raw_synset_words", "current_words", :name => "raw_synset_words_word_id_fk", :column => "word_id", :dependent => :delete
   add_foreign_key "raw_synset_words", "users", :name => "raw_synset_words_author_id_fk", :column => "author_id", :dependent => :delete
