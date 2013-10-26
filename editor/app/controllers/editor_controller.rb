@@ -204,20 +204,11 @@ class EditorController < ApplicationController
 
       unless definitions.empty?
         synset_words = RawSynsetWord.find_by_content(definitions, word_id)
-        raw_samples = RawSample.find_by_synset_words(synset_words.map(&:id))
-
-        samples = raw_samples.map do |origin|
-          unless sample = Sample.find_by_text_and_source(origin.text, origin.source)
-            sample = Sample.new(text: origin.text, source: origin.source)
-            sample.author = origin.author
-          end
-          sample
-        end.compact
-
-        Sample.transaction { samples.each(&:save!) }
-
+        samples = Sample.find_by_raw_synset_words(synset_words.map(&:id))
         synset_word.samples_ids = samples.map(&:id)
       end
+
+      binding.pry
 
       synset_word.save!
 

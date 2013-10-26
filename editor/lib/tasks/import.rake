@@ -58,10 +58,10 @@ def new_synset_word(sax, author_id, word_id)
   end
 end
 
-# Create an instance of the RawSample class.
+# Create an instance of the Sample class.
 #
 def new_sample(sax, author_id)
-  RawSample.new.tap do |sample|
+  Sample.new.tap do |sample|
     sample.author_id = author_id
     sample.text = sax.text
     sample.source = sax.source
@@ -219,7 +219,7 @@ namespace :yarn do
     ActiveRecord::Base.connection.reset_pk_sequence! Definition.table_name
     ActiveRecord::Base.connection.reset_pk_sequence! RawSynset.table_name
     ActiveRecord::Base.connection.reset_pk_sequence! RawSynsetWord.table_name
-    ActiveRecord::Base.connection.reset_pk_sequence! RawSample.table_name
+    ActiveRecord::Base.connection.reset_pk_sequence! Sample.table_name
     ActiveRecord::Base.connection.reset_pk_sequence! SynsetRelation.table_name
     ActiveRecord::Base.connection.reset_pk_sequence! WordRelation.table_name
     ActiveRecord::Base.connection.reset_pk_sequence! AntonomyRelation.table_name

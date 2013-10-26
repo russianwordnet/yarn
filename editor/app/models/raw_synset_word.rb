@@ -17,8 +17,8 @@ class RawSynsetWord < ActiveRecord::Base
     class_name: 'RawSynset'
 
   has_many :samples, finder_sql: proc {
-    %Q{SELECT * FROM raw_samples WHERE id IN
+    %Q{SELECT * FROM current_samples WHERE id IN
         (SELECT unnest(samples_ids) FROM raw_synset_words
           WHERE id = #{id});} },
-    class_name: 'RawSample'
+    class_name: 'Sample'
 end
