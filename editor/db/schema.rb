@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131023150149) do
+ActiveRecord::Schema.define(:version => 20131104035800) do
 
   create_table "antonomy_relations", :force => true do |t|
     t.integer  "antonomy_relation_id",                :null => false
@@ -279,6 +279,25 @@ ActiveRecord::Schema.define(:version => 20131023150149) do
   add_index "interlinks", ["synset_id"], :name => "index_interlinks_on_synset_id"
   add_index "interlinks", ["updated_at"], :name => "index_interlinks_on_updated_at"
 
+  create_table "mark_categories", :force => true do |t|
+    t.string   "title",      :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "mark_categories", ["title"], :name => "index_mark_categories_on_title", :unique => true
+
+  create_table "marks", :force => true do |t|
+    t.string   "name",             :null => false
+    t.string   "description",      :null => false
+    t.integer  "mark_category_id", :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "marks", ["mark_category_id"], :name => "index_marks_on_mark_category_id"
+  add_index "marks", ["name"], :name => "index_marks_on_name", :unique => true
+
   create_table "raw_synset_words", :force => true do |t|
     t.integer  "word_id",                     :null => false
     t.string   "nsg"
@@ -512,6 +531,8 @@ ActiveRecord::Schema.define(:version => 20131023150149) do
   add_foreign_key "interlinks", "current_synsets", :name => "interlinks_synset_id_fk", :column => "synset_id", :dependent => :delete
   add_foreign_key "interlinks", "users", :name => "interlinks_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "interlinks", "users", :name => "interlinks_author_id_fk", :column => "author_id", :dependent => :delete
+
+  add_foreign_key "marks", "mark_categories", :name => "marks_mark_category_id_fk", :dependent => :delete
 
   add_foreign_key "raw_synset_words", "current_words", :name => "raw_synset_words_word_id_fk", :column => "word_id", :dependent => :delete
   add_foreign_key "raw_synset_words", "users", :name => "raw_synset_words_author_id_fk", :column => "author_id", :dependent => :delete
