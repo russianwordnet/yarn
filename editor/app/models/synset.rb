@@ -28,6 +28,10 @@ class Synset < ActiveRecord::Base
         (SELECT unnest(words_ids) FROM current_synsets
           WHERE id = #{id});} }, class_name: 'SynsetWord'
 
+  has_many :antonomy_relations
+  has_many :synset_relations
+  has_many :interlinks
+
   def update_from(new_synset, save_method = :save)
     Synset.transaction do
       old_synsets.last and
