@@ -7,6 +7,20 @@
 
 <div id="editor-ui">
   <div id="editor-area">
+    <script type="text/javascript">
+      function updateHint(wordID, definitionID) {
+        $.ajax({
+          type: "GET",
+          url: "<%= editor_sample_url %>",
+          data: { word_id: wordID, definition_id: definitionID }
+        }).done(function(sample) {
+          $("#hint").html(sample);
+        });
+      }
+
+      window.updateHint = updateHint;
+    </script>
+
     <div class="row-fluid">
       <%= render 'editor/index/left_pane' %>
       <%= render 'editor/index/right_pane' %>

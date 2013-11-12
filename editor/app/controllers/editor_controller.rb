@@ -93,6 +93,28 @@ class EditorController < ApplicationController
       gsub(/[ЕЁ]/, '(Е|Ё)') }.join ' '
   end
 
+  def sample
+    unless params[:word_id].present? && params[:definition_id].present?
+      return false
+    end
+
+    @word = Word.find(params[:word_id])
+    @definition = Definition.find(params[:definition_id])
+    @synset_words = RawSynsetWord.find_by_content(@definition.id, @word.id)
+
+    samples_ids = @synset_words.map(&:samples_ids).flatten
+
+    @samples = Sample.find(samples_ids).map do |sample|
+      ERB::Util.html_escape('%s (%s)' % [sample.text, sample.source || 'н/д'])
+    end
+
+    if @samples.empty?
+      render text: 'нет примеров'
+    else
+      render text: @samples.join('<br /><br />').html_safe
+    end
+  end
+
   def word
     @word = if params[:next].present?
       Word.next_word(params[:word_id])

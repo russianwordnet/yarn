@@ -60,6 +60,7 @@ Yarn::Application.routes.draw do
     get 'next', :as => :next
 
     get 'show_synset', :as => :show_synset
+    get 'sample', :as => :sample
     post 'set_default_definition', :as => :set_default_definition
     post 'create_synset', :as => :create_synset
     post 'create_definition', :as => :create_definition
