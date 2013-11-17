@@ -5,7 +5,7 @@
 <% if @synset.words_ids.size > 0 %>
   <ul>
     <% @synset.words.each do |synset_word| %>
-      <li><%= link_to synset_word.word.word, synset_word_url(@synset, synset_word) %></li>
+      <li><%= link_to synset_word.word.word, synset_word_url(synset_word) %></li>
     <% end %>
   </ul>
 <% else %>
