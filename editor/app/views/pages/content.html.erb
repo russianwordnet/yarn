@@ -1,0 +1,12 @@
+<div class="row-fluid">
+  <h1>Данные</h1>
+  <p>В настоящее время тезаурус содержит:</p>
+  <ul class="disc">
+    <li>слов &mdash; <%= Word.count %>;</li>
+    <li>размеченных синсетов &mdash; <%= Synset.count %>;</li>
+    <li>неразмеченных синсетов &mdash; <%= RawSynset.count %>.</li>
+  </ul>
+  <p>Словари представляются в соответствии с нашей
+  <a href="https://github.com/xoposhiy/yarn/blob/master/formats/yarn.xsd"
+    >XML Schema</a></p>
+</div>
