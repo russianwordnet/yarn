@@ -5,10 +5,12 @@
   </main>
 
   <footer id="footer">
-    <div class="container">&copy;&nbsp;YARN,&nbsp;2012&ndash;<%= Time.now.utc.year %></p></div>
+    <div class="container">Проект выполняется при финансовой поддержке
+    <a href="http://www.rfh.ru">РГНФ</a>, грант №13-04-12020.</div>
   </footer>
 
   <%= javascript_include_tag 'application' %>
   <%= yield(:javascript) if content_for?(:javascript) %>
+
   <%= render 'shared/metrika' if Rails.env.production? %>
 </body>
