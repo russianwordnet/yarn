@@ -41,4 +41,54 @@ namespace :yarn do
     puts 'Output of %d duplicates is written to "%s"' %
       [duplicates.size, output]
   end
+
+  task :merge_lexemes => :environment do
+    query = %Q{SELECT DISTINCT ON (#{Word.table_name}.word)
+                 #{Word.table_name}.id, #{Word.table_name}.word,
+                 duplicate_words.id AS duplicate_id,
+                 duplicate_words.word AS duplicate_word
+               FROM #{Word.table_name}
+               INNER JOIN #{Word.table_name} AS duplicate_words ON
+                 duplicate_words.word = #{Word.table_name}.word AND
+                 duplicate_words.id <> #{Word.table_name}.id}
+
+    rows = ActiveRecord::Base.connection.execute(query)
+    puts 'Found %d duplicates' % rows.size
+
+    rows.each_with_index do |row, i|
+      id1, id2 = row.values_at('id', 'duplicate_id')
+      common_id, removed_id = [id1, id2].min, [id1, id2].max
+
+      Word.transaction do
+        RawSynsetWord.where(word_id: removed_id).
+          update_all(word_id: common_id)
+        SynsetWord.where(word_id: removed_id).
+          update_all(word_id: common_id)
+        OldSynsetWord.where(word_id: removed_id).
+          update_all(word_id: common_id)
+
+        AntonomyRelation.where(word1_id: removed_id).
+          update_all(word1_id: common_id)
+        AntonomyRelation.where(word2_id: removed_id).
+          update_all(word2_id: common_id)
+        OldAntonomyRelation.where(word1_id: removed_id).
+          update_all(word1_id: common_id)
+        OldAntonomyRelation.where(word2_id: removed_id).
+          update_all(word2_id: common_id)
+
+        WordRelation.where(word1_id: removed_id).
+          update_all(word1_id: common_id)
+        WordRelation.where(word2_id: removed_id).
+          update_all(word2_id: common_id)
+        OldWordRelation.where(word1_id: removed_id).
+          update_all(word1_id: common_id)
+        OldWordRelation.where(word2_id: removed_id).
+          update_all(word2_id: common_id)
+
+        Word.find(removed_id).update_attribute(:deleted_at, DateTime.now)
+      end
+
+      puts '%d rows have been processed' % (i + 1) if (i + 1) % 100 == 0 || (i + 1) == rows.size
+    end
+  end
 end

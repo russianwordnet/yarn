@@ -8,7 +8,8 @@ class EditorController < ApplicationController
   respond_to :html, :json
 
   def index
-    @words = Word.order('frequency DESC').select('id, word')
+    @words = Word.order('frequency DESC').select('id, word').
+      where(deleted_at: nil)
 
     if params.key?(:word) && !params[:word].empty?
       query  = params[:word].split.map! { |s| ('%s%%' % s).
@@ -33,7 +34,7 @@ class EditorController < ApplicationController
   end
 
   def search
-    @words = Word.where('word SIMILAR TO ?', @query).
+    @words = Word.where(deleted_at: nil).where('word SIMILAR TO ?', @query).
       order('frequency DESC', 'word').page params[:page]
 
     respond_to do |format|

@@ -9,7 +9,8 @@ class WordsController < ApplicationController
   before_filter :track_word, :only => [:update, :revert]
 
   def index
-    @words = Word.order('frequency DESC').page params[:page]
+    @words = Word.where(deleted_at: nil).
+      order('frequency DESC').page params[:page]
 
     respond_to do |format|
       format.html
@@ -19,7 +20,8 @@ class WordsController < ApplicationController
   end
 
   def search
-    @words = Word.where('word SIMILAR TO ?', @query).
+    @words = Word.where(deleted_at: nil).
+      where('word SIMILAR TO ?', @query).
       order('frequency DESC', 'word').page params[:page]
 
     respond_to do |format|
