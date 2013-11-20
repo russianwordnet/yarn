@@ -55,31 +55,44 @@ namespace :yarn do
     rows = ActiveRecord::Base.connection.execute(query)
     puts 'Found %d duplicates' % rows.size
 
+    def update_object(object, delta)
+      attributes = object.attributes.merge(delta)
+      object.update_from(OpenStruct.new(attributes))
+    end
+
     rows.each_with_index do |row, i|
       id1, id2 = row.values_at('id', 'duplicate_id')
       common_id, removed_id = [id1, id2].min, [id1, id2].max
 
       Word.transaction do
+        SynsetWord.where(word_id: removed_id).each do |sw|
+          update_object(sw, 'word_id' => common_id)
+        end
+
         RawSynsetWord.where(word_id: removed_id).
-          update_all(word_id: common_id)
-        SynsetWord.where(word_id: removed_id).
           update_all(word_id: common_id)
         OldSynsetWord.where(word_id: removed_id).
           update_all(word_id: common_id)
 
-        AntonomyRelation.where(word1_id: removed_id).
-          update_all(word1_id: common_id)
-        AntonomyRelation.where(word2_id: removed_id).
-          update_all(word2_id: common_id)
+        AntonomyRelation.where(word1_id: removed_id).each do |ar|
+          update_object(ar, 'word1_id' => common_id)
+        end
+        AntonomyRelation.where(word2_id: removed_id).each do |ar|
+          update_object(ar, 'word2_id' => common_id)
+        end
+
         OldAntonomyRelation.where(word1_id: removed_id).
           update_all(word1_id: common_id)
         OldAntonomyRelation.where(word2_id: removed_id).
           update_all(word2_id: common_id)
 
-        WordRelation.where(word1_id: removed_id).
-          update_all(word1_id: common_id)
-        WordRelation.where(word2_id: removed_id).
-          update_all(word2_id: common_id)
+        WordRelation.where(word1_id: removed_id).each do |ar|
+          update_object(ar, 'word1_id' => common_id)
+        end
+        WordRelation.where(word2_id: removed_id).each do |ar|
+          update_object(ar, 'word2_id' => common_id)
+        end
+
         OldWordRelation.where(word1_id: removed_id).
           update_all(word1_id: common_id)
         OldWordRelation.where(word2_id: removed_id).

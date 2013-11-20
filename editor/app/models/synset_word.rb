@@ -18,21 +18,21 @@ class SynsetWord < ActiveRecord::Base
         (SELECT unnest(samples_ids) FROM current_synset_words
           WHERE id = #{id});} }
 
-  def update_from(new_synset_word)
+  def update_from(new_synset_word, save_method = :save)
     SynsetWord.transaction do
       old_synset_words.last and
       old_synset_words.last.created_at > 12.hours.ago and
       old_synset_words.last.author_id == new_synset_word.author_id or
       OldSynsetWord.from_synset_word(self).save!
 
-      self.word = new_synset_word.word
+      self.word_id = new_synset_word.word_id
       self.nsg = new_synset_word.nsg
       self.marks = new_synset_word.marks
       self.samples_ids = new_synset_word.samples_ids
       self.author_id = new_synset_word.author_id
       self.revision += 1
 
-      save
+      method(save_method).call.tap { |result| self.reload if result }
     end
   end
 end
