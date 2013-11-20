@@ -5,6 +5,7 @@ json.definitions @definitions do |definition|
   json.text definition.text
   json.word_id @word.id
   json.word    @word.word
+  json.samples @samples[definition.id]
 end
 
 json.synonymes @synset_words do |synset_word|
