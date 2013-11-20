@@ -12,6 +12,7 @@ class OldWord < ActiveRecord::Base
     old_word.word = word.word
     old_word.grammar = word.grammar
     old_word.accents = word.accents
+    old_word.frequency = word.frequency
     old_word.uris = word.uris
     old_word.author_id = word.author_id
     old_word.approver_id = word.approver_id

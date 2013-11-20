@@ -27,7 +27,7 @@ class Word < ActiveRecord::Base
     ]).first
   end
 
-  def update_from(new_word)
+  def update_from(new_word, save_method = :save)
     Word.transaction do
       old_words.last and
       old_words.last.created_at > 12.hours.ago and
@@ -37,13 +37,14 @@ class Word < ActiveRecord::Base
       self.word = new_word.word
       self.grammar = new_word.grammar
       self.accents = new_word.accents
+      self.frequency = new_word.frequency
       self.uris = new_word.uris
       self.author_id = new_word.author_id
       self.approver_id = new_word.approver_id
       self.approved_at = new_word.approved_at
       self.revision += 1
 
-      return save.tap { |saved| old_word.save! if saved }
+      method(save_method).call.tap { |result| self.reload if result }
     end
   end  
 
