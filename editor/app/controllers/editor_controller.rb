@@ -93,28 +93,6 @@ class EditorController < ApplicationController
       gsub(/[ЕЁ]/, '(Е|Ё)') }.join ' '
   end
 
-  def sample
-    unless params[:word_id].present? && params[:definition_id].present?
-      return false
-    end
-
-    @word = Word.find(params[:word_id])
-    @definition = Definition.find(params[:definition_id])
-    @synset_words = RawSynsetWord.find_by_content(@definition.id, @word.id)
-
-    samples_ids = @synset_words.map(&:samples_ids).flatten
-
-    @samples = Sample.find(samples_ids).map do |sample|
-      ERB::Util.html_escape('%s (%s)' % [sample.text, sample.source || 'н/д'])
-    end
-
-    if @samples.empty?
-      render text: 'нет примеров'
-    else
-      render text: @samples.join('<br /><br />').html_safe
-    end
-  end
-
   def word
     @word = if params[:next].present?
       Word.next_word(params[:word_id])
@@ -124,11 +102,13 @@ class EditorController < ApplicationController
 
     @raw_synsets = @word.raw_synset_words.map(&:synsets).flatten.uniq
     @definitions = @raw_synsets.map(&:definitions).flatten.uniq
+    @samples = build_samples
+
     @synset_words = @raw_synsets.map(&:words).flatten.uniq(&:word_id)
     @synset_words.reject! { |sw| sw.word_id == @word.id }
     @synsets = @word.synset_words.map(&:synsets).flatten.uniq
 
-    respond_with @word, @definitions, @synsets
+    respond_with @word, @definitions, @synsets, @samples
   end
 
   def create_synset
@@ -241,5 +221,26 @@ class EditorController < ApplicationController
     @synset.reload
 
     render 'create_synset'
+  end
+
+  protected
+
+  def build_samples
+    @definitions.inject({}) do |hash, definition|
+      samples_ids = words_to_definitions[definition.id].map(&:sample_ids).flatten
+      samples = Sample.find(samples_ids)
+
+      hash[definition.id] = samples.map { |sample| '%s (%s)' % [sample.text, sample.source || 'н/д'] }
+
+      hash
+    end
+  end
+
+  def words_to_definitions
+    @words_to_definitions ||= @word.raw_synset_words.inject({}) do |h, rsw|
+      rsw.synsets.map(&:definitions_ids).flatten.each { |id| h[id] = Array.wrap(h[id]) << rsw }
+
+      h
+    end
   end
 end

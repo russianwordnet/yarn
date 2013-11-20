@@ -2,7 +2,18 @@
   <div class="listing definitions">
     <ul>
       {{#definitions}}
-        <li data-id="{{id}}" data-word="{{word}}" data-word-id="{{word_id}}" onmouseover='updateHint({{word_id}}, {{id}});'>{{text}}<span><i title="Скрыть определение" class="icon icon-eye-close"></i></span></li>
+        <li data-id="{{id}}" data-word="{{word}}" data-word-id="{{word_id}}">{{text}}<span><i title="Скрыть определение" class="icon icon-eye-close"></i></span>
+          <br \>
+          <small>
+              <strong>Пример(ы) уптребления:</strong> {{^samples}} нет примеров {{/samples}}
+              <ul>
+                {{#samples}}
+                  <li> {{.}} </li>
+                {{/samples}}
+              </ul>
+          </small>
+        </li>
+
       {{/definitions}}
     </ul>
   </div>
