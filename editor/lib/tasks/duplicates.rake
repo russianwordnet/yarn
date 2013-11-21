@@ -51,7 +51,8 @@ namespace :yarn do
                FROM #{Word.table_name}
                INNER JOIN #{Word.table_name} AS duplicate_words ON
                  duplicate_words.word = #{Word.table_name}.word AND
-                 duplicate_words.id <> #{Word.table_name}.id}
+                 duplicate_words.id <> #{Word.table_name}.id
+               WHERE current_words.deleted_at IS NULL}
 
     rows = ActiveRecord::Base.connection.execute(query)
     puts 'Found %d duplicates' % rows.size
