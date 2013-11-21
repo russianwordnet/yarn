@@ -42,6 +42,7 @@ namespace :yarn do
       [duplicates.size, output]
   end
 
+  desc 'Merge duplicate lexemes'
   task :merge_lexemes => :environment do
     query = %Q{SELECT DISTINCT ON (#{Word.table_name}.word)
                  #{Word.table_name}.id, #{Word.table_name}.word,
