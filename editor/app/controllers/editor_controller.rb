@@ -1,7 +1,8 @@
 # encoding: utf-8
 
 class EditorController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, except: [:index, :word, :show_synset,
+    :definitions, :synonymes]
   before_filter :extract_query, :only => :search
 
   layout proc {|controller| controller.request.xhr? ? false : "editor" }
