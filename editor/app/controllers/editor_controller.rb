@@ -180,7 +180,7 @@ class EditorController < ApplicationController
     @synset = Synset.find(params[:synset_id])
     @new_synset = @synset.dup
 
-    @new_synset.definitions_ids = params[:definitions_ids].map(&:to_i)
+    @new_synset.definitions_ids = (params[:definitions_ids] || []).map(&:to_i)
     @new_synset.words_ids = []
 
     # retrieve existent word associations
