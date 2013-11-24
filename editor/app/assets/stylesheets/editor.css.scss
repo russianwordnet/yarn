@@ -226,6 +226,12 @@
     }
   }
 
+  .hidden-samples {
+    .sample {
+      display: none;
+    }
+  }
+
   .listing-synsets {
     height: auto;
     max-height: 100px;
