@@ -2,6 +2,4 @@
 
 <p><strong>Имя:</strong> <%= current_user %></p>
 <p><strong>Роль:</strong> <%= current_user.admin? ? 'администратор' : 'участник' %></p>
-
-<h2>Вклад в редактирование синсетов</h2>
-<p>Внесено правок в синсеты: <%= @stats ? @stats.score : 0 %></p>
+<p><strong>Правок в синсетах:</strong> <%= @stats ? @stats.score : 0 %></p>
