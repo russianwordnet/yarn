@@ -10,3 +10,26 @@
   <a href="https://github.com/xoposhiy/yarn/blob/master/formats/yarn.xsd"
     >XML Schema</a></p>
 </div>
+<% if current_user && current_user.admin? %>
+  <div class="row-fluid">
+    <h2>Статистика по синсетам</h2>
+    <table width="100%">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Имя пользователя</th>
+          <th>Количество правок</th>
+        </tr>
+      </thead>
+      <tbody style="text-align: center;">
+      <% User.statistics.each do |user| %>
+        <tr>
+          <td><%= user.id %></td>
+          <td><%= user.name %></td>
+          <td><%= user.score %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

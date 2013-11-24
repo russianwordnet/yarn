@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131104035800) do
+ActiveRecord::Schema.define(:version => 20131124074924) do
 
   create_table "antonomy_relations", :force => true do |t|
     t.integer  "antonomy_relation_id",                :null => false
@@ -423,10 +423,12 @@ ActiveRecord::Schema.define(:version => 20131104035800) do
     t.string   "uid"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "role"
   end
 
   add_index "users", ["name"], :name => "index_users_on_name"
   add_index "users", ["provider", "uid"], :name => "index_users_on_provider_and_uid", :unique => true
+  add_index "users", ["role"], :name => "index_users_on_role"
 
   create_table "word_relations", :force => true do |t|
     t.integer  "word_relation_id",                :null => false
