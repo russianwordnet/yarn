@@ -51,7 +51,7 @@
     handleExpandHiddenButton: function() {
       $('#expand-hidden').on('click', $.proxy(function(e) {
         $('#editor-area .definitions li.hide').removeClass('hide')
-        $(e.target).hide()
+        $(e.currentTarget).hide()
       }, this))
     },
 
