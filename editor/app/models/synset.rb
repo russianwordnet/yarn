@@ -38,6 +38,8 @@ class Synset < ActiveRecord::Base
     joins('LEFT OUTER JOIN synsets on synsets.synset_id = current_synsets.id').
     where('current_synsets.deleted_at IS NULL AND ' \
       '(current_synsets.revision = 1 OR synsets.revision = 1)').
+    order(['array_length(current_synsets.words_ids, 1) DESC',
+           'array_length(current_synsets.definitions_ids, 1) DESC']).
     includes(:author)
   }
 
