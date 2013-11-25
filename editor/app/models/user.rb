@@ -15,20 +15,16 @@ class User < ActiveRecord::Base
 
   validates :name, presence: true
 
-  def self.statistics(*users_ids)
-    users_where = unless users_ids.empty?
-      'WHERE united_synsets.author_id IN (?)'
-    end
-
-    find_by_sql([
-      'SELECT united_synsets.author_id as id, name, count(*) AS score ' \
-        'FROM (SELECT id, author_id FROM current_synsets UNION ALL ' \
-              'SELECT synset_id AS id, author_id FROM synsets) AS ' \
-      'united_synsets INNER JOIN users ON author_id = users.id ' \
-      "#{users_where} GROUP BY author_id, name ORDER BY score DESC",
-      users_ids
-    ])
-  end
+  scope :scores, ->(*users_ids) {
+    select(['users.*', 'united_synsets.author_id AS id', 'count(*) AS score']).
+    from('(SELECT id, author_id FROM current_synsets UNION ALL ' \
+          'SELECT synset_id AS id, author_id FROM synsets) AS ' \
+          'united_synsets').
+    joins('INNER JOIN users ON author_id = users.id').
+    where(users_ids.any? && 'united_synsets.author_id IN (?)', users_ids).
+    group(:author_id, :name, 'users.id').
+    order('score DESC')
+  }
 
   def to_s
     name

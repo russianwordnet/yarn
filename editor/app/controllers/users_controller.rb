@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
   def show
-    @stats = User.statistics(current_user.id).first
+    @stats = User.score(current_user.id).first
   end
 end
