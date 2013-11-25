@@ -212,8 +212,6 @@ class EditorController < ApplicationController
         synset_word.samples_ids = samples.map(&:id)
       end
 
-      binding.pry
-
       synset_word.save!
 
       @new_synset.words_ids += [synset_word.id]
