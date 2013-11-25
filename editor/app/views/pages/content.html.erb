@@ -43,13 +43,13 @@
     <table style="width: 100%; text-align: left;">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Имя пользователя</th>
-          <th>Количество правок</th>
+          <th style="width: 5%;">ID</th>
+          <th style="width: 35%;">Имя пользователя</th>
+          <th style="width: 60%;">Количество правок</th>
         </tr>
       </thead>
-      <tbody style="text-align: center;">
-      <% User.statistics.each do |user| %>
+      <tbody>
+      <% User.scores.each do |user| %>
         <tr>
           <td><%= user.id %></td>
           <td><%= user.name %></td>
