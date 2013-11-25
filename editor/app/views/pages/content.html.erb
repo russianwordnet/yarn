@@ -13,7 +13,34 @@
 <% if current_user && current_user.admin? %>
   <div class="row-fluid">
     <h2>Статистика по синсетам</h2>
-    <table width="100%">
+    <table style="width: 100%; text-align: left;">
+      <thead>
+        <tr>
+          <th style="width: 5%;">ID</th>
+          <th style="width: 35%;">Имя пользователя</th>
+          <th style="width: 60%;">Синсеты</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% Synset.retrieve_creators.group_by(&:author).each do |user, synsets| %>
+        <tr>
+          <td><%= user.id %></td>
+          <td><%= user.name %></td>
+          <td>
+            <%= synsets.map do |synset|
+              link_to(synset.id, synset_path(synset))
+            end.join(', ').html_safe %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+<% if current_user && current_user.admin? %>
+  <div class="row-fluid">
+    <h2>Статистика по правкам в синсетах</h2>
+    <table style="width: 100%; text-align: left;">
       <thead>
         <tr>
           <th>ID</th>

@@ -32,6 +32,15 @@ class Synset < ActiveRecord::Base
   has_many :synset_relations
   has_many :interlinks
 
+  scope :retrieve_creators, -> {
+    select(['current_synsets.*',
+      'COALESCE(current_synsets.author_id, synsets.author_id) AS author_id']).
+    joins('LEFT OUTER JOIN synsets on synsets.synset_id = current_synsets.id').
+    where('current_synsets.deleted_at IS NULL AND ' \
+      '(current_synsets.revision = 1 OR synsets.revision = 1)').
+    includes(:author)
+  }
+
   def update_from(new_synset, save_method = :save)
     Synset.transaction do
       old_synsets.last and
