@@ -6,7 +6,8 @@ class SynsetsController < ApplicationController
   respond_to :html, :json
 
   def index
-    @synsets = Synset.order('updated_at DESC').page params[:page]
+    @synsets = Synset.where('author_id <> ?', 1).
+      order('updated_at DESC').page params[:page]
 
     respond_to do |format|
       format.html
