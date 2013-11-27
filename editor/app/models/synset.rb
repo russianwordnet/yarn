@@ -13,6 +13,10 @@ class Synset < ActiveRecord::Base
     unless synset.definitions_ids.include? synset.default_definition_id
       synset.default_definition_id = nil
     end
+
+    unless synset.words_ids.include? synset.default_synset_word_id
+      synset.default_synset_word_id = nil
+    end
   end
 
   has_many :old_synsets, :order => :revision,

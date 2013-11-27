@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131124074924) do
+ActiveRecord::Schema.define(:version => 20131127154419) do
 
   create_table "antonomy_relations", :force => true do |t|
     t.integer  "antonomy_relation_id",                :null => false
@@ -172,18 +172,20 @@ ActiveRecord::Schema.define(:version => 20131124074924) do
     t.integer  "author_id"
     t.integer  "approver_id"
     t.datetime "approved_at"
-    t.integer  "revision",              :default => 1,  :null => false
+    t.integer  "revision",               :default => 1,  :null => false
     t.datetime "deleted_at"
     t.datetime "updated_at"
-    t.integer  "words_ids",             :default => [],                 :array => true
-    t.integer  "definitions_ids",       :default => [],                 :array => true
+    t.integer  "words_ids",              :default => [],                 :array => true
+    t.integer  "definitions_ids",        :default => [],                 :array => true
     t.integer  "default_definition_id"
+    t.integer  "default_synset_word_id"
   end
 
   add_index "current_synsets", ["approved_at"], :name => "index_current_synsets_on_approved_at"
   add_index "current_synsets", ["approver_id"], :name => "index_current_synsets_on_approver_id"
   add_index "current_synsets", ["author_id"], :name => "index_current_synsets_on_author_id"
   add_index "current_synsets", ["default_definition_id"], :name => "index_current_synsets_on_default_definition_id"
+  add_index "current_synsets", ["default_synset_word_id"], :name => "index_current_synsets_on_default_synset_word_id"
   add_index "current_synsets", ["definitions_ids"], :name => "index_current_synsets_on_definitions_ids"
   add_index "current_synsets", ["deleted_at"], :name => "index_current_synsets_on_deleted_at"
   add_index "current_synsets", ["revision"], :name => "index_current_synsets_on_revision"
@@ -514,6 +516,7 @@ ActiveRecord::Schema.define(:version => 20131124074924) do
   add_foreign_key "current_synset_words", "users", :name => "current_synset_words_author_id_fk", :column => "author_id", :dependent => :delete
 
   add_foreign_key "current_synsets", "current_definitions", :name => "current_synsets_default_definition_id_fk", :column => "default_definition_id"
+  add_foreign_key "current_synsets", "current_synset_words", :name => "current_synsets_default_synset_word_id_fk", :column => "default_synset_word_id"
   add_foreign_key "current_synsets", "users", :name => "current_synsets_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "current_synsets", "users", :name => "current_synsets_author_id_fk", :column => "author_id", :dependent => :delete
 
