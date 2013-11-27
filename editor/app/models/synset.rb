@@ -63,4 +63,22 @@ class Synset < ActiveRecord::Base
       method(save_method).call.tap { |result| self.reload if result }
     end
   end
+
+  def words_with_default_first
+    return words_without_default_first unless default_synset_word_id
+    words = words_without_default_first.dup
+
+    words.delete(default_synset_word)
+    words.prepend(default_synset_word)
+  end
+  alias_method_chain :words, :default_first
+
+  def definitions_with_default_first
+    return definitions_without_default_first unless default_definition_id
+    definitions = definitions_without_default_first.dup
+
+    definitions.delete(default_definition)
+    definitions.prepend(default_definition)
+  end
+  alias_method_chain :definitions, :default_first
 end
