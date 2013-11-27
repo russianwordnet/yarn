@@ -13,10 +13,9 @@ class EditorController < ApplicationController
       where(deleted_at: nil)
 
     if params.key?(:word) && !params[:word].empty?
-      query  = params[:word].split.map! { |s| ('%s%%' % s).
-        gsub(/[её]/, '(е|ё)').
+      query  = params[:word].split.map! { |s| s.gsub(/[её]/, '(е|ё)').
         gsub(/[ЕЁ]/, '(Е|Ё)') }.join ' '
-      @words = @words.where('word SIMILAR TO ?', query)
+      @words = @words.where('word ~* ?', query)
     end
 
     @words = @words.page params[:page]
@@ -35,7 +34,7 @@ class EditorController < ApplicationController
   end
 
   def search
-    @words = Word.where(deleted_at: nil).where('word SIMILAR TO ?', @query).
+    @words = Word.where(deleted_at: nil).where('word ~* ?', @query).
       order('frequency DESC', 'word').page params[:page]
 
     respond_to do |format|
@@ -90,8 +89,7 @@ class EditorController < ApplicationController
       return false
     end
 
-    @query = params[:q].split.map! { |s| ('%s%%' % s).
-      gsub(/[её]/, '(е|ё)').
+    @query = params[:q].split.map! { |s| s.gsub(/[её]/, '(е|ё)').
       gsub(/[ЕЁ]/, '(Е|Ё)') }.join ' '
   end
 
