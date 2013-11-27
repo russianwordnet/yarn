@@ -8,6 +8,7 @@ class Synset < ActiveRecord::Base
   belongs_to :author, class_name: 'User'
 
   belongs_to :default_definition, class_name: 'Definition'
+  belongs_to :default_synset_word, class_name: 'SynsetWord'
 
   before_save do |synset|
     unless synset.definitions_ids.include? synset.default_definition_id

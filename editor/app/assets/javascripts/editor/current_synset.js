@@ -37,6 +37,8 @@
       this.handleRemoveWord()
       this.handleRemoveDefinition()
       this.handleCloneDefinition()
+      this.handleSetDefaultDefinition()
+      this.handleSetDefaultSynsetWord()
       this.o.onAfterRender(data)
     },
 
@@ -173,6 +175,38 @@
         var definition = $(e.currentTarget).closest('li').find('span').text()
         $('#current-synset a.dashed-link').trigger('click')
         $('#add-definition-modal #inputText').val(definition)
+      }, this))
+    },
+
+    handleSetDefaultDefinition: function() {
+      this.currentSynset.find('li .icon-flag.definition').off('click', '**').click($.proxy(function(e) {
+        var item = $(e.currentTarget).closest('li')
+
+        $.post('/editor/set_default_definition',
+        {
+          synset_id     : this.currentSynsetId,
+          definition_id : item.data('id')
+        },
+        $.proxy( function(data) {
+          this.render(data)
+        }, this)
+        )
+      }, this))
+    },
+
+    handleSetDefaultSynsetWord: function() {
+      this.currentSynset.find('.icon-flag.synset_word').off('click', '**').click($.proxy(function(e) {
+        var item = $(e.currentTarget).closest('div')
+
+        $.post('/editor/set_default_synset_word',
+        {
+          synset_id       : this.currentSynsetId,
+          synset_word_id  : item.data('id')
+        },
+        $.proxy( function(data) {
+          this.render(data)
+        }, this)
+        )
       }, this))
     },
 

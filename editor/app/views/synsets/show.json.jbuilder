@@ -1,7 +1,7 @@
 json.id @synset.id
 
 json.words @synset.words do |synset_word|
-  json.id   synset_word.word.id
+  json.id   synset_word.id
   json.word synset_word.word.word
 end
 
@@ -17,5 +17,5 @@ json.selected_synset do
   else
     json.text "Пустой синсет №#{@synset.id}"
   end
-  json.first_definition @synset.definitions.first.try(:text)
+  json.first_definition  @synset.default_definition ? @synset.default_definition.try(:text) : @synset.definitions.first.try(:text)
 end

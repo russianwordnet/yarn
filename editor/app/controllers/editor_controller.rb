@@ -152,7 +152,7 @@ class EditorController < ApplicationController
     @definitions = @synset.definitions
     @words = @synset.words.map(&:word)
 
-    respond_with @synset, @definitions, @words
+    render :create_synset
   end
 
   def set_default_definition
