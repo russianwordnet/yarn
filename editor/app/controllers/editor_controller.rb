@@ -150,7 +150,7 @@ class EditorController < ApplicationController
     @synset = Synset.find(params[:synset_id])
 
     @definitions = @synset.definitions
-    @words = @synset.synset_words.map(&:word)
+    @words = @synset.words.map(&:word)
 
     respond_with @synset, @definitions, @words
   end
