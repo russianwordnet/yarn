@@ -21,7 +21,7 @@ class WordsController < ApplicationController
 
   def search
     @words = Word.where(deleted_at: nil).
-      where('word SIMILAR TO ?', @query).
+      where('word ~* ?', @query).
       order('frequency DESC', 'word').page params[:page]
 
     respond_to do |format|
@@ -138,7 +138,7 @@ class WordsController < ApplicationController
       return false
     end
 
-    @query = params[:q].split.map! { |s| ('%s%%' % s).
+    @query = params[:q].split.map! { |s| ('^%s.+' % s).
       gsub(/[её]/, '(е|ё)').
       gsub(/[ЕЁ]/, '(Е|Ё)') }.join ' '
   end
