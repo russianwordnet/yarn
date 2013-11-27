@@ -138,8 +138,7 @@ class WordsController < ApplicationController
       return false
     end
 
-    @query = params[:q].split.map! { |s| ('%s.+' % s).
-      gsub(/[её]/, '(е|ё)').
+    @query = params[:q].split.map! { |s| s.gsub(/[её]/, '(е|ё)').
       gsub(/[ЕЁ]/, '(Е|Ё)') }.join ' '
   end
 
