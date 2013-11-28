@@ -1,4 +1,5 @@
-yarn
-====
+# YARN
+YARN is an acronym for Yet Another RussNet.
 
-Yet Another RussNet
+## Website
+http://russianword.net/
