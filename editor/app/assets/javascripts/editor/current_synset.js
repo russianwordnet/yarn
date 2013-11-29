@@ -201,7 +201,7 @@
         $.post('/editor/set_default_synset_word',
         {
           synset_id       : this.currentSynsetId,
-          synset_word_id  : item.data('id')
+          synset_word_id  : item.data('synset-word-id')
         },
         $.proxy( function(data) {
           this.render(data)
