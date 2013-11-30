@@ -10,7 +10,7 @@ namespace :yarn do
     subst = ENV['subst'] || ''
 
     puts 'Substituting the %s pattern to %s' % [regexp.inspect, subst.inspect]
-    rows = Word.where('word =~ ?', pattern)
+    rows = Word.where('word ~* ?', pattern)
     puts rows.to_sql
 
     rows.each_with_index do |word, i|
