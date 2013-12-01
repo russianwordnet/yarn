@@ -17,8 +17,8 @@ namespace :yarn do
       attributes = word.attributes
       attributes['word'] = attributes['word'].gsub(regexp, subst)
       attributes['author_id'] = author_id
+      puts 'Changing "%s" to "%s"' % [word.word, attributes['word']]
       word.update_from(OpenStruct.new(attributes))
-      puts '%d words were affected' % (i + 1) if (i + 1) % 100 == 0 || (i + 1) == rows.size
     end
   end
 end
