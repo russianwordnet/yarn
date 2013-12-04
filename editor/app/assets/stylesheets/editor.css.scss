@@ -294,50 +294,51 @@
   }
 
   // Synonymes
-  #synonymes {
-    .accordion-heading {
-      a {
-        font-weight: bold;
-        font-size: 110%;
-        color: #666;
-        @include background-image(none);
-        background-color: #dedede;
-      }
+  .accordion-heading {
+    a {
+      font-weight: bold;
+      font-size: 110%;
+      color: #666;
+      @include background-image(none);
+      background-color: #dedede;
+    }
 
-      .accordion-toggle {
-        padding: 3px 10px;
-      }
+    .accordion-toggle {
+      padding: 3px 10px;
+    }
 
-      .add-word {
-        @extend .pull-right;
-        visibility: hidden;
-
-        &:hover {
-          color: $base-blue;
-        }
-      }
+    .add-word {
+      @extend .pull-right;
+      visibility: hidden;
 
       &:hover {
-        .add-word { visibility: visible; }
+        color: $base-blue;
       }
     }
 
-    .accordion-inner {
-      padding: 1px;
+    &:hover {
+      .add-word { visibility: visible; }
     }
+  }
+
+  .accordion-inner {
+    padding: 1px;
   }
 
   // Synsets
 
   // Current synset
   #current-synset {
-    background: #dedede;
     margin: 0 -10px;
     padding: 10px;
     //display: none;
 
     &.active {
       background: #FFF9CD;
+    }
+
+    section {
+      background: #dedede;
     }
 
     // Current words as tags

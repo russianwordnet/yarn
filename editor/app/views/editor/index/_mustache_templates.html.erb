@@ -69,34 +69,43 @@
 </script>
 
 <script id="current-synset-tpl" type="text/html">
-  <section id="current-synset">
-    <div id="current-words">
+  <div id="current-synset">
+    <div class="accordion" id="synset-words">
       {{#words}}
-        <div data-id="{{id}}" data-synset-word-id="{{synset_word_id}}">
-          <span>{{word}}</span>
-          <i title="Удалить" class="icon icon-remove"></i>
-          <i title="Сделать первым" class="icon icon-flag synset_word"></i>
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#synonymes" href="#">
+
+              {{word}}
+
+              <span class="pull-right synset_word" data-id="{{id}}" data-synset-word-id="{{synset_word_id}}">
+                <i title="Удалить" class="icon icon-remove"></i>
+                <i title="Сделать первым" class="icon icon-flag"></i>
+              </span>
+            </a>
+          </div>
         </div>
       {{/words}}
     </div>
+    <section>
+      <div>
+        <ol>
+          {{#definitions}}
+            <li data-id="{{id}}" data-word="{{word}}">
+              <span>{{text}}</span>
+              <i title="Добавить новое определение на основе этого" class="icon icon-copy"></i>
+              <i title="Удалить" class="icon icon-remove"></i>
+              <i title="Сделать первым" class="icon icon-flag definition"></i>
+            </li>
+          {{/definitions}}
+        </ol>
+      </div>
 
-    <div>
-      <ol>
-        {{#definitions}}
-          <li data-id="{{id}}" data-word="{{word}}">
-            <span>{{text}}</span>
-            <i title="Добавить новое определение на основе этого" class="icon icon-copy"></i>
-            <i title="Удалить" class="icon icon-remove"></i>
-            <i title="Сделать первым" class="icon icon-flag definition"></i>
-          </li>
-        {{/definitions}}
-      </ol>
-    </div>
-
-    <div>
-      <a href="#add-definition-modal" data-toggle="modal" class="dashed-link"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить определение</a>
-    </div>
-  </section>
+      <div>
+        <a href="#add-definition-modal" data-toggle="modal" class="dashed-link"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить определение</a>
+      </div>
+    </section>
+  </div>
 </script>
 
 <script id="word-tpl" type="text/html">

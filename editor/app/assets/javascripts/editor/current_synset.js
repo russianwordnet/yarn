@@ -114,8 +114,8 @@
     },
 
     handleRemoveWord: function() {
-      $('#current-words').off('click', '**').on('click', 'i.icon-remove', $.proxy(function(e) {
-        var item = $(e.currentTarget).closest('div')
+      this.currentSynset.off('click', '.synset_word i.icon-remove').on('click', '.synset_word i.icon-remove', $.proxy(function(e) {
+        var item = $(e.currentTarget).parent()
 
         this.selectedWords = $.grep(this.selectedWords, function(obj) {
           return obj.id != item.data('id')
@@ -123,6 +123,22 @@
 
         item.remove()
         this.save()
+      }, this))
+    },
+
+    handleSetDefaultSynsetWord: function() {
+      this.currentSynset.off('click', '.synset_word i.icon-flag').on('click', '.synset_word i.icon-flag', $.proxy(function(e) {
+        var item = $(e.currentTarget).parent()
+
+        $.post('/editor/set_default_synset_word',
+        {
+          synset_id       : this.currentSynsetId,
+          synset_word_id  : item.data('synset-word-id')
+        },
+        $.proxy( function(data) {
+          this.render(data)
+        }, this)
+        )
       }, this))
     },
 
@@ -186,22 +202,6 @@
         {
           synset_id     : this.currentSynsetId,
           definition_id : item.data('id')
-        },
-        $.proxy( function(data) {
-          this.render(data)
-        }, this)
-        )
-      }, this))
-    },
-
-    handleSetDefaultSynsetWord: function() {
-      this.currentSynset.find('.icon-flag.synset_word').off('click', '**').click($.proxy(function(e) {
-        var item = $(e.currentTarget).closest('div')
-
-        $.post('/editor/set_default_synset_word',
-        {
-          synset_id       : this.currentSynsetId,
-          synset_word_id  : item.data('synset-word-id')
         },
         $.proxy( function(data) {
           this.render(data)
