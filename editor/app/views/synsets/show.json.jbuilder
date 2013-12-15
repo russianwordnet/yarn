@@ -13,7 +13,7 @@ end
 
 json.selected_synset do
   json.id @synset.id
-  if @lexemes.any?
+  if @lexemes.size > 0
     json.text @lexemes.map(&:word).join ', '
   else
     json.text "Пустой синсет №#{@synset.id}"
