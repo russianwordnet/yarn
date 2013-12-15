@@ -33,6 +33,12 @@ class Synset < ActiveRecord::Base
         (SELECT unnest(words_ids) FROM current_synsets
           WHERE id = #{id});} }, class_name: 'SynsetWord'
 
+  has_many :lexemes, class_name: 'Word', finder_sql: proc {
+    %Q{SELECT * FROM current_words where id IN
+        (SELECT DISTINCT word_id FROM current_synset_words WHERE id IN
+          (SELECT unnest(words_ids) FROM current_synsets
+            WHERE id = #{id}));} }
+
   has_many :antonomy_relations
   has_many :synset_relations
   has_many :interlinks
