@@ -1,9 +1,8 @@
 # encoding: utf-8
 
 class EditorController < ApplicationController
-  before_filter :authenticate_user!, except: [:index, :word, :show_synset,
-    :definitions, :synonymes]
-  before_filter :extract_query, :only => :search
+  before_filter :authenticate_user!, except:
+    [:index, :word, :show_synset, :definitions, :synonymes]
 
   layout proc {|controller| controller.request.xhr? ? false : "editor" }
   respond_to :html, :json
@@ -13,12 +12,21 @@ class EditorController < ApplicationController
       where(deleted_at: nil)
 
     if params.key?(:word) && !params[:word].empty?
-      query  = params[:word].split.map! { |s| s.gsub(/[её]/, '(е|ё)').
-        gsub(/[ЕЁ]/, '(Е|Ё)') }.join ' '
-      @words = @words.where('word ~* ?', query)
+      (@query = params[:word].gsub(/\p{Zs}{2,}/, ' ')).split.each do |token|
+        token.insert(0, '%')
+        token.insert(-1, '%')
+
+        if token =~ /[ЕеЁё]/
+          yetoken = token.gsub(/[ЕЁ]/, 'Е').gsub(/[её]/, 'е')
+          yotoken = token.gsub(/[ЕЁ]/, 'Ё').gsub(/[её]/, 'ё')
+          @words = @words.where('word ILIKE ? OR word ILIKE ?', yetoken, yotoken)
+        else
+          @words = @words.where('word ILIKE ?', token)
+        end
+      end
     end
 
-    @words = @words.page params[:page]
+    @words = @words.page(params[:page])
 
     respond_with @words do |format|
       format.html do
@@ -30,16 +38,6 @@ class EditorController < ApplicationController
 
         render options
       end
-    end
-  end
-
-  def search
-    @words = Word.where(deleted_at: nil).where('word ~* ?', @query).
-      order('frequency DESC', 'word').page params[:page]
-
-    respond_to do |format|
-      format.xml { render xml: @words }
-      format.json { render json: @words }
     end
   end
 
@@ -81,16 +79,6 @@ class EditorController < ApplicationController
 
   def append_definition
     @definition = Definition.find(params[:definition_id])
-  end
-
-  def extract_query
-    unless params[:q].present?
-      redirect_to words_url
-      return false
-    end
-
-    @query = params[:q].split.map! { |s| s.gsub(/[её]/, '(е|ё)').
-      gsub(/[ЕЁ]/, '(Е|Ё)') }.join ' '
   end
 
   def word
