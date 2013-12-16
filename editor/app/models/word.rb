@@ -16,6 +16,7 @@ class Word < ActiveRecord::Base
   has_many :antonomy_relations
   has_many :word_relations
 
+  # TODO: scope!
   def self.next_word(id)
     find_by_sql([
       "SELECT * FROM #{table_name} ORDER BY frequency DESC OFFSET (" \
