@@ -11,7 +11,9 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131127154419) do
+ActiveRecord::Schema.define(:version => 20131216185542) do
+
+  add_extension "pg_trgm"
 
   create_table "antonomy_relations", :force => true do |t|
     t.integer  "antonomy_relation_id",                :null => false
@@ -235,6 +237,7 @@ ActiveRecord::Schema.define(:version => 20131127154419) do
   add_index "current_words", ["revision"], :name => "index_current_words_on_revision"
   add_index "current_words", ["uris"], :name => "index_current_words_on_uris"
   add_index "current_words", ["word"], :name => "index_current_words_on_word"
+  add_index "current_words", ["word"], :name => "index_current_words_on_word_trgm", :using => :gin, :index_opclass => :gin_trgm_ops
 
   create_table "definitions", :force => true do |t|
     t.integer  "author_id"
