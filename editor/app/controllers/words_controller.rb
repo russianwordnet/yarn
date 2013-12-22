@@ -4,7 +4,6 @@ class WordsController < ApplicationController
   before_filter :authenticate_user!, :except => [:index, :search, :approved, :show, :history]
   before_filter :find_word, :except => [:index, :search, :approved, :new, :create]
   before_filter :set_top_bar_word, :except => [:index, :search, :approved]
-  before_filter :extract_query, :only => :search
   before_filter :prepare_revert, :only => :revert
   before_filter :track_word, :only => [:update, :revert]
 
@@ -20,9 +19,25 @@ class WordsController < ApplicationController
   end
 
   def search
-    @words = Word.where(deleted_at: nil).
-      where('word ~* ?', @query).
-      order('frequency DESC', 'word').page params[:page]
+    return (redirect_to(words_url) and false) unless params[:q].present?
+
+    @words = Word.where(deleted_at: nil)
+
+    (@query = params[:q].gsub(/\p{Zs}{2,}/, ' ')).split.each do |token|
+      token.insert(0, '%')
+      token.insert(-1, '%')
+
+      if token =~ /[ЕеЁё]/
+        yetoken = token.gsub(/[ЕЁ]/, 'Е').gsub(/[её]/, 'е')
+        yotoken = token.gsub(/[ЕЁ]/, 'Ё').gsub(/[её]/, 'ё')
+        @words = @words.where('word ILIKE ? OR word ILIKE ?', yetoken, yotoken)
+      else
+        @words = @words.where('word ILIKE ?', token)
+      end
+    end
+
+    @words = @words.order('frequency DESC', 'word').
+      page(params[:page])
 
     respond_to do |format|
       format.html
@@ -130,16 +145,6 @@ class WordsController < ApplicationController
 
   def set_top_bar_word
     self.top_bar_word = @word
-  end
-
-  def extract_query
-    unless params[:q].present?
-      redirect_to words_url
-      return false
-    end
-
-    @query = params[:q].split.map! { |s| s.gsub(/[её]/, '(е|ё)').
-      gsub(/[ЕЁ]/, '(Е|Ё)') }.join ' '
   end
 
   def prepare_revert

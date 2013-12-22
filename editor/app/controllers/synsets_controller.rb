@@ -17,7 +17,9 @@ class SynsetsController < ApplicationController
   end
 
   def show
-    respond_with @synsets
+    @definitions = @synset.definitions
+    @synset_words = @synset.words
+    @lexemes = @synset.lexemes.to_a
   end
 
   def search

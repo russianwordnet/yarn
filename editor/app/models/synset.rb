@@ -33,14 +33,22 @@ class Synset < ActiveRecord::Base
         (SELECT unnest(words_ids) FROM current_synsets
           WHERE id = #{id});} }, class_name: 'SynsetWord'
 
+  has_many :lexemes, class_name: 'Word', finder_sql: proc {
+    %Q{SELECT * FROM current_words INNER JOIN
+        (SELECT word_id FROM current_synset_words WHERE id IN
+          (SELECT unnest(words_ids) FROM current_synsets
+            WHERE id = #{id})) AS nested_synset_words
+        ON nested_synset_words.word_id = current_words.id} }
+
   has_many :antonomy_relations
   has_many :synset_relations
   has_many :interlinks
 
-  scope :retrieve_creators, -> {
+  scope :retrieve_creators, ->(*users_ids) {
     select(['current_synsets.*',
       'COALESCE(current_synsets.author_id, synsets.author_id) AS author_id']).
     joins('LEFT OUTER JOIN synsets on synsets.synset_id = current_synsets.id').
+    where(users_ids.any? && 'current_synsets.author_id IN (?)', users_ids).
     where('current_synsets.deleted_at IS NULL AND ' \
       '(current_synsets.revision = 1 OR synsets.revision = 1)').
     order(['array_length(current_synsets.words_ids, 1) DESC',

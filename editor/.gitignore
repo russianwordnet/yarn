@@ -20,6 +20,10 @@
 /bin/*.pid
 /tmp
 
+# Ignore all database backups.
+*.sql.gz
+*.sql
+
 # Prevent git-checkout from erasing production configuration
 /config/database.yml
 

@@ -3,3 +3,17 @@
 <p><strong>Имя:</strong> <%= current_user %></p>
 <p><strong>Роль:</strong> <%= current_user.admin? ? 'администратор' : 'участник' %></p>
 <p><strong>Правок в синсетах:</strong> <%= @stats ? @stats.score : 0 %></p>
+
+<h2>Синсеты</h2>
+<% if synsets = Synset.retrieve_creators(current_user.id) %>
+  <ul class="triple-columns">
+    <% synsets.each do |synset| %>
+      <li>
+        <%= link_to synset.id, synset_path(synset) %>
+        <%= synset_words(synset) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Нет синсетов.</p>
+<% end %>
