@@ -4,6 +4,6 @@ class IndexCurrentWordsTrgm < ActiveRecord::Migration
   end
 
   def down
-    execute 'DROP INDEX DROP INDEX index_current_words_on_word_trgm;'
+    remove_index :current_words, :name => :index_current_words_on_word_trgm
   end
 end

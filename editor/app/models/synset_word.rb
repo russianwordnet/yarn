@@ -1,7 +1,7 @@
 class SynsetWord < ActiveRecord::Base
   self.table_name = 'current_synset_words'
 
-  attr_accessible :word, :samples_ids, :nsg, :marks
+  attr_accessible :word, :samples_ids, :nsg, :marks_ids
 
   belongs_to :author, class_name: 'User'
 
@@ -16,6 +16,11 @@ class SynsetWord < ActiveRecord::Base
   has_many :samples, finder_sql: proc {
     %Q{SELECT * FROM current_samples WHERE id IN
         (SELECT unnest(samples_ids) FROM current_synset_words
+          WHERE id = #{id});} }
+
+  has_many :marks, finder_sql: proc {
+    %Q{SELECT * FROM marks WHERE id IN
+        (SELECT unnest(marks_ids) FROM current_synset_words
           WHERE id = #{id});} }
 
   def update_from(new_synset_word, save_method = :save)

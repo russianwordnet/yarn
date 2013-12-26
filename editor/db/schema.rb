@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131216185542) do
+ActiveRecord::Schema.define(:version => 20131226212902) do
 
   add_extension "pg_trgm"
 
@@ -154,19 +154,20 @@ ActiveRecord::Schema.define(:version => 20131216185542) do
     t.integer  "revision",    :default => 1,  :null => false
     t.integer  "word_id",                     :null => false
     t.boolean  "nsg"
-    t.string   "marks",       :default => [],                 :array => true
     t.integer  "samples_ids", :default => [],                 :array => true
     t.datetime "updated_at"
     t.datetime "deleted_at"
+    t.integer  "marks_ids",   :default => [], :null => false, :array => true
   end
 
   add_index "current_synset_words", ["approved_at"], :name => "index_current_synset_words_on_approved_at"
   add_index "current_synset_words", ["approver_id"], :name => "index_current_synset_words_on_approver_id"
   add_index "current_synset_words", ["author_id"], :name => "index_current_synset_words_on_author_id"
   add_index "current_synset_words", ["deleted_at"], :name => "index_current_synset_words_on_deleted_at"
-  add_index "current_synset_words", ["marks"], :name => "index_current_synset_words_on_marks"
+  add_index "current_synset_words", ["marks_ids"], :name => "index_current_synset_words_on_marks_ids", :using => :gin
   add_index "current_synset_words", ["nsg"], :name => "index_current_synset_words_on_nsg"
   add_index "current_synset_words", ["revision"], :name => "index_current_synset_words_on_revision"
+  add_index "current_synset_words", ["samples_ids"], :name => "index_current_synset_words_on_samples_ids", :using => :gin
   add_index "current_synset_words", ["updated_at"], :name => "index_current_synset_words_on_updated_at"
   add_index "current_synset_words", ["word_id"], :name => "index_current_synset_words_on_word_id"
 
@@ -188,10 +189,10 @@ ActiveRecord::Schema.define(:version => 20131216185542) do
   add_index "current_synsets", ["author_id"], :name => "index_current_synsets_on_author_id"
   add_index "current_synsets", ["default_definition_id"], :name => "index_current_synsets_on_default_definition_id"
   add_index "current_synsets", ["default_synset_word_id"], :name => "index_current_synsets_on_default_synset_word_id"
-  add_index "current_synsets", ["definitions_ids"], :name => "index_current_synsets_on_definitions_ids"
+  add_index "current_synsets", ["definitions_ids"], :name => "index_current_synsets_on_definitions_ids", :using => :gin
   add_index "current_synsets", ["deleted_at"], :name => "index_current_synsets_on_deleted_at"
   add_index "current_synsets", ["revision"], :name => "index_current_synsets_on_revision"
-  add_index "current_synsets", ["words_ids"], :name => "index_current_synsets_on_words_ids"
+  add_index "current_synsets", ["words_ids"], :name => "index_current_synsets_on_words_ids", :using => :gin
 
   create_table "current_word_relations", :force => true do |t|
     t.integer  "word1_id",                   :null => false
@@ -236,7 +237,6 @@ ActiveRecord::Schema.define(:version => 20131216185542) do
   add_index "current_words", ["grammar"], :name => "index_current_words_on_grammar"
   add_index "current_words", ["revision"], :name => "index_current_words_on_revision"
   add_index "current_words", ["uris"], :name => "index_current_words_on_uris"
-  add_index "current_words", ["word"], :name => "index_current_words_on_word"
   add_index "current_words", ["word"], :name => "index_current_words_on_word_trgm", :using => :gin, :index_opclass => :gin_trgm_ops
 
   create_table "definitions", :force => true do |t|
@@ -383,11 +383,11 @@ ActiveRecord::Schema.define(:version => 20131216185542) do
     t.integer  "revision",       :default => 1,  :null => false
     t.integer  "word_id",                        :null => false
     t.boolean  "nsg"
-    t.string   "marks",          :default => [],                 :array => true
     t.integer  "samples_ids",    :default => [],                 :array => true
     t.integer  "synset_word_id",                 :null => false
     t.datetime "created_at"
     t.datetime "deleted_at"
+    t.integer  "marks_ids",      :default => [], :null => false, :array => true
   end
 
   add_index "synset_words", ["approved_at"], :name => "index_synset_words_on_approved_at"
@@ -395,9 +395,10 @@ ActiveRecord::Schema.define(:version => 20131216185542) do
   add_index "synset_words", ["author_id"], :name => "index_synset_words_on_author_id"
   add_index "synset_words", ["created_at"], :name => "index_synset_words_on_created_at"
   add_index "synset_words", ["deleted_at"], :name => "index_synset_words_on_deleted_at"
-  add_index "synset_words", ["marks"], :name => "index_synset_words_on_marks"
+  add_index "synset_words", ["marks_ids"], :name => "index_synset_words_on_marks_ids", :using => :gin
   add_index "synset_words", ["nsg"], :name => "index_synset_words_on_nsg"
   add_index "synset_words", ["revision"], :name => "index_synset_words_on_revision"
+  add_index "synset_words", ["samples_ids"], :name => "index_synset_words_on_samples_ids", :using => :gin
   add_index "synset_words", ["synset_word_id"], :name => "index_synset_words_on_synset_word_id"
   add_index "synset_words", ["word_id"], :name => "index_synset_words_on_word_id"
 
@@ -416,11 +417,11 @@ ActiveRecord::Schema.define(:version => 20131216185542) do
   add_index "synsets", ["approved_at"], :name => "index_synsets_on_approved_at"
   add_index "synsets", ["approver_id"], :name => "index_synsets_on_approver_id"
   add_index "synsets", ["author_id"], :name => "index_synsets_on_author_id"
-  add_index "synsets", ["definitions_ids"], :name => "index_synsets_on_definitions_ids"
+  add_index "synsets", ["definitions_ids"], :name => "index_synsets_on_definitions_ids", :using => :gin
   add_index "synsets", ["deleted_at"], :name => "index_synsets_on_deleted_at"
   add_index "synsets", ["revision"], :name => "index_synsets_on_revision"
   add_index "synsets", ["synset_id"], :name => "index_synsets_on_synset_id"
-  add_index "synsets", ["words_ids"], :name => "index_synsets_on_words_ids"
+  add_index "synsets", ["words_ids"], :name => "index_synsets_on_words_ids", :using => :gin
 
   create_table "users", :force => true do |t|
     t.string   "name",       :null => false

@@ -94,6 +94,7 @@ class EditorController < ApplicationController
 
     @synset_words = @raw_synsets.map(&:words).flatten.uniq(&:word_id)
     @synset_words.reject! { |sw| sw.word_id == @word.id }
+    @synset_words.reject! { |sw| !!sw.word.deleted_at }
     @synsets = @word.synset_words.map(&:synsets).flatten.uniq
 
     respond_with @word, @definitions, @synsets, @samples
