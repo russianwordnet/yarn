@@ -18,6 +18,11 @@ class SynsetWord < ActiveRecord::Base
         (SELECT unnest(samples_ids) FROM current_synset_words
           WHERE id = #{id});} }
 
+  has_many :marks, finder_sql: proc {
+    %Q{SELECT * FROM marks WHERE id IN
+        (SELECT unnest(marks_ids) FROM current_synset_words
+          WHERE id = #{id});} }
+
   def update_from(new_synset_word, save_method = :save)
     SynsetWord.transaction do
       old_synset_words.last and
