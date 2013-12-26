@@ -3,6 +3,7 @@
   <%= active_link_to 'Публикации', page_path(:publications), :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Данные', page_path(:content), :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Технологии', page_path(:technologies), :wrap_tag => :li, :active => :exclusive %>
+  <%= active_link_to 'Инструкция', 'http://nlpub.ru/YARN/Инструкция', :wrap_tag => :li, :active => :exclusive %>
   <li class="divider"></li>
   <%= active_link_to 'Все слова', words_path, :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Утверждённые слова', approved_words_path, :wrap_tag => :li %>
