@@ -1,7 +1,7 @@
 class SynsetWord < ActiveRecord::Base
   self.table_name = 'current_synset_words'
 
-  attr_accessible :word, :samples_ids, :nsg, :marks
+  attr_accessible :word, :samples_ids, :nsg, :marks_ids
 
   belongs_to :author, class_name: 'User'
 
