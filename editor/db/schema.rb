@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131226212902) do
+ActiveRecord::Schema.define(:version => 20131226235647) do
 
   add_extension "pg_trgm"
 
@@ -328,8 +328,8 @@ ActiveRecord::Schema.define(:version => 20131226212902) do
   end
 
   add_index "raw_synsets", ["author_id"], :name => "index_raw_synsets_on_author_id"
-  add_index "raw_synsets", ["definitions_ids"], :name => "index_raw_synsets_on_definitions_ids"
-  add_index "raw_synsets", ["words_ids"], :name => "index_raw_synsets_on_words_ids"
+  add_index "raw_synsets", ["definitions_ids"], :name => "index_raw_synsets_on_definitions_ids", :using => :gin
+  add_index "raw_synsets", ["words_ids"], :name => "index_raw_synsets_on_words_ids", :using => :gin
 
   create_table "samples", :force => true do |t|
     t.integer  "author_id"
