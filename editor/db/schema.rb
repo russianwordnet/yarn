@@ -237,6 +237,7 @@ ActiveRecord::Schema.define(:version => 20131226235647) do
   add_index "current_words", ["grammar"], :name => "index_current_words_on_grammar"
   add_index "current_words", ["revision"], :name => "index_current_words_on_revision"
   add_index "current_words", ["uris"], :name => "index_current_words_on_uris"
+  add_index "current_words", ["word"], :name => "index_current_words_on_word"
   add_index "current_words", ["word"], :name => "index_current_words_on_word_trgm", :using => :gin, :index_opclass => :gin_trgm_ops
 
   create_table "definitions", :force => true do |t|
