@@ -5,6 +5,7 @@
 //= require editor/synonymes
 //= require editor/synsets
 //= require editor/current_synset
+//= require editor/marks_picker
 
 (function( $ ) {
   $.fn.editor = function(o) {

@@ -28,6 +28,8 @@ class EditorController < ApplicationController
 
     @words = @words.page(params[:page])
 
+    @marks_categories = MarkCategory.includes(:marks).all
+
     respond_with @words do |format|
       format.html do
         options = if request.xhr?
@@ -155,6 +157,13 @@ class EditorController < ApplicationController
     @synset = Synset.find(params[:synset_id])
     @synset_word = SynsetWord.find(params[:synset_word_id])
     @synset.update_attribute(:default_synset_word, @synset_word)
+    show_synset
+  end
+
+  def edit_marks
+    synset_word = SynsetWord.find(params[:synset_word_id])
+    synset_word.update_attribute(:marks_ids, Array.wrap(params[:marks]))
+
     show_synset
   end
 

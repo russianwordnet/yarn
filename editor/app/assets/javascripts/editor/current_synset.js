@@ -4,6 +4,7 @@
       template           : $('#current-synset-tpl').text(),
       wordTemplate       : $('#word-tpl').text(),
       definitionTemplate : $('#definition-tpl').text(),
+      marksPicker        : $.fn.MarksPicker,
       onRemoveDefinition : function(definitionId) {},
       onAfterRender      : function(data) {},
     }, o)
@@ -39,6 +40,7 @@
       this.handleCloneDefinition()
       this.handleSetDefaultDefinition()
       this.handleSetDefaultSynsetWord()
+      this.handleEditMarksBtn()
       this.o.onAfterRender(data)
     },
 
@@ -98,7 +100,6 @@
       if ($.grep(this.selectedWords, function(obj, i) { return obj.id == word.id }).length) {
         return
       }
-
       // Add new word
       this.selectedWords.push(word)
 
@@ -108,14 +109,14 @@
           backgroundColor: '#eeeeee',
         }, { duration: 700 })
 
-      $('#current-words').append(newWord)
+      $('#synset-words').append(newWord)
       this.handleRemoveWord()
       this.save()
     },
 
     handleRemoveWord: function() {
       this.currentSynset.off('click', '.synset_word i.icon-remove').on('click', '.synset_word i.icon-remove', $.proxy(function(e) {
-        var item = $(e.currentTarget).parent()
+        var item = $(e.currentTarget).closest('a')
 
         this.selectedWords = $.grep(this.selectedWords, function(obj) {
           return obj.id != item.data('id')
@@ -128,7 +129,7 @@
 
     handleSetDefaultSynsetWord: function() {
       this.currentSynset.off('click', '.synset_word i.icon-flag').on('click', '.synset_word i.icon-flag', $.proxy(function(e) {
-        var item = $(e.currentTarget).parent()
+        var item = $(e.currentTarget).closest('a')
 
         $.post('/editor/set_default_synset_word',
         {
@@ -151,7 +152,7 @@
     },
 
     highlightWords: function() {
-      $('#current-words').toggleClass('active')
+      $('#synset-words').toggleClass('active')
     },
 
     addDefinition: function(definition) {
@@ -245,6 +246,37 @@
 
     wordIds: function() {
       return $.map(this.selectedWords, function(n, i) { return n.id })
+    },
+
+    handleEditMarksBtn: function() {
+      $(document).off('click', '.edit-marks').on('click', '.edit-marks', $.proxy(function(e) {
+        e.preventDefault()
+        this.marksPickerDialog(e.target)
+      }, this))
+    },
+
+    marksPickerDialog: function(target) {
+      var parent = $(target).closest('a')
+      var data = {
+        id:   parent.data('synset-word-id'),
+        synset_id: this.currentSynsetId,
+        selected_ids: this.marksIds(parent)
+      }
+
+      this.marksPicker = new this.o.marksPicker(data, {
+        onAfterEditMarks : $.proxy(function(edited_data) {
+          this.render(edited_data)
+        }, this), 
+      })
+      this.marksPicker.show()
+    },
+
+    marksIds: function(parent) {
+      var ids = $(parent).find('.mark').map(function(index, element) {
+          return $(element).data('id')
+      })
+
+      return ids.get()
     }
-  }
+}
 })(jQuery);

@@ -74,11 +74,21 @@
       {{#words}}
         <div class="accordion-group">
           <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#synonymes" href="#">
+            <a class="accordion-toggle" data-toggle="collapse" href="#" data-id="{{id}}" data-synset-word-id="{{synset_word_id}}">
 
-              {{word}}
+              <span class="span2">{{word}}</span>
 
-              <span class="pull-right synset_word" data-id="{{id}}" data-synset-word-id="{{synset_word_id}}">
+              <span id ="marks">
+                {{#marks}}
+                  <span class = "mark" data-id="{{id}}" data-category="{{category_id}}">{{name}}</span>
+                {{/marks}}
+
+                <span class="edit-marks">
+                  <i title="Редактировать пометы" class='icon icon-pencil'></i>
+                </span>
+              </span>
+
+              <span class="pull-right synset_word">
                 <i title="Удалить" class="icon icon-remove"></i>
                 <i title="Сделать первым" class="icon icon-flag"></i>
               </span>

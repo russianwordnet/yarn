@@ -55,6 +55,20 @@
   }
 }
 
+#marks-picker {
+  width: 240px;
+  margin-left: 20px !important;
+  margin-top: 190px !important;
+
+  .selected {
+    background: #999999;
+    
+    a:hover, a:focus {
+      background: #999999;
+    }
+  }
+}
+
 #editor-bar {
   min-height: auto;
   padding: 10px;
@@ -339,6 +353,17 @@
 
     section {
       background: #dedede;
+    }
+
+    #marks {
+      margin-left: 10px;
+      .mark {
+        background: #eee;
+        padding: 3px;
+        margin-top: -3px;
+        @include border-radius(3px);
+        @include inline-block;
+      }
     }
 
     // Current words as tags
