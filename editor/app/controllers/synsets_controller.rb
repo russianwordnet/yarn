@@ -1,7 +1,8 @@
 class SynsetsController < ApplicationController
-  before_filter :find_synset, :only => :show
+  before_filter :find_synset, :only => [:show, :destroy]
   before_filter :find_word, :only => :search
   before_filter :set_top_bar_synset, :only => :show
+  before_filter :allow_destroy?, :only => :destroy
 
   helper_method :allow_edit?
 
@@ -34,7 +35,6 @@ class SynsetsController < ApplicationController
   end
 
   def destroy
-    @synset = Synset.find(params[:id])
     @synset.delete
 
     respond_to do |format|
@@ -58,5 +58,9 @@ class SynsetsController < ApplicationController
 
   def allow_edit?(synset)
     current_user.admin? || synset.author_id == current_user.id
+  end
+
+  def allow_destroy?
+    head :forbidden unless allow_edit?(@synset)
   end
 end
