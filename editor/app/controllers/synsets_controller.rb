@@ -3,6 +3,8 @@ class SynsetsController < ApplicationController
   before_filter :find_word, :only => :search
   before_filter :set_top_bar_synset, :only => :show
 
+  helper_method :allow_edit?
+
   respond_to :html, :json
 
   def index
@@ -31,6 +33,16 @@ class SynsetsController < ApplicationController
     end
   end
 
+  def destroy
+    @synset = Synset.find(params[:id])
+    @synset.delete
+
+    respond_to do |format|
+      format.html { redirect_to action: :index }
+      format.json { head :ok }
+    end
+  end
+
   protected
   def find_synset
     @synset = Synset.find(params[:id])
@@ -42,5 +54,9 @@ class SynsetsController < ApplicationController
 
   def set_top_bar_synset
     self.top_bar_synset = @synset
+  end
+
+  def allow_edit?(synset)
+    current_user.admin? || synset.author_id == current_user.id
   end
 end

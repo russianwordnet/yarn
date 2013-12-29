@@ -33,6 +33,7 @@
         <% end %>
 
         <%= link_to('Редактировать', @edit_uri, class: 'btn btn-small') if @edit_uri %>
+        <%= link_to('Удалить', @destroy_url, method: :delete, confirm: 'Вы уверены, что хотите удалить синсет?', class: 'btn bt-small') if @destroy_url %>
       </div>
     </div>
   </div>

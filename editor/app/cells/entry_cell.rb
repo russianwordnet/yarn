@@ -5,6 +5,7 @@ class EntryCell < Cell::Rails
     @approve_uri = args[:approve_uri]
     @disapprove_uri = args[:disapprove_uri]
     @edit_uri = args[:edit_uri]
+    @destroy_url = args[:destroy_url]
     render
   end
 end

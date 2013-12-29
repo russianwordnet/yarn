@@ -32,4 +32,6 @@
   <p>Ещё нет ни одного определения.</p>
 <% end %>
 
-<%= render_cell :entry, :metadata, entry: @synset %>
+<% options = {entry: @synset} %>
+<% options.merge!({destroy_url: synset_url(@synset)}) if allow_edit?(@synset) %>
+<%= render_cell :entry, :metadata, options %>
