@@ -4,6 +4,10 @@ json.words @synset_words do |synset_word|
   json.id               synset_word.word.id
   json.synset_word_id   synset_word.id
   json.word             synset_word.word.word
+  json.marks  synset_word.marks do |mark|
+    json.id   mark.id
+    json.name mark.name
+  end
 end
 
 json.definitions @definitions do |definition|

@@ -1,0 +1,11 @@
+.dropdown
+  %ul#marks-picker.modal.hide.categories.dropdown-menu.clearfix{role: 'menu', :'aria-labelledby' => 'dropdownMenu'}
+    - marks_categories.each do |category|
+      %li.category.dropdown-submenu{data: {id: category.id}}
+        %a{tabindex: -1, href: '#'}
+          = category.title
+        %ul.dropdown-menu.marks
+          - category.marks.each do |mark|
+            %li.mark{data: {id: mark.id}}
+              %a{tabindex: '-1', href: '#'}
+                = mark.name
