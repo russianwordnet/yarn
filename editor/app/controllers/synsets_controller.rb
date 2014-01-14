@@ -35,7 +35,7 @@ class SynsetsController < ApplicationController
   end
 
   def destroy
-    @synset.delete
+    @synset.destroy
 
     respond_to do |format|
       format.html { redirect_to action: :index }

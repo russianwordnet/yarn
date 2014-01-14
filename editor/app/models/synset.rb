@@ -44,6 +44,8 @@ class Synset < ActiveRecord::Base
   has_many :synset_relations
   has_many :interlinks
 
+  before_destroy :move_to_old
+
   scope :retrieve_creators, ->(*users_ids) {
     select(['current_synsets.*',
       'COALESCE(current_synsets.author_id, synsets.author_id) AS author_id']).
@@ -89,4 +91,10 @@ class Synset < ActiveRecord::Base
     definitions.prepend(default_definition)
   end
   alias_method_chain :definitions, :default_first
+
+  def move_to_old
+    old_synset = OldSynset.from_synset(self)
+    old_synset.deleted_at = Time.now.utc
+    old_synset.save!
+  end
 end
