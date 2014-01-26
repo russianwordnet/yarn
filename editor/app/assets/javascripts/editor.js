@@ -34,12 +34,14 @@
     $.fn.editor = function(el) { this.initialize(el) }
 
     $.fn.editor.prototype = {
+      data          : null,
+      currentSynset : null,
       // Initialize editor
       initialize: function(editorUi) {
         this.editorUi = $(editorUi)
 
         if (this.isWordPicked()) {
-          this.loadWord(this.wordCookie())
+          this.loadWord(this.wordCookie(), false, true)
         } else {
           this.wordPickerDialog()
         }
@@ -197,21 +199,46 @@
         return this.wordCookie() != undefined
       },
 
+      isSynsetPicked: function() {
+        return this.synsetCookie() != undefined
+      },
+
       wordCookie: function() {
         return $.cookie('wordId')
       },
 
-      loadWord: function(wordId, next) {
+      synsetCookie: function() {
+        return $.cookie('synsetId')
+      },
+
+      loadWord: function(wordId, next, needLoadSynset) {
         var params = { word_id: wordId }
 
-        if (next != undefined) {
+        if (next != undefined && next != false) {
           params['next'] = true
         }
 
         $.getJSON(o.options.uri, params, $.proxy(function(data) {
           this.build(data)
           $.cookie('wordId', data.id)
+
+          if(needLoadSynset && this.isSynsetPicked()) {
+            this.loadSynset(this.synsetCookie())
+          }
         }, this))
+      },
+
+      loadSynset: function(synsetId) {
+        var id = this.synsetCookie()
+        $.each(this.data.synsets, $.proxy(function(index, synset) {
+          if(synset.id == id) {
+            this.currentSynset.load(id)
+            return false
+          }
+        }, this)
+        )
+
+        $.cookie('synsetId', null)
       }
     }
 
