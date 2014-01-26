@@ -57,6 +57,7 @@ class SynsetsController < ApplicationController
   end
 
   def allow_edit?(synset)
+    return false unless user_signed_in?
     current_user.admin? || synset.author_id == current_user.id
   end
 
