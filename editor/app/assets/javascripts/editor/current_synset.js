@@ -7,6 +7,7 @@
       marksPicker        : $.fn.MarksPicker,
       onRemoveDefinition : function(definitionId) {},
       onAfterRender      : function(data) {},
+      onExpandAccordion  : function(accordion) { },
     }, o)
 
     this.initialize(o)
@@ -31,17 +32,33 @@
       this.displayed           = true
       this.selectedDefinitions = data.definitions
       this.selectedWords       = data.words
-      this.currentSynset       = $(Mustache.render(this.o.template, data))
+
+      var accordionView = {
+        hasSamples     : function() { return this.samples.length > 0 },
+        definitions    : data.definitions,
+        words          : data.words
+      }
+
+      this.currentSynset       = $(Mustache.render(this.o.template, accordionView))
+      this.accordions = this.currentSynset.find('.accordion')
       this.currentSynsetId     = data.id
 
       $('#synsets').append(this.currentSynset)
+
       this.handleRemoveWord()
       this.handleRemoveDefinition()
       this.handleCloneDefinition()
       this.handleSetDefaultDefinition()
       this.handleSetDefaultSynsetWord()
       this.handleEditMarksBtn()
+
       this.o.onAfterRender(data)
+
+      this.accordions
+        .on('show', this.toggleIcon)
+        .on('hide', this.toggleIcon)
+        .on('shown', $.proxy(this.fireOnExpandAccordion, this))
+        .on('hidden', $.proxy(this.fireOnExpandAccordion, this))
     },
 
     remove: function() {
@@ -277,6 +294,20 @@
       })
 
       return ids.get()
-    }
+    },
+
+    toggleIcon: function(e) {
+      var icon = $(e.target).closest('.accordion-heading').find('a > i.icon-collapse')
+
+      if (icon.hasClass('icon-caret-right')) {
+        icon.removeClass('icon-caret-right').addClass('icon-caret-down')
+      } else {
+        icon.removeClass('icon-caret-down').addClass('icon-caret-right')
+      }
+    },
+
+    fireOnExpandAccordion: function() {
+      this.o.onExpandAccordion(this.currentSynset)
+    },
 }
 })(jQuery);

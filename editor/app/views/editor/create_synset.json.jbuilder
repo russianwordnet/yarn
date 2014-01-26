@@ -8,6 +8,9 @@ json.words @synset.words do |synset_word|
     json.id   mark.id
     json.name mark.name
   end
+  json.samples synset_word.samples do |sample|
+    json.text sample.text
+  end
 end
 
 json.definitions @synset.definitions do |definition|

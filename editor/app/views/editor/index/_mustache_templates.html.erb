@@ -74,9 +74,14 @@
       {{#words}}
         <div class="accordion-group">
           <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" href="#" data-id="{{id}}" data-synset-word-id="{{synset_word_id}}">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#synset-words" data-id="{{id}}" data-synset-word-id="{{synset_word_id}}" href="#sample-collapse-{{id}}">
 
-              <span class="span2">{{word}}</span>
+                {{#hasSamples}}
+                  <i class="icon icon-collapse icon-caret-right"></i>
+                  &nbsp;
+                {{/hasSamples}}
+
+                {{word}}
 
               <span id ="marks">
                 {{#marks}}
@@ -94,6 +99,17 @@
               </span>
             </a>
           </div>
+          {{#hasSamples}}
+            <div id="sample-collapse-{{id}}" class="accordion-body collapse">
+              <div class="accordion-inner">
+                <ol>
+                  {{#samples}}
+                    <li>{{text}}</li>
+                  {{/samples}}
+                <ol>
+              </div>
+            </div>
+          {{/hasSamples}}
         </div>
       {{/words}}
     </div>
