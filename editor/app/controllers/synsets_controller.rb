@@ -1,5 +1,5 @@
 class SynsetsController < ApplicationController
-  before_filter :find_synset, :only => [:show, :destroy]
+  before_filter :find_synset, :only => [:show, :destroy, :edit]
   before_filter :find_word, :only => :search
   before_filter :set_top_bar_synset, :only => :show
   before_filter :allow_destroy?, :only => :destroy
@@ -41,6 +41,14 @@ class SynsetsController < ApplicationController
       format.html { redirect_to action: :index }
       format.json { head :ok }
     end
+  end
+
+  def edit
+    synset_word = @synset.default_synset_word || @synset.words.first
+    cookies['wordId']   = synset_word.word_id
+    cookies['synsetId'] = @synset.id
+
+    redirect_to editor_url
   end
 
   protected

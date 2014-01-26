@@ -33,5 +33,5 @@
 <% end %>
 
 <% options = {entry: @synset} %>
-<% options.merge!({destroy_url: synset_url(@synset)}) if allow_edit?(@synset) %>
+<% options.merge!({edit_uri: edit_synset_url(@synset)}) %>
 <%= render_cell :entry, :metadata, options %>

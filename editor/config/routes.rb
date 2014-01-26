@@ -26,7 +26,7 @@ Yarn::Application.routes.draw do
 
   resources :synset_words, only: [:show]
 
-  resources :synsets, only: [:index, :show, :destroy] do
+  resources :synsets, only: [:index, :show, :destroy, :edit] do
     resources :definitions, only: [:show]
     resources :words, controller: 'synset_words', only: [:show] do
       resources :samples, only: [:show]
