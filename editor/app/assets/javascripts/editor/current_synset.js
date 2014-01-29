@@ -36,7 +36,8 @@
       var accordionView = {
         hasSamples     : function() { return this.samples.length > 0 },
         definitions    : data.definitions,
-        words          : data.words
+        words          : data.words,
+        allow_destroy  : data.allow_destroy
       }
 
       this.currentSynset       = $(Mustache.render(this.o.template, accordionView))
@@ -51,6 +52,7 @@
       this.handleSetDefaultDefinition()
       this.handleSetDefaultSynsetWord()
       this.handleEditMarksBtn()
+      this.handleDeleteButton()
 
       this.o.onAfterRender(data)
 
@@ -309,5 +311,19 @@
     fireOnExpandAccordion: function() {
       this.o.onExpandAccordion(this.currentSynset)
     },
+
+    handleDeleteButton: function() {
+      $(document).off('click', '#destroy-current-synset').on('click', '#destroy-current-synset', $.proxy(function(e) {
+        e.preventDefault()
+
+        var url = '/synsets/' + this.currentSynsetId + '.json'
+
+        if (confirm('Вы уверены, что хотите удалить синсет?')) {
+          $.post(url, {_method : 'delete'}, function() {
+            location.reload()
+          })
+        }
+      }, this))
+    }
 }
 })(jQuery);

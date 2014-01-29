@@ -131,6 +131,10 @@
         <a href="#add-definition-modal" data-toggle="modal" class="dashed-link"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить определение</a>
       </div>
     </section>
+
+    {{#allow_destroy}}
+      <a class='btn btn-danger' id='destroy-current-synset' href='#'> Удалить синсет </a>
+    {{/allow_destroy}}
   </div>
 </script>
 
