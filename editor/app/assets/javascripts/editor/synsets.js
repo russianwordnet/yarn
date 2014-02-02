@@ -62,6 +62,11 @@
       }, this))
     },
 
+    setSelected: function(id) {
+      this.selectedSynset = this.synsets.find('[data-id=' + id + ']')
+      this.selectedSynset.addClass('active')
+    },
+
     // Тут короче фишка в том, что мы заменяем текущий выделенный синсет на шаблон и поэтому на него пропадает ссылка this.selectedSynset
     // Надо чето придумать
     updateSelected: function(data) {

@@ -232,6 +232,7 @@
         var id = this.synsetCookie()
         $.each(this.data.synsets, $.proxy(function(index, synset) {
           if(synset.id == id) {
+            this.synsets.setSelected(id)
             this.currentSynset.load(id)
             return false
           }
