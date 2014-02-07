@@ -31,6 +31,6 @@ class User < ActiveRecord::Base
   end
 
   def admin?
-    role && role.casecmp('admin')
+    role && role.casecmp('admin') == 0
   end
 end
