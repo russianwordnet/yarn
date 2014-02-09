@@ -7,13 +7,13 @@
     <li>неразмеченных синсетов &mdash; <%= RawSynset.count %>.</li>
   </ul>
   <p>Словари представляются в соответствии с нашей
-  <a href="https://github.com/xoposhiy/yarn/blob/master/formats/yarn.xsd"
+  <a href="https://github.com/russianwordnet/yarn/blob/master/formats/yarn.xsd"
     >XML Schema</a></p>
 </div>
 <% if current_user && current_user.admin? %>
   <div class="row-fluid">
     <h2>Статистика по синсетам</h2>
-    <table style="width: 100%; text-align: left;">
+    <table style="width: 100%; text-align: left;" border="1">
       <thead>
         <tr>
           <th style="width: 5%;">ID</th>
@@ -22,11 +22,13 @@
         </tr>
       </thead>
       <tbody>
-      <% Synset.retrieve_creators.group_by(&:author).each do |user, synsets| %>
+      <% Synset.retrieve_creators.each do |user, synsets| %>
         <tr>
-          <td><%= user.id %></td>
-          <td><%= user.name %></td>
-          <td>
+          <td style="vertical-align: top;"><%= user.id %></td>
+          <td style="vertical-align: top;">
+            <%= user.name %> (синсетов: <strong><%= synsets.size %></strong>)
+          </td>
+          <td style="vertical-align: top;">
             <%= synsets.map do |synset|
               link_to(synset.id, synset_path(synset))
             end.join(', ').html_safe %>

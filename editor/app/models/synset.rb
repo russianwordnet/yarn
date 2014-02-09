@@ -46,17 +46,17 @@ class Synset < ActiveRecord::Base
 
   before_destroy :move_to_old
 
-  scope :retrieve_creators, ->(*users_ids) {
-    select(['current_synsets.*',
-      'COALESCE(current_synsets.author_id, synsets.author_id) AS author_id']).
-    joins('LEFT OUTER JOIN synsets on synsets.synset_id = current_synsets.id').
-    where(users_ids.any? && 'current_synsets.author_id IN (?)', users_ids).
-    where('current_synsets.deleted_at IS NULL AND ' \
-      '(current_synsets.revision = 1 OR synsets.revision = 1)').
-    order(['array_length(current_synsets.words_ids, 1) DESC',
-           'array_length(current_synsets.definitions_ids, 1) DESC']).
-    includes(:author)
-  }
+  def self.retrieve_creators
+    find_by_sql('SELECT ranked_synsets.id, ranked_synsets.author_id FROM ' \
+      '(SELECT synsets.*, rank() OVER (' \
+        'PARTITION BY synset_id ORDER BY synsets.revision' \
+      ') AS rank FROM synsets) AS ranked_synsets ' \
+      'INNER JOIN current_synsets ON synset_id = current_synsets.id ' \
+      'WHERE array_length(current_synsets.words_ids, 1) > 1 ' \
+      'AND rank = 1 AND current_synsets.deleted_at IS NULL').
+    group_by(&:author).
+    sort { |(_, s1), (_, s2)| s2.size <=> s1.size }
+  end
 
   def update_from(new_synset, save_method = :save)
     Synset.transaction do
