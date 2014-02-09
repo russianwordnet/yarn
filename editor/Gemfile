@@ -21,6 +21,7 @@ gem 'sax-machine'
 gem 'haml'
 gem 'high_voltage'
 gem 'kramdown'
+gem 'bb-ruby'
 
 gem 'puma'
 gem 'pry'

@@ -31,6 +31,11 @@ class Definition < ActiveRecord::Base
     end
   end
 
+  def text
+    attributes['text'].try(:bbcode_to_html, {}, false, :enable,
+      :bold, :italics, :underline).try(:html_safe)
+  end
+
   def to_s
     text
   end
