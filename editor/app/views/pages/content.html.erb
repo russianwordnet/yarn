@@ -42,7 +42,7 @@
 <% if current_user && current_user.admin? %>
   <div class="row-fluid">
     <h2>Статистика по правкам в синсетах</h2>
-    <table style="width: 100%; text-align: left;">
+    <table style="width: 100%; text-align: left;" border="1">
       <thead>
         <tr>
           <th style="width: 5%;">ID</th>
@@ -53,9 +53,9 @@
       <tbody>
       <% User.scores.each do |user| %>
         <tr>
-          <td><%= user.id %></td>
-          <td><%= user.name %></td>
-          <td><%= user.score %></td>
+          <td style="vertical-align: top;"><%= user.id %></td>
+          <td style="vertical-align: top;"><%= user.name %></td>
+          <td style="vertical-align: top;"><%= user.score %></td>
         </tr>
       <% end %>
       </tbody>
