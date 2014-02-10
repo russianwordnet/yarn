@@ -44,8 +44,6 @@ class Synset < ActiveRecord::Base
   has_many :synset_relations
   has_many :interlinks
 
-  before_destroy :move_to_old
-
   def self.retrieve_creators
     find_by_sql('SELECT ranked_synsets.id, ranked_synsets.author_id FROM ' \
       '(SELECT synsets.*, rank() OVER (' \
@@ -60,6 +58,7 @@ class Synset < ActiveRecord::Base
 
   def update_from(new_synset, save_method = :save)
     Synset.transaction do
+      # TODO - вынести в отдельный метод
       old_synsets.last and
       old_synsets.last.created_at > 12.hours.ago and
       old_synsets.last.author_id == new_synset.author_id or
@@ -92,9 +91,18 @@ class Synset < ActiveRecord::Base
   end
   alias_method_chain :definitions, :default_first
 
-  def move_to_old
-    old_synset = OldSynset.from_synset(self)
-    old_synset.deleted_at = Time.now.utc
-    old_synset.save!
+  def destroy
+    update_from(self)
+    update_attribute(:deleted_at, Time.now.utc)
+  end
+
+  def origin_author
+    return author if revision == 1
+
+    old_synsets.find_by_revision(1).author
+  end
+
+  def allow_destroy_by?(user)
+    user.admin? || origin_author.id == user.id
   end
 end
