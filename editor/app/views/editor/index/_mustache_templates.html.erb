@@ -104,7 +104,7 @@
               <div class="accordion-inner">
                 <ol>
                   {{#samples}}
-                    <li>{{text}}</li>
+                    <li>{{&text}}</li>
                   {{/samples}}
                 <ol>
               </div>
@@ -118,7 +118,7 @@
         <ol>
           {{#definitions}}
             <li data-id="{{id}}" data-word="{{word}}">
-              <span>{{text}}</span>
+              <span>{{&text}}</span>
               <i title="Добавить новое определение на основе этого" class="icon icon-copy"></i>
               <i title="Удалить" class="icon icon-remove"></i>
               <i title="Сделать первым" class="icon icon-flag definition"></i>
@@ -147,7 +147,7 @@
 
 <script id="definition-tpl" type="text/html">
   <li data-id="{{id}}">
-    {{text}}
+    {{&text}}
     <i title="Удалить" class="icon icon-remove"></i>
   </li>
 </script>
