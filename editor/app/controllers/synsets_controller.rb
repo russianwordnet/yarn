@@ -4,8 +4,6 @@ class SynsetsController < ApplicationController
   before_filter :set_top_bar_synset, :only => :show
   before_filter :allow_destroy?, :only => :destroy
 
-  helper_method :allow_edit?
-
   respond_to :html, :json
 
   def index
@@ -39,7 +37,7 @@ class SynsetsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to action: :index }
-      format.json { head :ok }
+      format.json { head :no_content }
     end
   end
 
@@ -64,12 +62,9 @@ class SynsetsController < ApplicationController
     self.top_bar_synset = @synset
   end
 
-  def allow_edit?(synset)
-    return false unless user_signed_in?
-    current_user.admin? || synset.author_id == current_user.id
-  end
-
   def allow_destroy?
-    head :forbidden unless allow_edit?(@synset)
+    return false unless user_signed_in?
+
+    head :forbidden unless @synset.allow_destroy_by?(current_user)
   end
 end
