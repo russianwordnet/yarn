@@ -263,6 +263,11 @@
           color: #222;
         }
 
+        &.approved {
+          background: #dedede !important; // cause of :hover, :even e.t.c.
+          color: #666 !important;
+        }
+
         strong { font-size: 110%; margin: 0 7px 0 0; }
       }
     }

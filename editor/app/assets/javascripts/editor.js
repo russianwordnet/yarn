@@ -231,7 +231,7 @@
       loadSynset: function(synsetId) {
         var id = this.synsetCookie()
         $.each(this.data.synsets, $.proxy(function(index, synset) {
-          if(synset.id == id) {
+          if(synset.id == id && synset.state != 'approved') {
             this.synsets.setSelected(id)
             this.currentSynset.load(id)
             return false

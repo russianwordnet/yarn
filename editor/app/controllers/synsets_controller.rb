@@ -1,8 +1,9 @@
 class SynsetsController < ApplicationController
-  before_filter :find_synset, :only => [:show, :destroy, :edit]
+  before_filter :find_synset, :only => [:show, :destroy, :edit, :approve]
   before_filter :find_word, :only => :search
   before_filter :set_top_bar_synset, :only => :show
   before_filter :allow_destroy?, :only => :destroy
+  before_filter :allow_approve?, :only => :approve
 
   respond_to :html, :json
 
@@ -41,6 +42,17 @@ class SynsetsController < ApplicationController
     end
   end
 
+  def approve
+    @synset.approver = current_user
+    @synset.approved_at = DateTime.now
+    @synset.save!
+
+    respond_to do |format|
+      format.html { redirect_to action: :index }
+      format.json { head :no_content }
+    end
+  end
+
   def edit
     synset_word = @synset.default_synset_word || @synset.words.first
     cookies['wordId']   = synset_word.word_id
@@ -66,5 +78,9 @@ class SynsetsController < ApplicationController
     return false unless user_signed_in?
 
     head :forbidden unless @synset.allow_destroy_by?(current_user)
+  end
+
+  def allow_approve?
+    head :forbidden unless current_user.try(:admin?)
   end
 end

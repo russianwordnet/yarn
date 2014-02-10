@@ -31,4 +31,5 @@ json.synsets @synsets do |synset|
     json.text "Пустой синсет №#{synset.id}"
   end
   json.first_definition synset.default_definition ? synset.default_definition.try(:text) : synset.definitions.first.try(:text)
+  json.state synset.approved_at.present? ? 'approved' : nil
 end

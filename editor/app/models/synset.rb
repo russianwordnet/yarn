@@ -6,6 +6,7 @@ class Synset < ActiveRecord::Base
   attr_accessible :words_ids, :definitions_ids
 
   belongs_to :author, class_name: 'User'
+  belongs_to :approver, class_name: 'User'
 
   belongs_to :default_definition, class_name: 'Definition'
   belongs_to :default_synset_word, class_name: 'SynsetWord'

@@ -1,5 +1,6 @@
 json.id @synset.id
-json.allow_destroy @synset.allow_destroy_by?(current_user) if user_signed_in?
+json.allow_destroy current_user && @synset.allow_destroy_by?(current_user)
+json.allow_approve current_user && current_user.admin?
 
 json.words @synset.words do |synset_word|
   json.id               synset_word.word.id

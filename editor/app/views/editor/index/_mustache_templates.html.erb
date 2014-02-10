@@ -23,7 +23,7 @@
   <div class="listing listing-synsets">
     <ul>
       {{#synsets}}
-        <li data-id="{{id}}"><strong>{{text}}</strong><span>{{first_definition}}</span></li>
+        <li data-id="{{id}}" class="{{state}}"><strong>{{text}}</strong><span>{{first_definition}}</span></li>
       {{/synsets}}
     </ul>
   </div>
@@ -135,6 +135,10 @@
     {{#allow_destroy}}
       <a class='btn btn-danger' id='destroy-current-synset' href='#'> Удалить синсет </a>
     {{/allow_destroy}}
+
+    {{#allow_approve}}
+      <a class='btn btn-success' id='approve-current-synset' href='#'> Подтвердить синсет </a>
+    {{/allow_approve}}
   </div>
 </script>
 

@@ -35,6 +35,10 @@ Yarn::Application.routes.draw do
     collection do
       get :search
     end
+
+    member do
+      get :approve
+    end
   end
 
   resources :raw_synset_words, only: [:show]

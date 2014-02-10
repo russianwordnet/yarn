@@ -37,7 +37,8 @@
         hasSamples     : function() { return this.samples.length > 0 },
         definitions    : data.definitions,
         words          : data.words,
-        allow_destroy  : data.allow_destroy
+        allow_destroy  : data.allow_destroy,
+        allow_approve  : data.allow_approve
       }
 
       this.currentSynset       = $(Mustache.render(this.o.template, accordionView))
@@ -53,6 +54,7 @@
       this.handleSetDefaultSynsetWord()
       this.handleEditMarksBtn()
       this.handleDeleteButton()
+      this.handleApproveButton()
 
       this.o.onAfterRender(data)
 
@@ -320,6 +322,21 @@
 
         if (confirm('Вы уверены, что хотите удалить синсет?')) {
           $.post(url, {_method : 'delete'}, function() {
+            location.reload()
+          })
+        }
+      }, this))
+    },
+
+    handleApproveButton: function() {
+      $(document).off('click', '#approve-current-synset').on('click', '#approve-current-synset', $.proxy(function(e) {
+        console.log('clicked')
+        e.preventDefault()
+
+        var url = '/synsets/' + this.currentSynsetId + '/approve'
+
+        if (confirm('Вы уверены, что хотите подтвердить синсет?')) {
+          $.get(url, function() {
             location.reload()
           })
         }
