@@ -11,7 +11,7 @@ class SynsetWord < ActiveRecord::Base
     :inverse_of => :origin
 
   has_many :synsets, finder_sql: proc {
-    %Q{SELECT * FROM current_synsets WHERE words_ids @> '{#{id}}';} }
+    %Q{SELECT * FROM current_synsets WHERE words_ids @> '{#{id}}' and deleted_at IS NULL;} }
 
   has_many :samples, finder_sql: proc {
     %Q{SELECT * FROM current_samples WHERE id IN
