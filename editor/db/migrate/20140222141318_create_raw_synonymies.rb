@@ -3,7 +3,7 @@ class CreateRawSynonymies < ActiveRecord::Migration
     create_table :raw_synonymies do |t|
       t.belongs_to :word1, null: false
       t.belongs_to :word2, null: false
-      t.belongs_to :author, null: false
+      t.belongs_to :author
       t.timestamps
     end
 

@@ -3,7 +3,7 @@ class CreateRawExamples < ActiveRecord::Migration
     create_table :raw_examples do |t|
       t.belongs_to :raw_definition, null: false
       t.belongs_to :sample, null: false
-      t.belongs_to :author, null: false
+      t.belongs_to :author
       t.timestamps
     end
 

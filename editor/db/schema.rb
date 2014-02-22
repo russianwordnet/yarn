@@ -307,7 +307,7 @@ ActiveRecord::Schema.define(:version => 20140222141417) do
   create_table "raw_definitions", :force => true do |t|
     t.integer  "word_id",       :null => false
     t.integer  "definition_id", :null => false
-    t.integer  "author_id",     :null => false
+    t.integer  "author_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
@@ -319,7 +319,7 @@ ActiveRecord::Schema.define(:version => 20140222141417) do
   create_table "raw_examples", :force => true do |t|
     t.integer  "raw_definition_id", :null => false
     t.integer  "sample_id",         :null => false
-    t.integer  "author_id",         :null => false
+    t.integer  "author_id"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
   end
@@ -331,7 +331,7 @@ ActiveRecord::Schema.define(:version => 20140222141417) do
   create_table "raw_synonymies", :force => true do |t|
     t.integer  "word1_id",   :null => false
     t.integer  "word2_id",   :null => false
-    t.integer  "author_id",  :null => false
+    t.integer  "author_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

@@ -3,7 +3,7 @@ class CreateRawDefinitions < ActiveRecord::Migration
     create_table :raw_definitions do |t|
       t.belongs_to :word, null: false
       t.belongs_to :definition, null: false
-      t.belongs_to :author, null: false
+      t.belongs_to :author
       t.timestamps
     end
 
