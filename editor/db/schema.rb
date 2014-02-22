@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131226235647) do
+ActiveRecord::Schema.define(:version => 20140222141417) do
 
   add_extension "pg_trgm"
 
@@ -304,6 +304,43 @@ ActiveRecord::Schema.define(:version => 20131226235647) do
   add_index "marks", ["mark_category_id"], :name => "index_marks_on_mark_category_id"
   add_index "marks", ["name"], :name => "index_marks_on_name", :unique => true
 
+  create_table "raw_definitions", :force => true do |t|
+    t.integer  "word_id",       :null => false
+    t.integer  "definition_id", :null => false
+    t.integer  "author_id",     :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "raw_definitions", ["author_id"], :name => "index_raw_definitions_on_author_id"
+  add_index "raw_definitions", ["definition_id"], :name => "index_raw_definitions_on_definition_id"
+  add_index "raw_definitions", ["word_id"], :name => "index_raw_definitions_on_word_id"
+
+  create_table "raw_examples", :force => true do |t|
+    t.integer  "raw_definition_id", :null => false
+    t.integer  "sample_id",         :null => false
+    t.integer  "author_id",         :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "raw_examples", ["author_id"], :name => "index_raw_examples_on_author_id"
+  add_index "raw_examples", ["raw_definition_id"], :name => "index_raw_examples_on_raw_definition_id"
+  add_index "raw_examples", ["sample_id"], :name => "index_raw_examples_on_sample_id"
+
+  create_table "raw_synonymies", :force => true do |t|
+    t.integer  "word1_id",   :null => false
+    t.integer  "word2_id",   :null => false
+    t.integer  "author_id",  :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "raw_synonymies", ["author_id"], :name => "index_raw_synonymies_on_author_id"
+  add_index "raw_synonymies", ["word1_id", "word2_id"], :name => "index_raw_synonymies_on_word1_id_and_word2_id", :unique => true
+  add_index "raw_synonymies", ["word1_id"], :name => "index_raw_synonymies_on_word1_id"
+  add_index "raw_synonymies", ["word2_id"], :name => "index_raw_synonymies_on_word2_id"
+
   create_table "raw_synset_words", :force => true do |t|
     t.integer  "word_id",                     :null => false
     t.string   "nsg"
@@ -543,6 +580,18 @@ ActiveRecord::Schema.define(:version => 20131226235647) do
   add_foreign_key "interlinks", "users", :name => "interlinks_author_id_fk", :column => "author_id", :dependent => :delete
 
   add_foreign_key "marks", "mark_categories", :name => "marks_mark_category_id_fk", :dependent => :delete
+
+  add_foreign_key "raw_definitions", "current_definitions", :name => "raw_definitions_definition_id_fk", :column => "definition_id", :dependent => :delete
+  add_foreign_key "raw_definitions", "current_words", :name => "raw_definitions_word_id_fk", :column => "word_id", :dependent => :delete
+  add_foreign_key "raw_definitions", "users", :name => "raw_definitions_author_id_fk", :column => "author_id", :dependent => :delete
+
+  add_foreign_key "raw_examples", "current_samples", :name => "raw_examples_sample_id_fk", :column => "sample_id", :dependent => :delete
+  add_foreign_key "raw_examples", "raw_definitions", :name => "raw_examples_raw_definition_id_fk", :dependent => :delete
+  add_foreign_key "raw_examples", "users", :name => "raw_examples_author_id_fk", :column => "author_id", :dependent => :delete
+
+  add_foreign_key "raw_synonymies", "current_words", :name => "raw_synonymies_word1_id_fk", :column => "word1_id", :dependent => :delete
+  add_foreign_key "raw_synonymies", "current_words", :name => "raw_synonymies_word2_id_fk", :column => "word2_id", :dependent => :delete
+  add_foreign_key "raw_synonymies", "users", :name => "raw_synonymies_author_id_fk", :column => "author_id", :dependent => :delete
 
   add_foreign_key "raw_synset_words", "current_words", :name => "raw_synset_words_word_id_fk", :column => "word_id", :dependent => :delete
   add_foreign_key "raw_synset_words", "users", :name => "raw_synset_words_author_id_fk", :column => "author_id", :dependent => :delete
