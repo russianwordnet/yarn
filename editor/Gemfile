@@ -25,6 +25,7 @@ gem 'bb-ruby'
 
 gem 'puma'
 gem 'pry'
+gem 'parallel'
 
 gem 'font-awesome-sass-rails', '3.0.2.2'
 gem 'jbuilder'
