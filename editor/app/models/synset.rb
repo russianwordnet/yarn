@@ -106,4 +106,19 @@ class Synset < ActiveRecord::Base
   def allow_destroy_by?(user)
     user.admin? || origin_author.id == user.id
   end
+
+  def open_for_user?(user)
+    return false if (updated_at > 5.minutes.ago) && (user.id != author_id)
+    return false if words_ids && SynsetWord.where(id: words_ids).where(%Q{author_id != #{user.id} and updated_at > '#{5.minutes.ago}'}).exists?
+
+    true
+  end
+
+  # TODO: State machine
+  def state(user = nil)
+    return :approved if approved_at.present?
+    return :closed if user && !open_for_user?(user)
+
+    :normal
+  end
 end

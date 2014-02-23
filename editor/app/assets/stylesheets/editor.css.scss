@@ -263,7 +263,7 @@
           color: #222;
         }
 
-        &.approved {
+        &.approved, &.closed {
           background: #dedede !important; // cause of :hover, :even e.t.c.
           color: #666 !important;
         }

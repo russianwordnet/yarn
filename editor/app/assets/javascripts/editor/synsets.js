@@ -50,7 +50,7 @@
     handleList: function() {
       this.selectedSynset = this.synsets.find('li.active')
       
-      this.synsets.find('ul').off('click', '**').on('click', 'li:not(.approved)', $.proxy(function(e) {
+      this.synsets.find('ul').off('click', '**').on('click', 'li.normal', $.proxy(function(e) {
         e.stopPropagation()
 
         if (this.selectedSynset != null) {
