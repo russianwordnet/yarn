@@ -23,6 +23,20 @@ class SynsetWord < ActiveRecord::Base
         (SELECT unnest(marks_ids) FROM current_synset_words
           WHERE id = #{id});} }
 
+  def update_with_tracking(attrs = {}, save_method = :save)
+    SynsetWord.transaction do
+      OldSynsetWord.from_synset_word(self).save! if need_track?
+
+      self.attributes = attrs if attrs.present?
+      yield self if block_given?
+
+      self.revision += 1
+
+      method(save_method).call.tap { |result| self.reload if result }
+    end
+  end
+
+  # Deprecated
   def update_from(new_synset_word, save_method = :save)
     SynsetWord.transaction do
       old_synset_words.last and
@@ -39,5 +53,11 @@ class SynsetWord < ActiveRecord::Base
 
       method(save_method).call.tap { |result| self.reload if result }
     end
+  end
+
+  def need_track?
+    old_synset_words.last.blank? ||
+    old_synset_words.last.created_at < 12.hours.ago ||
+    old_synset_words.last.author_id != new_synset_word.author_id
   end
 end

@@ -13,7 +13,7 @@ class OldSynsetWord < ActiveRecord::Base
     old_synset_word = synset_word.old_synset_words.build
     old_synset_word.word = synset_word.word
     old_synset_word.nsg = synset_word.nsg
-    old_synset_word.marks = synset_word.marks
+    old_synset_word.marks_ids = synset_word.marks_ids
     old_synset_word.samples_ids = synset_word.samples_ids
     old_synset_word.author_id = synset_word.author_id
     old_synset_word.approver_id = synset_word.approver_id
