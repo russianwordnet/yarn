@@ -162,7 +162,7 @@ class EditorController < ApplicationController
 
   def edit_marks
     synset_word = SynsetWord.find(params[:synset_word_id])
-    synset_word.update_attribute(:marks_ids, Array.wrap(params[:marks]))
+    synset_word.update_with_tracking(marks_ids: Array.wrap(params[:marks]))
 
     show_synset
   end
