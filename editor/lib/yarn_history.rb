@@ -3,48 +3,71 @@
 # A mixin that allows to simplify history tracking of model changes.
 #
 module YarnHistory
-  extend ActiveSupport::Concern
+  module Trackable
+    extend ActiveSupport::Concern
 
-  module ClassMethods
-    def has_history(association, attributes, options = {})
-      self.has_many association, options
-      attr_reader :yarn_has_history
-      @yarn_has_history = attributes
+    included do
+      has_many history_association, :order => :revision, :inverse_of => :origin
     end
 
-    def history_of(association, attributes, options = {})
-      belongs_to association, options
-      attr_reader :yarn_history_of
-      @yarn_history_of = attributes
+    module ClassMethods
+      def history_class
+        self.name.prepend('Old').constantize
+      end
+
+      def history_association
+        self.name.underscore.pluralize.prepend('old_').to_sym
+      end
+    end
+
+    def update_with_tracking(attrs = {}, save_method = :save)
+      self.class.transaction do
+        self.class.history_class.from_origin(self).save! if need_track?
+
+        self.attributes = attrs if attrs.present?
+        yield self if block_given?
+
+        self.revision += 1
+
+        method(save_method).call.tap { |result| self.reload if result }
+      end
+    end
+
+    def need_track?
+      send(self.class.history_association).last.blank? ||
+      send(self.class.history_association).last.created_at < 12.hours.ago ||
+      send(self.class.history_association).last.author_id != author_id
     end
   end
 
-  def update_history(new_model)
-    self.class.transaction do
-      origin = self.history_class.save_history(self)
+  module History
+    extend ActiveSupport::Concern
 
-      yarn_has_history.each do |attr|
-        setter = ('%s=' % attr).to_sym
-        self.send(setter, new_model.send(attr))
-      end
+    included do
+      association_class = origin_class.to_s
+      foreign_key = origin_class.to_s.foreign_key
+      inverse_of = self.name.underscore.pluralize.to_sym
 
-      self.revision += 1
-
-      return self.save.tap { |saved| origin.save! if saved }
+      belongs_to :origin, class_name: association_class, foreign_key: foreign_key, inverse_of: inverse_of
     end
-  end
 
-  def save_history(origin)
-    self.history_association.build do |model|
-      yarn_history_of.each do |attr|
-        setter = ('%s=' % attr).to_sym
-        model.send(setter, origin.send(attr))
+    module ClassMethods
+      def inverse_association
+        self.name.underscore.pluralize.to_sym
       end
 
-      model.revision = origin.revision
-      model.created_at = origin.updated_at
+      def origin_class
+        self.name.from(3).constantize
+      end
+
+      def from_origin(origin_entity)
+        attrs = origin_entity.attributes.reject {|k,_| %w(id updated_at).include? k }
+        attrs.merge!(created_at: origin_entity.updated_at)
+
+        history_entity = origin_entity.send(self.inverse_association).build(attrs, without_protection: true)
+
+        history_entity
+      end
     end
   end
 end
-
-ActiveRecord::Base.send(:extend, YarnHistory)
