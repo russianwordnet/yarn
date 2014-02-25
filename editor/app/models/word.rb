@@ -7,6 +7,7 @@ class Word < ActiveRecord::Base
 
   belongs_to :author, class_name: 'User'
   belongs_to :approver, class_name: 'User'
+  has_one :score, class_name: 'WordScore'
 
   has_many :old_words, order: 'revision DESC', :inverse_of => :origin
 

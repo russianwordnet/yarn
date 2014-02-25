@@ -8,8 +8,7 @@ class EditorController < ApplicationController
   respond_to :html, :json
 
   def index
-    @words = Word.order('frequency DESC').select('id, word').
-      where(deleted_at: nil)
+    @words = Word.select('id, word, frequency').where(deleted_at: nil)
 
     if params.key?(:word) && !params[:word].empty?
       (@query = params[:word].gsub(/\p{Zs}{2,}/, ' ')).split.each do |token|
@@ -23,7 +22,11 @@ class EditorController < ApplicationController
         else
           @words = @words.where('word ILIKE ?', token)
         end
+
+        @words = @words.order('frequency DESC, word')
       end
+    else
+      @words = @words.joins(:score).order('score DESC, word')
     end
 
     @words = @words.page(params[:page])
