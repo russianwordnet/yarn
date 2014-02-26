@@ -4,14 +4,16 @@
       {{#definitions}}
         <li data-id="{{id}}" data-word="{{word}}" data-word-id="{{word_id}}">{{text}}<span><i title="Скрыть определение" class="icon icon-eye-close"></i></span>
           <br>
-          <small class="sample">
-              <strong>Пример(ы) употребления:</strong> {{^samples}} нет примеров {{/samples}}
-              <ul>
-                {{#samples}}
-                  <li> {{.}} </li>
-                {{/samples}}
-              </ul>
-          </small>
+          {{#hasSamples}}
+            <small class="sample">
+                <strong>Пример(ы) употребления:</strong>
+                <ul>
+                  {{#samples}}
+                    <li> {{.}} </li>
+                  {{/samples}}
+                </ul>
+            </small>
+          {{/hasSamples}}
         </li>
 
       {{/definitions}}
