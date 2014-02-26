@@ -1,9 +1,11 @@
 class Synset < ActiveRecord::Base
   self.table_name = 'current_synsets'
 
+  include YarnHistory::Trackable
+
   paginates_per 70
 
-  attr_accessible :words_ids, :definitions_ids
+  attr_accessible :words_ids, :definitions_ids, :default_definition_id, :default_synset_word_id
 
   belongs_to :author, class_name: 'User'
   belongs_to :approver, class_name: 'User'
@@ -20,9 +22,6 @@ class Synset < ActiveRecord::Base
       synset.default_synset_word_id = nil
     end
   end
-
-  has_many :old_synsets, :order => :revision,
-    :inverse_of => :origin
 
   has_many :definitions, finder_sql: proc {
     %Q{SELECT * FROM current_definitions WHERE id IN

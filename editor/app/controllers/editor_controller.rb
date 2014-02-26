@@ -152,14 +152,16 @@ class EditorController < ApplicationController
   def set_default_definition
     @synset = Synset.find(params[:synset_id])
     @definition = Definition.find(params[:definition_id])
-    @synset.update_attribute(:default_definition, @definition)
+    @synset.update_with_tracking {|s| s.default_definition = @definition }
+
     show_synset
   end
 
   def set_default_synset_word
     @synset = Synset.find(params[:synset_id])
     @synset_word = SynsetWord.find(params[:synset_word_id])
-    @synset.update_attribute(:default_synset_word, @synset_word)
+    @synset.update_with_tracking {|s| s.default_synset_word = @synset_word }
+
     show_synset
   end
 
