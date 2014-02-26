@@ -1,9 +1,11 @@
 class Synset < ActiveRecord::Base
   self.table_name = 'current_synsets'
 
+  include YarnHistory::Trackable
+
   paginates_per 70
 
-  attr_accessible :words_ids, :definitions_ids
+  attr_accessible :words_ids, :definitions_ids, :default_definition_id, :default_synset_word_id
 
   belongs_to :author, class_name: 'User'
   belongs_to :approver, class_name: 'User'
@@ -20,9 +22,6 @@ class Synset < ActiveRecord::Base
       synset.default_synset_word_id = nil
     end
   end
-
-  has_many :old_synsets, :order => :revision,
-    :inverse_of => :origin
 
   has_many :definitions, finder_sql: proc {
     %Q{SELECT * FROM current_definitions WHERE id IN
@@ -105,5 +104,20 @@ class Synset < ActiveRecord::Base
 
   def allow_destroy_by?(user)
     user.admin? || origin_author.id == user.id
+  end
+
+  def open_for_user?(user)
+    return false if (updated_at > 5.minutes.ago) && (user.id != author_id)
+    return false if words_ids && SynsetWord.where(id: words_ids).where(%Q{author_id != #{user.id} and updated_at > '#{5.minutes.ago}'}).exists?
+
+    true
+  end
+
+  # TODO: State machine
+  def state(user = nil)
+    return :approved if approved_at.present?
+    return :closed if user && !open_for_user?(user)
+
+    :normal
   end
 end

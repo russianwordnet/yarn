@@ -20,8 +20,9 @@
     },
 
     render: function() {
+      var hasSamples = function() { return this.samples != null }
       this.o.placeholder.html(
-        Mustache.render(this.o.template, { definitions: this.data.definitions })
+        Mustache.render(this.o.template, { definitions: this.data.definitions, hasSamples: hasSamples })
       )
     }
   }

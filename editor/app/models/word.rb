@@ -7,6 +7,7 @@ class Word < ActiveRecord::Base
 
   belongs_to :author, class_name: 'User'
   belongs_to :approver, class_name: 'User'
+  has_one :score, class_name: 'WordScore'
 
   has_many :old_words, order: 'revision DESC', :inverse_of => :origin
 
@@ -15,6 +16,9 @@ class Word < ActiveRecord::Base
 
   has_many :antonomy_relations
   has_many :word_relations
+
+  has_many :raw_synonym, :inverse_of => :word1, :foreign_key => :word1_id
+  has_many :raw_synonyms, :through => :raw_synonym, :source => :word2
 
   # TODO: scope!
   def self.next_word(id)

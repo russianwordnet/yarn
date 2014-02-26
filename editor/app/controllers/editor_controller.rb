@@ -8,8 +8,7 @@ class EditorController < ApplicationController
   respond_to :html, :json
 
   def index
-    @words = Word.order('frequency DESC').select('id, word').
-      where(deleted_at: nil)
+    @words = Word.select('id, word, frequency').where(deleted_at: nil)
 
     if params.key?(:word) && !params[:word].empty?
       (@query = params[:word].gsub(/\p{Zs}{2,}/, ' ')).split.each do |token|
@@ -23,7 +22,11 @@ class EditorController < ApplicationController
         else
           @words = @words.where('word ILIKE ?', token)
         end
+
+        @words = @words.order('frequency DESC, word')
       end
+    else
+      @words = @words.joins(:score).order('score DESC, word')
     end
 
     @words = @words.page(params[:page])
@@ -90,13 +93,16 @@ class EditorController < ApplicationController
       Word.find(params[:word_id])
     end
 
-    @raw_synsets = @word.raw_synset_words.map(&:synsets).flatten.uniq
-    @definitions = @raw_synsets.map(&:definitions).flatten.uniq
-    @samples = build_samples
+    @raw_synonyms = @word.raw_synonyms
+    @definitions = Definition.joins(:raw_definition).where(raw_definitions: {word_id: @word.id})
+    @synonyms_definitions =  Definition.select('current_definitions.*, word_id').
+                                        joins(:raw_definition).
+                                        where(raw_definitions: {word_id: @raw_synonyms.map(&:id)}).
+                                        where(deleted_at:nil).
+                                        group_by(&:word_id)
 
-    @synset_words = @raw_synsets.map(&:words).flatten.uniq(&:word_id)
-    @synset_words.reject! { |sw| sw.word_id == @word.id }
-    @synset_words.reject! { |sw| !!sw.word.deleted_at }
+    build_samples
+
     @synsets = @word.synset_words.map(&:synsets).flatten.uniq
 
     respond_with @word, @definitions, @synsets, @samples
@@ -149,20 +155,22 @@ class EditorController < ApplicationController
   def set_default_definition
     @synset = Synset.find(params[:synset_id])
     @definition = Definition.find(params[:definition_id])
-    @synset.update_attribute(:default_definition, @definition)
+    @synset.update_with_tracking {|s| s.default_definition = @definition }
+
     show_synset
   end
 
   def set_default_synset_word
     @synset = Synset.find(params[:synset_id])
     @synset_word = SynsetWord.find(params[:synset_word_id])
-    @synset.update_attribute(:default_synset_word, @synset_word)
+    @synset.update_with_tracking {|s| s.default_synset_word = @synset_word }
+
     show_synset
   end
 
   def edit_marks
     synset_word = SynsetWord.find(params[:synset_word_id])
-    synset_word.update_attribute(:marks_ids, Array.wrap(params[:marks]))
+    synset_word.update_with_tracking(marks_ids: Array.wrap(params[:marks]))
 
     show_synset
   end
@@ -229,11 +237,15 @@ class EditorController < ApplicationController
   protected
 
   def build_samples
-    @definitions.inject({}) do |hash, definition|
-      samples_ids = words_to_definitions[definition.id].map(&:sample_ids).flatten
-      samples = Sample.find(samples_ids)
+    definition_ids = @definitions.map(&:id) + @synonyms_definitions.values.flatten.map(&:id)
 
-      hash[definition.id] = samples.map { |sample| '%s (%s)' % [sample.text, sample.source || 'н/д'] }
+    @samples = Sample.select('current_samples.*, definition_id').
+                      joins(:raw_example => :raw_definition).
+                      where(raw_definitions: {definition_id: definition_ids}).
+                      group_by(&:definition_id)
+
+    @samples.inject({}) do |hash, (definition_id, samples)|
+      hash[definition_id] = samples.map! {|sample| '%s (%s)' % [sample.text, sample.source || 'н/д'] }
 
       hash
     end

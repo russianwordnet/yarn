@@ -1,14 +1,14 @@
 class SynsetWord < ActiveRecord::Base
   self.table_name = 'current_synset_words'
 
+  include YarnHistory::Trackable
+
   attr_accessible :word, :samples_ids, :nsg, :marks_ids
 
   belongs_to :author, class_name: 'User'
 
   belongs_to :word, :inverse_of => :synset_words
 
-  has_many :old_synset_words, :order => :revision,
-    :inverse_of => :origin
 
   has_many :synsets, finder_sql: proc {
     %Q{SELECT * FROM current_synsets WHERE words_ids @> '{#{id}}' and deleted_at IS NULL;} }
@@ -23,6 +23,7 @@ class SynsetWord < ActiveRecord::Base
         (SELECT unnest(marks_ids) FROM current_synset_words
           WHERE id = #{id});} }
 
+  # Deprecated
   def update_from(new_synset_word, save_method = :save)
     SynsetWord.transaction do
       old_synset_words.last and
