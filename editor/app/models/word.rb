@@ -17,6 +17,9 @@ class Word < ActiveRecord::Base
   has_many :antonomy_relations
   has_many :word_relations
 
+  has_many :raw_synonym, :inverse_of => :word1, :foreign_key => :word1_id
+  has_many :raw_synonyms, :through => :raw_synonym, :source => :word2
+
   # TODO: scope!
   def self.next_word(id)
     find_by_sql([

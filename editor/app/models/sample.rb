@@ -21,6 +21,8 @@ class Sample < ActiveRecord::Base
     %Q{SELECT * FROM raw_synset_words WHERE samples_ids @> '{#{id}}';} },
     class_name: 'RawSynsetWord'
 
+  has_one :raw_example
+
   def update_from(new_sample)
     Sample.transaction do
       old_samples.last and

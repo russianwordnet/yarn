@@ -93,13 +93,16 @@ class EditorController < ApplicationController
       Word.find(params[:word_id])
     end
 
-    @raw_synsets = @word.raw_synset_words.map(&:synsets).flatten.uniq
-    @definitions = @raw_synsets.map(&:definitions).flatten.uniq
-    @samples = build_samples
+    @raw_synonyms = @word.raw_synonyms
+    @definitions = Definition.joins(:raw_definition).where(raw_definitions: {word_id: @word.id})
+    @synonyms_definitions =  Definition.select('current_definitions.*, word_id').
+                                        joins(:raw_definition).
+                                        where(raw_definitions: {word_id: @raw_synonyms.map(&:id)}).
+                                        where(deleted_at:nil).
+                                        group_by(&:word_id)
 
-    @synset_words = @raw_synsets.map(&:words).flatten.uniq(&:word_id)
-    @synset_words.reject! { |sw| sw.word_id == @word.id }
-    @synset_words.reject! { |sw| !!sw.word.deleted_at }
+    build_samples
+
     @synsets = @word.synset_words.map(&:synsets).flatten.uniq
 
     respond_with @word, @definitions, @synsets, @samples
@@ -234,11 +237,15 @@ class EditorController < ApplicationController
   protected
 
   def build_samples
-    @definitions.inject({}) do |hash, definition|
-      samples_ids = words_to_definitions[definition.id].map(&:sample_ids).flatten
-      samples = Sample.find(samples_ids)
+    definition_ids = @definitions.map(&:id) + @synonyms_definitions.values.flatten.map(&:id)
 
-      hash[definition.id] = samples.map { |sample| '%s (%s)' % [sample.text, sample.source || 'н/д'] }
+    @samples = Sample.select('current_samples.*, definition_id').
+                      joins(:raw_example => :raw_definition).
+                      where(raw_definitions: {definition_id: definition_ids}).
+                      group_by(&:definition_id)
+
+    @samples.inject({}) do |hash, (definition_id, samples)|
+      hash[definition_id] = samples.map! {|sample| '%s (%s)' % [sample.text, sample.source || 'н/д'] }
 
       hash
     end
