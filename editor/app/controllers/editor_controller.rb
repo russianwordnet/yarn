@@ -94,12 +94,12 @@ class EditorController < ApplicationController
       Word.find(params[:word_id])
     end
 
-    @raw_synonyms = @word.raw_synonyms
-    @definitions = Definition.joins(:raw_definition).where(raw_definitions: {word_id: @word.id})
+    @raw_synonyms = @word.raw_synonyms.where(deleted_at: nil)
+    @definitions = Definition.joins(:raw_definition).where(deleted_at: nil, raw_definitions: {word_id: @word.id})
     @synonyms_definitions =  Definition.select('current_definitions.*, word_id').
                                         joins(:raw_definition).
                                         where(raw_definitions: {word_id: @raw_synonyms.map(&:id)}).
-                                        where(deleted_at:nil).
+                                        where(deleted_at: nil).
                                         group_by { |d| d.word_id.to_i }
 
     build_samples
