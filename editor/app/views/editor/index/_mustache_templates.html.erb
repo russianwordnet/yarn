@@ -2,14 +2,14 @@
   <div class="listing definitions">
     <ul>
       {{#definitions}}
-        <li data-id="{{id}}" data-word="{{word}}" data-word-id="{{word_id}}">{{text}}<span><i title="Скрыть определение" class="icon icon-eye-close"></i></span>
+        <li data-id="{{id}}" data-word="{{word}}" data-word-id="{{word_id}}">{{&text}}<span><i title="Скрыть определение" class="icon icon-eye-close"></i></span>
           <br>
           {{#hasSamples}}
             <small class="sample">
                 <strong>Пример(ы) употребления:</strong>
                 <ul>
                   {{#samples}}
-                    <li> {{.}} </li>
+                    <li> {{&.}} </li>
                   {{/samples}}
                 </ul>
             </small>
@@ -25,7 +25,7 @@
   <div class="listing listing-synsets">
     <ul>
       {{#synsets}}
-        <li data-id="{{id}}" class="{{state}}"><strong>{{text}}</strong><span>{{first_definition}}</span></li>
+        <li data-id="{{id}}" class="{{state}}"><strong>{{text}}</strong><span>{{&first_definition}}</span></li>
       {{/synsets}}
     </ul>
   </div>
