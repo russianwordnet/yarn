@@ -24,6 +24,7 @@ module YarnHistory
       self.class.transaction do
         self.class.history_class.from_origin(self).save! if need_track?
 
+        self.author = attrs.delete(:author) if attrs[:author].present?
         self.attributes = attrs if attrs.present?
         yield self if block_given?
 

@@ -135,10 +135,7 @@ class EditorController < ApplicationController
     @definition.author = current_user
     @definition.save!
 
-    @new_synset = @synset.dup
-    @new_synset.definitions_ids += [@definition.id]
-
-    @synset.update_from(@new_synset, :save!)
+    @synset.update_with_tracking(author: current_user) {|synset| synset.definitions_ids += [@definition.id]}
 
     render 'create_definition'
   end
@@ -155,7 +152,7 @@ class EditorController < ApplicationController
   def set_default_definition
     @synset = Synset.find(params[:synset_id])
     @definition = Definition.find(params[:definition_id])
-    @synset.update_with_tracking {|s| s.default_definition = @definition }
+    @synset.update_with_tracking(author: current_user) {|s| s.default_definition = @definition }
 
     show_synset
   end
@@ -163,14 +160,14 @@ class EditorController < ApplicationController
   def set_default_synset_word
     @synset = Synset.find(params[:synset_id])
     @synset_word = SynsetWord.find(params[:synset_word_id])
-    @synset.update_with_tracking {|s| s.default_synset_word = @synset_word }
+    @synset.update_with_tracking(author: current_user) {|s| s.default_synset_word = @synset_word }
 
     show_synset
   end
 
   def edit_marks
     synset_word = SynsetWord.find(params[:synset_word_id])
-    synset_word.update_with_tracking(marks_ids: Array.wrap(params[:marks]))
+    synset_word.update_with_tracking(marks_ids: Array.wrap(params[:marks]), author: current_user)
 
     show_synset
   end
@@ -189,6 +186,7 @@ class EditorController < ApplicationController
   #
   def save
     @synset = Synset.find(params[:synset_id])
+
     @new_synset = @synset.dup
 
     @new_synset.definitions_ids = (params[:definitions_ids] || []).map(&:to_i)
