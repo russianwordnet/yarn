@@ -100,7 +100,7 @@ class EditorController < ApplicationController
                                         joins(:raw_definition).
                                         where(raw_definitions: {word_id: @raw_synonyms.map(&:id)}).
                                         where(deleted_at:nil).
-                                        group_by(&:word_id)
+                                        group_by { |d| d.word_id.to_i }
 
     build_samples
 
