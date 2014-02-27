@@ -56,6 +56,9 @@
         alert('Время ожидания истекло');
       } else if (exception === 'abort') {
         alert('Ajax запрос оклонён.');
+      } else if (jqXHR.status == 409) {
+        alert('Извините, но кто-то только что отредактировал тот же синсет :( Страница будет обновлена.')
+        window.location.reload();
       } else {
         alert('Неизвестная ошибка.\n' + jqXHR.responseText);
       }

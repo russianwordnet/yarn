@@ -32,7 +32,8 @@
           {
             synset_id:      this.data.synset_id,
             synset_word_id: this.data.id,
-            marks:          this.selectedIds()
+            marks:          this.selectedIds(),
+            timestamp:      this.data.timestamp
           }, $.proxy(function(data) {
           this.o.onAfterEditMarks(data)
         }, this))

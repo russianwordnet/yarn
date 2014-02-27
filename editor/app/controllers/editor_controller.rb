@@ -3,6 +3,7 @@
 class EditorController < ApplicationController
   before_filter :authenticate_user!, except:
     [:index, :word, :show_synset, :definitions, :synonymes]
+  before_filter :timestamp_required, only: [:edit_marks, :save]
 
   layout proc {|controller| controller.request.xhr? ? false : "editor" }
   respond_to :html, :json
@@ -167,6 +168,8 @@ class EditorController < ApplicationController
 
   def edit_marks
     synset_word = SynsetWord.find(params[:synset_word_id])
+    return head 409 if params[:timestamp].to_f < synset_word.updated_at.to_f
+
     synset_word.update_with_tracking(marks_ids: Array.wrap(params[:marks]), author: current_user)
 
     show_synset
@@ -186,6 +189,7 @@ class EditorController < ApplicationController
   #
   def save
     @synset = Synset.find(params[:synset_id])
+    return head 409 if params[:timestamp].to_f < @synset.updated_at.to_f
 
     @new_synset = @synset.dup
 
@@ -255,5 +259,9 @@ class EditorController < ApplicationController
 
       h
     end
+  end
+
+  def timestamp_required
+    head 500 unless params[:timestamp].present?
   end
 end

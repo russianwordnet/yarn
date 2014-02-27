@@ -44,6 +44,7 @@
       this.currentSynset       = $(Mustache.render(this.o.template, accordionView))
       this.accordions = this.currentSynset.find('.accordion')
       this.currentSynsetId     = data.id
+      this.timestamp = data.timestamp
 
       $('#synsets').append(this.currentSynset)
 
@@ -105,6 +106,8 @@
 
         // Add new definition
         $.post('/editor/create_definition.json', params, $.proxy(function(data) {
+          console.log("timestamp before:" + this.timestamp)
+          this.timestamp = data.timestamp
           this.addDefinition(data)
           modal.modal('hide')
         }, this))
@@ -247,7 +250,8 @@
         _method         : 'put',
         synset_id       : this.currentSynsetId,
         definitions_ids : this.definitionIds(),
-        lexemes_ids     : this.wordIds()
+        lexemes_ids     : this.wordIds(),
+        timestamp       : this.timestamp
       }
 
       $.post('/editor/save.json', params, $.proxy(function(data) {
@@ -281,7 +285,8 @@
       var data = {
         id:   parent.data('synset-word-id'),
         synset_id: this.currentSynsetId,
-        selected_ids: this.marksIds(parent)
+        selected_ids: this.marksIds(parent),
+        timestamp: this.timestamp
       }
 
       this.marksPicker = new this.o.marksPicker(data, {
