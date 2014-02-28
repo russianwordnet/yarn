@@ -145,10 +145,48 @@
 </script>
 
 <script id="word-tpl" type="text/html">
-  <div data-id="{{id}}">
-    <span title="Добавить в текущий синсет">{{word}}</span>
-    <i title="Удалить" class="icon icon-remove"></i>
-  </div>
+  {{#word}}
+    {{! Какого черта не работает при вынесении в отдельный шаблон? Разобраться }}
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#synset-words" data-id="{{id}}" data-synset-word-id="{{synset_word_id}}" href="#sample-collapse-{{id}}">
+
+            {{#hasSamples}}
+              <i class="icon icon-collapse icon-caret-right"></i>
+              &nbsp;
+            {{/hasSamples}}
+
+            {{word}}
+
+          <span id ="marks">
+            {{#marks}}
+              <span class = "mark" data-id="{{id}}" data-category="{{category_id}}">{{name}}</span>
+            {{/marks}}
+
+            <span class="edit-marks">
+              <i title="Редактировать пометы" class='icon icon-pencil'></i>
+            </span>
+          </span>
+
+          <span class="pull-right synset_word">
+            <i title="Удалить" class="icon icon-remove"></i>
+            <i title="Сделать первым" class="icon icon-flag"></i>
+          </span>
+        </a>
+      </div>
+      {{#hasSamples}}
+        <div id="sample-collapse-{{id}}" class="accordion-body collapse">
+          <div class="accordion-inner">
+            <ol>
+              {{#samples}}
+                <li>{{&text}}</li>
+              {{/samples}}
+            <ol>
+          </div>
+        </div>
+      {{/hasSamples}}
+    </div>
+  {{/word}}
 </script>
 
 <script id="definition-tpl" type="text/html">
