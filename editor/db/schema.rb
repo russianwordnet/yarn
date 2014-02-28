@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140224115856) do
+ActiveRecord::Schema.define(:version => 20140227215059) do
 
   add_extension "pg_trgm"
 
@@ -151,18 +151,20 @@ ActiveRecord::Schema.define(:version => 20140224115856) do
     t.integer  "author_id"
     t.integer  "approver_id"
     t.datetime "approved_at"
-    t.integer  "revision",    :default => 1,  :null => false
-    t.integer  "word_id",                     :null => false
+    t.integer  "revision",        :default => 1,  :null => false
+    t.integer  "word_id",                         :null => false
     t.boolean  "nsg"
-    t.integer  "samples_ids", :default => [],                 :array => true
+    t.integer  "samples_ids",     :default => [],                 :array => true
     t.datetime "updated_at"
     t.datetime "deleted_at"
-    t.integer  "marks_ids",   :default => [], :null => false, :array => true
+    t.integer  "marks_ids",       :default => [], :null => false, :array => true
+    t.integer  "definitions_ids", :default => [],                 :array => true
   end
 
   add_index "current_synset_words", ["approved_at"], :name => "index_current_synset_words_on_approved_at"
   add_index "current_synset_words", ["approver_id"], :name => "index_current_synset_words_on_approver_id"
   add_index "current_synset_words", ["author_id"], :name => "index_current_synset_words_on_author_id"
+  add_index "current_synset_words", ["definitions_ids"], :name => "index_current_synset_words_on_definitions_ids", :using => :gin
   add_index "current_synset_words", ["deleted_at"], :name => "index_current_synset_words_on_deleted_at"
   add_index "current_synset_words", ["marks_ids"], :name => "index_current_synset_words_on_marks_ids", :using => :gin
   add_index "current_synset_words", ["nsg"], :name => "index_current_synset_words_on_nsg"
@@ -418,20 +420,22 @@ ActiveRecord::Schema.define(:version => 20140224115856) do
     t.integer  "author_id"
     t.integer  "approver_id"
     t.datetime "approved_at"
-    t.integer  "revision",       :default => 1,  :null => false
-    t.integer  "word_id",                        :null => false
+    t.integer  "revision",        :default => 1,  :null => false
+    t.integer  "word_id",                         :null => false
     t.boolean  "nsg"
-    t.integer  "samples_ids",    :default => [],                 :array => true
-    t.integer  "synset_word_id",                 :null => false
+    t.integer  "samples_ids",     :default => [],                 :array => true
+    t.integer  "synset_word_id",                  :null => false
     t.datetime "created_at"
     t.datetime "deleted_at"
-    t.integer  "marks_ids",      :default => [], :null => false, :array => true
+    t.integer  "marks_ids",       :default => [], :null => false, :array => true
+    t.integer  "definitions_ids", :default => [],                 :array => true
   end
 
   add_index "synset_words", ["approved_at"], :name => "index_synset_words_on_approved_at"
   add_index "synset_words", ["approver_id"], :name => "index_synset_words_on_approver_id"
   add_index "synset_words", ["author_id"], :name => "index_synset_words_on_author_id"
   add_index "synset_words", ["created_at"], :name => "index_synset_words_on_created_at"
+  add_index "synset_words", ["definitions_ids"], :name => "index_synset_words_on_definitions_ids", :using => :gin
   add_index "synset_words", ["deleted_at"], :name => "index_synset_words_on_deleted_at"
   add_index "synset_words", ["marks_ids"], :name => "index_synset_words_on_marks_ids", :using => :gin
   add_index "synset_words", ["nsg"], :name => "index_synset_words_on_nsg"
@@ -444,12 +448,14 @@ ActiveRecord::Schema.define(:version => 20140224115856) do
     t.integer  "author_id"
     t.integer  "approver_id"
     t.datetime "approved_at"
-    t.integer  "revision",        :default => 1,  :null => false
+    t.integer  "revision",               :default => 1,  :null => false
     t.datetime "deleted_at"
     t.integer  "synset_id"
     t.datetime "created_at"
-    t.integer  "words_ids",       :default => [],                 :array => true
-    t.integer  "definitions_ids", :default => [],                 :array => true
+    t.integer  "words_ids",              :default => [],                 :array => true
+    t.integer  "definitions_ids",        :default => [],                 :array => true
+    t.integer  "default_definition_id"
+    t.integer  "default_synset_word_id"
   end
 
   add_index "synsets", ["approved_at"], :name => "index_synsets_on_approved_at"

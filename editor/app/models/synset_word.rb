@@ -3,15 +3,19 @@ class SynsetWord < ActiveRecord::Base
 
   include YarnHistory::Trackable
 
-  attr_accessible :word, :samples_ids, :nsg, :marks_ids
+  attr_accessible :word, :definitions_ids, :samples_ids, :nsg, :marks_ids
 
   belongs_to :author, class_name: 'User'
 
   belongs_to :word, :inverse_of => :synset_words
 
-
   has_many :synsets, finder_sql: proc {
     %Q{SELECT * FROM current_synsets WHERE words_ids @> '{#{id}}' and deleted_at IS NULL;} }
+
+  has_many :definitions, finder_sql: proc {
+    %Q{SELECT * FROM current_definitions WHERE id IN
+        (SELECT unnest(definitions_ids) FROM current_synset_words
+          WHERE id = #{id});} }
 
   has_many :samples, finder_sql: proc {
     %Q{SELECT * FROM current_samples WHERE id IN
