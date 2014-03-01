@@ -1,8 +1,6 @@
 namespace :yarn do
   namespace :import do
     task :synonyms => :environment do
-      require File.expand_path('../../yarn_raw_xml', __FILE__)
-
       if dry = ENV['dry'].present?
         STDERR.puts 'Working in dry mode, changes will not be made.'
       end
