@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140301102432) do
+ActiveRecord::Schema.define(:version => 20140301104713) do
 
   add_extension "pg_trgm"
 
@@ -283,6 +283,7 @@ ActiveRecord::Schema.define(:version => 20140301102432) do
   add_index "examples", ["author_id"], :name => "index_examples_on_author_id"
   add_index "examples", ["created_at"], :name => "index_examples_on_created_at"
   add_index "examples", ["deleted_at"], :name => "index_examples_on_deleted_at"
+  add_index "examples", ["example_id"], :name => "index_examples_on_example_id"
   add_index "examples", ["revision"], :name => "index_examples_on_revision"
   add_index "examples", ["source"], :name => "index_examples_on_source"
   add_index "examples", ["uri"], :name => "index_examples_on_uri"
