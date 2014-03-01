@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140301094306) do
+ActiveRecord::Schema.define(:version => 20140301102432) do
 
   add_extension "pg_trgm"
 
@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(:version => 20140301094306) do
   add_index "current_examples", ["updated_at"], :name => "index_current_examples_on_updated_at"
   add_index "current_examples", ["uri"], :name => "index_current_examples_on_uri"
 
-  create_table "current_interlinks", :force => true do |t|
+  create_table "current_interlanguage_relations", :force => true do |t|
     t.integer  "synset_id",                  :null => false
     t.text     "pwn",                        :null => false
     t.integer  "author_id",                  :null => false
@@ -118,14 +118,14 @@ ActiveRecord::Schema.define(:version => 20140301094306) do
     t.datetime "deleted_at"
   end
 
-  add_index "current_interlinks", ["approved_at"], :name => "index_current_interlinks_on_approved_at"
-  add_index "current_interlinks", ["approver_id"], :name => "index_current_interlinks_on_approver_id"
-  add_index "current_interlinks", ["author_id"], :name => "index_current_interlinks_on_author_id"
-  add_index "current_interlinks", ["deleted_at"], :name => "index_current_interlinks_on_deleted_at"
-  add_index "current_interlinks", ["pwn"], :name => "index_current_interlinks_on_pwn"
-  add_index "current_interlinks", ["revision"], :name => "index_current_interlinks_on_revision"
-  add_index "current_interlinks", ["synset_id"], :name => "index_current_interlinks_on_synset_id"
-  add_index "current_interlinks", ["updated_at"], :name => "index_current_interlinks_on_updated_at"
+  add_index "current_interlanguage_relations", ["approved_at"], :name => "index_current_interlanguage_relations_on_approved_at"
+  add_index "current_interlanguage_relations", ["approver_id"], :name => "index_current_interlanguage_relations_on_approver_id"
+  add_index "current_interlanguage_relations", ["author_id"], :name => "index_current_interlanguage_relations_on_author_id"
+  add_index "current_interlanguage_relations", ["deleted_at"], :name => "index_current_interlanguage_relations_on_deleted_at"
+  add_index "current_interlanguage_relations", ["pwn"], :name => "index_current_interlanguage_relations_on_pwn"
+  add_index "current_interlanguage_relations", ["revision"], :name => "index_current_interlanguage_relations_on_revision"
+  add_index "current_interlanguage_relations", ["synset_id"], :name => "index_current_interlanguage_relations_on_synset_id"
+  add_index "current_interlanguage_relations", ["updated_at"], :name => "index_current_interlanguage_relations_on_updated_at"
 
   create_table "current_synset_relations", :force => true do |t|
     t.integer  "synset1_id",                 :null => false
@@ -287,27 +287,27 @@ ActiveRecord::Schema.define(:version => 20140301094306) do
   add_index "examples", ["source"], :name => "index_examples_on_source"
   add_index "examples", ["uri"], :name => "index_examples_on_uri"
 
-  create_table "interlinks", :force => true do |t|
-    t.integer  "interlink_id",                :null => false
-    t.integer  "synset_id",                   :null => false
-    t.text     "pwn",                         :null => false
-    t.integer  "author_id",                   :null => false
-    t.integer  "revision",     :default => 1, :null => false
-    t.integer  "approver_id",                 :null => false
+  create_table "interlanguage_relations", :force => true do |t|
+    t.integer  "interlanguage_relation_id",                :null => false
+    t.integer  "synset_id",                                :null => false
+    t.text     "pwn",                                      :null => false
+    t.integer  "author_id",                                :null => false
+    t.integer  "revision",                  :default => 1, :null => false
+    t.integer  "approver_id",                              :null => false
     t.datetime "approved_at"
-    t.datetime "updated_at"
+    t.datetime "created_at"
     t.datetime "deleted_at"
   end
 
-  add_index "interlinks", ["approved_at"], :name => "index_interlinks_on_approved_at"
-  add_index "interlinks", ["approver_id"], :name => "index_interlinks_on_approver_id"
-  add_index "interlinks", ["author_id"], :name => "index_interlinks_on_author_id"
-  add_index "interlinks", ["deleted_at"], :name => "index_interlinks_on_deleted_at"
-  add_index "interlinks", ["interlink_id"], :name => "index_interlinks_on_interlink_id"
-  add_index "interlinks", ["pwn"], :name => "index_interlinks_on_pwn"
-  add_index "interlinks", ["revision"], :name => "index_interlinks_on_revision"
-  add_index "interlinks", ["synset_id"], :name => "index_interlinks_on_synset_id"
-  add_index "interlinks", ["updated_at"], :name => "index_interlinks_on_updated_at"
+  add_index "interlanguage_relations", ["approved_at"], :name => "index_interlanguage_relations_on_approved_at"
+  add_index "interlanguage_relations", ["approver_id"], :name => "index_interlanguage_relations_on_approver_id"
+  add_index "interlanguage_relations", ["author_id"], :name => "index_interlanguage_relations_on_author_id"
+  add_index "interlanguage_relations", ["created_at"], :name => "index_interlanguage_relations_on_created_at"
+  add_index "interlanguage_relations", ["deleted_at"], :name => "index_interlanguage_relations_on_deleted_at"
+  add_index "interlanguage_relations", ["interlanguage_relation_id"], :name => "index_interlanguage_relations_on_interlanguage_relation_id"
+  add_index "interlanguage_relations", ["pwn"], :name => "index_interlanguage_relations_on_pwn"
+  add_index "interlanguage_relations", ["revision"], :name => "index_interlanguage_relations_on_revision"
+  add_index "interlanguage_relations", ["synset_id"], :name => "index_interlanguage_relations_on_synset_id"
 
   create_table "mark_categories", :force => true do |t|
     t.string   "title",      :null => false
@@ -549,9 +549,8 @@ ActiveRecord::Schema.define(:version => 20140301094306) do
   add_foreign_key "current_examples", "users", :name => "current_examples_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "current_examples", "users", :name => "current_examples_author_id_fk", :column => "author_id", :dependent => :delete
 
-  add_foreign_key "current_interlinks", "current_synsets", :name => "current_interlinks_synset_id_fk", :column => "synset_id", :dependent => :delete
-  add_foreign_key "current_interlinks", "users", :name => "current_interlinks_approver_id_fk", :column => "approver_id", :dependent => :delete
-  add_foreign_key "current_interlinks", "users", :name => "current_interlinks_author_id_fk", :column => "author_id", :dependent => :delete
+  add_foreign_key "current_interlanguage_relations", "users", :name => "current_interlanguage_relations_approver_id_fk", :column => "approver_id", :dependent => :delete
+  add_foreign_key "current_interlanguage_relations", "users", :name => "current_interlanguage_relations_author_id_fk", :column => "author_id", :dependent => :delete
 
   add_foreign_key "current_synset_relations", "current_synsets", :name => "current_synset_relations_synset1_id_fk", :column => "synset1_id", :dependent => :delete
   add_foreign_key "current_synset_relations", "current_synsets", :name => "current_synset_relations_synset2_id_fk", :column => "synset2_id", :dependent => :delete
@@ -583,10 +582,9 @@ ActiveRecord::Schema.define(:version => 20140301094306) do
   add_foreign_key "examples", "users", :name => "examples_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "examples", "users", :name => "examples_author_id_fk", :column => "author_id", :dependent => :delete
 
-  add_foreign_key "interlinks", "current_interlinks", :name => "interlinks_interlink_id_fk", :column => "interlink_id", :dependent => :delete
-  add_foreign_key "interlinks", "current_synsets", :name => "interlinks_synset_id_fk", :column => "synset_id", :dependent => :delete
-  add_foreign_key "interlinks", "users", :name => "interlinks_approver_id_fk", :column => "approver_id", :dependent => :delete
-  add_foreign_key "interlinks", "users", :name => "interlinks_author_id_fk", :column => "author_id", :dependent => :delete
+  add_foreign_key "interlanguage_relations", "current_interlanguage_relations", :name => "interlanguage_relations_interlanguage_relation_id_fk", :column => "interlanguage_relation_id", :dependent => :delete
+  add_foreign_key "interlanguage_relations", "users", :name => "interlanguage_relations_approver_id_fk", :column => "approver_id", :dependent => :delete
+  add_foreign_key "interlanguage_relations", "users", :name => "interlanguage_relations_author_id_fk", :column => "author_id", :dependent => :delete
 
   add_foreign_key "marks", "mark_categories", :name => "marks_mark_category_id_fk", :dependent => :delete
 
