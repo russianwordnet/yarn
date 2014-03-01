@@ -3,7 +3,7 @@ class SynsetWord < ActiveRecord::Base
 
   include YarnHistory::Trackable
 
-  attr_accessible :word, :definitions_ids, :samples_ids, :nsg, :marks_ids
+  attr_accessible :word, :definitions_ids, :examples_ids, :nsg, :marks_ids
 
   belongs_to :author, class_name: 'User'
 
@@ -18,8 +18,8 @@ class SynsetWord < ActiveRecord::Base
           WHERE id = #{id});} }
 
   has_many :samples, finder_sql: proc {
-    %Q{SELECT * FROM current_samples WHERE id IN
-        (SELECT unnest(samples_ids) FROM current_synset_words
+    %Q{SELECT * FROM current_examples WHERE id IN
+        (SELECT unnest(examples_ids) FROM current_synset_words
           WHERE id = #{id});} }
 
   has_many :marks, finder_sql: proc {
@@ -38,7 +38,7 @@ class SynsetWord < ActiveRecord::Base
       self.word_id = new_synset_word.word_id
       self.nsg = new_synset_word.nsg
       self.marks = new_synset_word.marks
-      self.samples_ids = new_synset_word.samples_ids
+      self.examples_ids = new_synset_word.examples_ids
       self.author_id = new_synset_word.author_id
       self.revision += 1
 

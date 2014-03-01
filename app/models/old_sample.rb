@@ -1,8 +1,8 @@
 class OldSample < ActiveRecord::Base
-  self.table_name = 'samples'
+  self.table_name = 'examples'
 
   belongs_to :author, class_name: 'User'
-  belongs_to :origin, class_name: 'Sample', foreign_key: 'sample_id',
+  belongs_to :origin, class_name: 'Sample', foreign_key: 'example_id',
     :inverse_of => :old_samples
 
   def self.from_sample(sample)

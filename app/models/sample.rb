@@ -1,13 +1,13 @@
 class Sample < ActiveRecord::Base
-  self.table_name = 'current_samples'
+  self.table_name = 'current_examples'
 
   attr_accessible :text, :source, :uri
 
   belongs_to :author, class_name: 'User'
 
   scope :find_by_raw_synset_words, ->(words_ids) {
-    select("DISTINCT ON (id) current_samples.*").
-    where("id IN (SELECT unnest(samples_ids) FROM raw_synset_words " \
+    select("DISTINCT ON (id) current_examples.*").
+    where("id IN (SELECT unnest(examples_ids) FROM raw_synset_words " \
           "WHERE id IN (?))", words_ids)
   }
 
@@ -15,13 +15,13 @@ class Sample < ActiveRecord::Base
     :inverse_of => :origin
 
   has_many :synset_words, finder_sql: proc {
-    %Q{SELECT * FROM current_synset_words WHERE samples_ids @> '{#{id}}';} }
+    %Q{SELECT * FROM current_synset_words WHERE examples_ids @> '{#{id}}';} }
 
   has_many :raw_synset_words, finder_sql: proc {
-    %Q{SELECT * FROM raw_synset_words WHERE samples_ids @> '{#{id}}';} },
+    %Q{SELECT * FROM raw_synset_words WHERE examples_ids @> '{#{id}}';} },
     class_name: 'RawSynsetWord'
 
-  has_one :raw_example
+  has_one :raw_example, :foreign_key => :example_id
 
   def update_from(new_sample)
     Sample.transaction do

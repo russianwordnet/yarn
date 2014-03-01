@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140301080700) do
+ActiveRecord::Schema.define(:version => 20140301094306) do
 
   add_extension "pg_trgm"
 
@@ -86,6 +86,27 @@ ActiveRecord::Schema.define(:version => 20140301080700) do
   add_index "current_definitions", ["updated_at"], :name => "index_current_definitions_on_updated_at"
   add_index "current_definitions", ["uri"], :name => "index_current_definitions_on_uri"
 
+  create_table "current_examples", :force => true do |t|
+    t.text     "text",                       :null => false
+    t.text     "source"
+    t.string   "uri"
+    t.integer  "author_id",                  :null => false
+    t.datetime "updated_at",                 :null => false
+    t.integer  "approver_id"
+    t.datetime "approved_at"
+    t.integer  "revision",    :default => 1, :null => false
+    t.datetime "deleted_at"
+  end
+
+  add_index "current_examples", ["approved_at"], :name => "index_current_examples_on_approved_at"
+  add_index "current_examples", ["approver_id"], :name => "index_current_examples_on_approver_id"
+  add_index "current_examples", ["author_id"], :name => "index_current_examples_on_author_id"
+  add_index "current_examples", ["deleted_at"], :name => "index_current_examples_on_deleted_at"
+  add_index "current_examples", ["revision"], :name => "index_current_examples_on_revision"
+  add_index "current_examples", ["source"], :name => "index_current_examples_on_source"
+  add_index "current_examples", ["updated_at"], :name => "index_current_examples_on_updated_at"
+  add_index "current_examples", ["uri"], :name => "index_current_examples_on_uri"
+
   create_table "current_interlinks", :force => true do |t|
     t.integer  "synset_id",                  :null => false
     t.text     "pwn",                        :null => false
@@ -105,27 +126,6 @@ ActiveRecord::Schema.define(:version => 20140301080700) do
   add_index "current_interlinks", ["revision"], :name => "index_current_interlinks_on_revision"
   add_index "current_interlinks", ["synset_id"], :name => "index_current_interlinks_on_synset_id"
   add_index "current_interlinks", ["updated_at"], :name => "index_current_interlinks_on_updated_at"
-
-  create_table "current_samples", :force => true do |t|
-    t.text     "text",                       :null => false
-    t.text     "source"
-    t.string   "uri"
-    t.integer  "author_id",                  :null => false
-    t.datetime "updated_at",                 :null => false
-    t.integer  "approver_id"
-    t.datetime "approved_at"
-    t.integer  "revision",    :default => 1, :null => false
-    t.datetime "deleted_at"
-  end
-
-  add_index "current_samples", ["approved_at"], :name => "index_current_samples_on_approved_at"
-  add_index "current_samples", ["approver_id"], :name => "index_current_samples_on_approver_id"
-  add_index "current_samples", ["author_id"], :name => "index_current_samples_on_author_id"
-  add_index "current_samples", ["deleted_at"], :name => "index_current_samples_on_deleted_at"
-  add_index "current_samples", ["revision"], :name => "index_current_samples_on_revision"
-  add_index "current_samples", ["source"], :name => "index_current_samples_on_source"
-  add_index "current_samples", ["updated_at"], :name => "index_current_samples_on_updated_at"
-  add_index "current_samples", ["uri"], :name => "index_current_samples_on_uri"
 
   create_table "current_synset_relations", :force => true do |t|
     t.integer  "synset1_id",                 :null => false
@@ -154,7 +154,7 @@ ActiveRecord::Schema.define(:version => 20140301080700) do
     t.integer  "revision",        :default => 1,  :null => false
     t.integer  "word_id",                         :null => false
     t.boolean  "nsg"
-    t.integer  "samples_ids",     :default => [],                 :array => true
+    t.integer  "examples_ids",    :default => [],                 :array => true
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.integer  "marks_ids",       :default => [], :null => false, :array => true
@@ -166,10 +166,10 @@ ActiveRecord::Schema.define(:version => 20140301080700) do
   add_index "current_synset_words", ["author_id"], :name => "index_current_synset_words_on_author_id"
   add_index "current_synset_words", ["definitions_ids"], :name => "index_current_synset_words_on_definitions_ids", :using => :gin
   add_index "current_synset_words", ["deleted_at"], :name => "index_current_synset_words_on_deleted_at"
+  add_index "current_synset_words", ["examples_ids"], :name => "index_current_synset_words_on_examples_ids", :using => :gin
   add_index "current_synset_words", ["marks_ids"], :name => "index_current_synset_words_on_marks_ids", :using => :gin
   add_index "current_synset_words", ["nsg"], :name => "index_current_synset_words_on_nsg"
   add_index "current_synset_words", ["revision"], :name => "index_current_synset_words_on_revision"
-  add_index "current_synset_words", ["samples_ids"], :name => "index_current_synset_words_on_samples_ids", :using => :gin
   add_index "current_synset_words", ["updated_at"], :name => "index_current_synset_words_on_updated_at"
   add_index "current_synset_words", ["word_id"], :name => "index_current_synset_words_on_word_id"
 
@@ -265,6 +265,28 @@ ActiveRecord::Schema.define(:version => 20140301080700) do
   add_index "definitions", ["source"], :name => "index_definitions_on_source"
   add_index "definitions", ["uri"], :name => "index_definitions_on_uri"
 
+  create_table "examples", :force => true do |t|
+    t.integer  "author_id"
+    t.integer  "approver_id"
+    t.datetime "approved_at"
+    t.integer  "revision",    :default => 1, :null => false
+    t.text     "text",                       :null => false
+    t.text     "source"
+    t.string   "uri"
+    t.integer  "example_id",                 :null => false
+    t.datetime "created_at"
+    t.datetime "deleted_at"
+  end
+
+  add_index "examples", ["approved_at"], :name => "index_examples_on_approved_at"
+  add_index "examples", ["approver_id"], :name => "index_examples_on_approver_id"
+  add_index "examples", ["author_id"], :name => "index_examples_on_author_id"
+  add_index "examples", ["created_at"], :name => "index_examples_on_created_at"
+  add_index "examples", ["deleted_at"], :name => "index_examples_on_deleted_at"
+  add_index "examples", ["revision"], :name => "index_examples_on_revision"
+  add_index "examples", ["source"], :name => "index_examples_on_source"
+  add_index "examples", ["uri"], :name => "index_examples_on_uri"
+
   create_table "interlinks", :force => true do |t|
     t.integer  "interlink_id",                :null => false
     t.integer  "synset_id",                   :null => false
@@ -320,15 +342,15 @@ ActiveRecord::Schema.define(:version => 20140301080700) do
 
   create_table "raw_examples", :force => true do |t|
     t.integer  "raw_definition_id", :null => false
-    t.integer  "sample_id",         :null => false
+    t.integer  "example_id",        :null => false
     t.integer  "author_id"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
   end
 
   add_index "raw_examples", ["author_id"], :name => "index_raw_examples_on_author_id"
+  add_index "raw_examples", ["example_id"], :name => "index_raw_examples_on_example_id"
   add_index "raw_examples", ["raw_definition_id"], :name => "index_raw_examples_on_raw_definition_id"
-  add_index "raw_examples", ["sample_id"], :name => "index_raw_examples_on_sample_id"
 
   create_table "raw_synonymies", :force => true do |t|
     t.integer  "word1_id",   :null => false
@@ -344,19 +366,19 @@ ActiveRecord::Schema.define(:version => 20140301080700) do
   add_index "raw_synonymies", ["word2_id"], :name => "index_raw_synonymies_on_word2_id"
 
   create_table "raw_synset_words", :force => true do |t|
-    t.integer  "word_id",                     :null => false
+    t.integer  "word_id",                      :null => false
     t.string   "nsg"
-    t.string   "marks",       :default => [], :null => false, :array => true
-    t.integer  "samples_ids", :default => [], :null => false, :array => true
-    t.integer  "author_id",                   :null => false
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.string   "marks",        :default => [], :null => false, :array => true
+    t.integer  "examples_ids", :default => [], :null => false, :array => true
+    t.integer  "author_id",                    :null => false
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
   end
 
   add_index "raw_synset_words", ["author_id"], :name => "index_raw_synset_words_on_author_id"
+  add_index "raw_synset_words", ["examples_ids"], :name => "index_raw_synset_words_on_examples_ids", :using => :gin
   add_index "raw_synset_words", ["marks"], :name => "index_raw_synset_words_on_marks"
   add_index "raw_synset_words", ["nsg"], :name => "index_raw_synset_words_on_nsg"
-  add_index "raw_synset_words", ["samples_ids"], :name => "index_raw_synset_words_on_samples_ids"
   add_index "raw_synset_words", ["word_id"], :name => "index_raw_synset_words_on_word_id"
 
   create_table "raw_synsets", :force => true do |t|
@@ -370,29 +392,6 @@ ActiveRecord::Schema.define(:version => 20140301080700) do
   add_index "raw_synsets", ["author_id"], :name => "index_raw_synsets_on_author_id"
   add_index "raw_synsets", ["definitions_ids"], :name => "index_raw_synsets_on_definitions_ids", :using => :gin
   add_index "raw_synsets", ["words_ids"], :name => "index_raw_synsets_on_words_ids", :using => :gin
-
-  create_table "samples", :force => true do |t|
-    t.integer  "author_id"
-    t.integer  "approver_id"
-    t.datetime "approved_at"
-    t.integer  "revision",    :default => 1, :null => false
-    t.text     "text",                       :null => false
-    t.text     "source"
-    t.string   "uri"
-    t.integer  "sample_id",                  :null => false
-    t.datetime "created_at"
-    t.datetime "deleted_at"
-  end
-
-  add_index "samples", ["approved_at"], :name => "index_samples_on_approved_at"
-  add_index "samples", ["approver_id"], :name => "index_samples_on_approver_id"
-  add_index "samples", ["author_id"], :name => "index_samples_on_author_id"
-  add_index "samples", ["created_at"], :name => "index_samples_on_created_at"
-  add_index "samples", ["deleted_at"], :name => "index_samples_on_deleted_at"
-  add_index "samples", ["revision"], :name => "index_samples_on_revision"
-  add_index "samples", ["sample_id"], :name => "index_samples_on_sample_id"
-  add_index "samples", ["source"], :name => "index_samples_on_source"
-  add_index "samples", ["uri"], :name => "index_samples_on_uri"
 
   create_table "synset_relations", :force => true do |t|
     t.integer  "synset_relation_id",                :null => false
@@ -423,7 +422,7 @@ ActiveRecord::Schema.define(:version => 20140301080700) do
     t.integer  "revision",        :default => 1,  :null => false
     t.integer  "word_id",                         :null => false
     t.boolean  "nsg"
-    t.integer  "samples_ids",     :default => [],                 :array => true
+    t.integer  "examples_ids",    :default => [],                 :array => true
     t.integer  "synset_word_id",                  :null => false
     t.datetime "created_at"
     t.datetime "deleted_at"
@@ -437,10 +436,10 @@ ActiveRecord::Schema.define(:version => 20140301080700) do
   add_index "synset_words", ["created_at"], :name => "index_synset_words_on_created_at"
   add_index "synset_words", ["definitions_ids"], :name => "index_synset_words_on_definitions_ids", :using => :gin
   add_index "synset_words", ["deleted_at"], :name => "index_synset_words_on_deleted_at"
+  add_index "synset_words", ["examples_ids"], :name => "index_synset_words_on_examples_ids", :using => :gin
   add_index "synset_words", ["marks_ids"], :name => "index_synset_words_on_marks_ids", :using => :gin
   add_index "synset_words", ["nsg"], :name => "index_synset_words_on_nsg"
   add_index "synset_words", ["revision"], :name => "index_synset_words_on_revision"
-  add_index "synset_words", ["samples_ids"], :name => "index_synset_words_on_samples_ids", :using => :gin
   add_index "synset_words", ["synset_word_id"], :name => "index_synset_words_on_synset_word_id"
   add_index "synset_words", ["word_id"], :name => "index_synset_words_on_word_id"
 
@@ -547,12 +546,12 @@ ActiveRecord::Schema.define(:version => 20140301080700) do
   add_foreign_key "current_definitions", "users", :name => "current_definitions_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "current_definitions", "users", :name => "current_definitions_author_id_fk", :column => "author_id", :dependent => :delete
 
+  add_foreign_key "current_examples", "users", :name => "current_examples_approver_id_fk", :column => "approver_id", :dependent => :delete
+  add_foreign_key "current_examples", "users", :name => "current_examples_author_id_fk", :column => "author_id", :dependent => :delete
+
   add_foreign_key "current_interlinks", "current_synsets", :name => "current_interlinks_synset_id_fk", :column => "synset_id", :dependent => :delete
   add_foreign_key "current_interlinks", "users", :name => "current_interlinks_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "current_interlinks", "users", :name => "current_interlinks_author_id_fk", :column => "author_id", :dependent => :delete
-
-  add_foreign_key "current_samples", "users", :name => "current_samples_approver_id_fk", :column => "approver_id", :dependent => :delete
-  add_foreign_key "current_samples", "users", :name => "current_samples_author_id_fk", :column => "author_id", :dependent => :delete
 
   add_foreign_key "current_synset_relations", "current_synsets", :name => "current_synset_relations_synset1_id_fk", :column => "synset1_id", :dependent => :delete
   add_foreign_key "current_synset_relations", "current_synsets", :name => "current_synset_relations_synset2_id_fk", :column => "synset2_id", :dependent => :delete
@@ -580,6 +579,10 @@ ActiveRecord::Schema.define(:version => 20140301080700) do
   add_foreign_key "definitions", "users", :name => "definitions_approver_id_fk", :column => "approver_id", :dependent => :delete
   add_foreign_key "definitions", "users", :name => "definitions_author_id_fk", :column => "author_id", :dependent => :delete
 
+  add_foreign_key "examples", "current_examples", :name => "examples_example_id_fk", :column => "example_id", :dependent => :delete
+  add_foreign_key "examples", "users", :name => "examples_approver_id_fk", :column => "approver_id", :dependent => :delete
+  add_foreign_key "examples", "users", :name => "examples_author_id_fk", :column => "author_id", :dependent => :delete
+
   add_foreign_key "interlinks", "current_interlinks", :name => "interlinks_interlink_id_fk", :column => "interlink_id", :dependent => :delete
   add_foreign_key "interlinks", "current_synsets", :name => "interlinks_synset_id_fk", :column => "synset_id", :dependent => :delete
   add_foreign_key "interlinks", "users", :name => "interlinks_approver_id_fk", :column => "approver_id", :dependent => :delete
@@ -591,7 +594,7 @@ ActiveRecord::Schema.define(:version => 20140301080700) do
   add_foreign_key "raw_definitions", "current_words", :name => "raw_definitions_word_id_fk", :column => "word_id", :dependent => :delete
   add_foreign_key "raw_definitions", "users", :name => "raw_definitions_author_id_fk", :column => "author_id", :dependent => :delete
 
-  add_foreign_key "raw_examples", "current_samples", :name => "raw_examples_sample_id_fk", :column => "sample_id", :dependent => :delete
+  add_foreign_key "raw_examples", "current_examples", :name => "raw_examples_sample_id_fk", :column => "example_id", :dependent => :delete
   add_foreign_key "raw_examples", "raw_definitions", :name => "raw_examples_raw_definition_id_fk", :dependent => :delete
   add_foreign_key "raw_examples", "users", :name => "raw_examples_author_id_fk", :column => "author_id", :dependent => :delete
 
@@ -603,10 +606,6 @@ ActiveRecord::Schema.define(:version => 20140301080700) do
   add_foreign_key "raw_synset_words", "users", :name => "raw_synset_words_author_id_fk", :column => "author_id", :dependent => :delete
 
   add_foreign_key "raw_synsets", "users", :name => "raw_synsets_author_id_fk", :column => "author_id", :dependent => :delete
-
-  add_foreign_key "samples", "current_samples", :name => "samples_sample_id_fk", :column => "sample_id", :dependent => :delete
-  add_foreign_key "samples", "users", :name => "samples_approver_id_fk", :column => "approver_id", :dependent => :delete
-  add_foreign_key "samples", "users", :name => "samples_author_id_fk", :column => "author_id", :dependent => :delete
 
   add_foreign_key "synset_relations", "current_synset_relations", :name => "synset_relations_synset_relation_id_fk", :column => "synset_relation_id", :dependent => :delete
   add_foreign_key "synset_relations", "current_synsets", :name => "synset_relations_synset1_id_fk", :column => "synset1_id", :dependent => :delete

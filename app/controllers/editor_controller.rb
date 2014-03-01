@@ -208,7 +208,7 @@ class EditorController < ApplicationController
       unless definitions.empty?
         synset_words = RawSynsetWord.find_by_content(definitions, word_id)
         samples = Sample.find_by_raw_synset_words(synset_words.map(&:id))
-        synset_word.samples_ids = samples.map(&:id)
+        synset_word.examples_ids = samples.map(&:id)
       end
 
       synset_word.save!
@@ -227,7 +227,7 @@ class EditorController < ApplicationController
   def build_samples
     definition_ids = @definitions.map(&:id) + @synonyms_definitions.values.flatten.map(&:id)
 
-    @samples = Sample.select('current_samples.*, definition_id').
+    @samples = Sample.select('current_examples.*, definition_id').
                       joins(:raw_example => :raw_definition).
                       where(raw_definitions: {definition_id: definition_ids}).
                       group_by(&:definition_id)

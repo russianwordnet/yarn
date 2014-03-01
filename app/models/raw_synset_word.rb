@@ -1,5 +1,5 @@
 class RawSynsetWord < ActiveRecord::Base
-  attr_accessible :word, :samples_ids, :nsg, :marks
+  attr_accessible :word, :examples_ids, :nsg, :marks
 
   belongs_to :author, class_name: 'User'
 
@@ -16,9 +16,9 @@ class RawSynsetWord < ActiveRecord::Base
     %Q{SELECT * FROM raw_synsets WHERE words_ids @> '{#{id}}';} },
     class_name: 'RawSynset'
 
-  has_many :samples, finder_sql: proc {
-    %Q{SELECT * FROM current_samples WHERE id IN
-        (SELECT unnest(samples_ids) FROM raw_synset_words
+  has_many :examples, finder_sql: proc {
+    %Q{SELECT * FROM current_examples WHERE id IN
+        (SELECT unnest(examples_ids) FROM raw_synset_words
           WHERE id = #{id});} },
     class_name: 'Sample'
 end

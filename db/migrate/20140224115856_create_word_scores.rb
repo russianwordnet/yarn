@@ -9,7 +9,8 @@ class CreateWordScores < ActiveRecord::Migration
       WITH NO DATA;
     SQL
 
-    add_index :word_scores, :word_id
+    add_index :word_scores, :word_id, unique: true
+    add_index :word_scores, :score
   end
 
   def down
