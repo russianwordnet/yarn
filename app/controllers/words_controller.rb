@@ -21,22 +21,9 @@ class WordsController < ApplicationController
   def search
     return (redirect_to(words_url) and false) unless params[:q].present?
 
-    @words = Word.where(deleted_at: nil)
-
-    (@query = params[:q].gsub(/\p{Zs}{2,}/, ' ')).split.each do |token|
-      token.insert(0, '%')
-      token.insert(-1, '%')
-
-      if token =~ /[ЕеЁё]/
-        yetoken = token.gsub(/[ЕЁ]/, 'Е').gsub(/[её]/, 'е')
-        yotoken = token.gsub(/[ЕЁ]/, 'Ё').gsub(/[её]/, 'ё')
-        @words = @words.where('word ILIKE ? OR word ILIKE ?', yetoken, yotoken)
-      else
-        @words = @words.where('word ILIKE ?', token)
-      end
-    end
-
-    @words = @words.order('frequency DESC', 'word').
+    @words = Word.search(params[:q]).
+      where(deleted_at: nil).
+      order(['rank DESC', 'frequency DESC', 'word']).
       page(params[:page])
 
     respond_to do |format|

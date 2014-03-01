@@ -9,36 +9,22 @@ class EditorController < ApplicationController
   respond_to :html, :json
 
   def index
-    @words = Word.select('id, word, frequency').where(deleted_at: nil)
-
-    if params.key?(:word) && !params[:word].empty?
-      (@query = params[:word].gsub(/\p{Zs}{2,}/, ' ')).split.each do |token|
-        token.insert(0, '%')
-        token.insert(-1, '%')
-
-        if token =~ /[ЕеЁё]/
-          yetoken = token.gsub(/[ЕЁ]/, 'Е').gsub(/[её]/, 'е')
-          yotoken = token.gsub(/[ЕЁ]/, 'Ё').gsub(/[её]/, 'ё')
-          @words = @words.where('word ILIKE ? OR word ILIKE ?', yetoken, yotoken)
-        else
-          @words = @words.where('word ILIKE ?', token)
-        end
-
-        @words = @words.order('frequency DESC, word')
-      end
+    @words = if params[:word].present?
+      Word.search(params[:word]).
+        order(['rank DESC', 'frequency DESC', 'word'])
     else
-      @words = @words.joins(:score).order('score DESC, word')
+      Word.joins(:score).
+        order(['score DESC', 'word'])
     end
 
-    @words = @words.page(params[:page])
-
-    @marks_categories = MarkCategory.includes(:marks).all
+    @words = @words.where(deleted_at: nil).page(params[:page])
 
     respond_with @words do |format|
       format.html do
         options = if request.xhr?
           { :partial => 'editor/index/word_picker_listing', :locals => { :words => @words } }
         else
+          @marks_categories = MarkCategory.includes(:marks).all
           'index'
         end
 

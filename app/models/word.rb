@@ -20,6 +20,16 @@ class Word < ActiveRecord::Base
   has_many :raw_synonym, :inverse_of => :word1, :foreign_key => :word1_id
   has_many :raw_synonyms, :through => :raw_synonym, :source => :word2
 
+  scope :search, ->(query) {
+    tsquery = sanitize(query.to_s)
+    regexp = sanitize('.*%s.*' % Regexp.escape(query.to_s).
+      gsub(/[ЕеЁё]/, '[ЕеЁё]'))
+
+    select(['%s.*' % table_name, "ts_rank(to_tsvector('russian', word), query) AS rank"]).
+    from("%s, plainto_tsquery('russian', %s) query" % [table_name, tsquery]).
+    where("(to_tsvector('russian', word) @@ query OR word ~* %s)" % regexp)
+  }
+
   # TODO: scope!
   def self.next_word(id)
     find_by_sql([
