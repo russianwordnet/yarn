@@ -17,6 +17,10 @@ class Word < ActiveRecord::Base
   has_many :antonomy_relations
   has_many :word_relations
 
+  has_many :synsets, :through => :synset_words
+  has_many :definitions, :through => :synset_words
+  has_many :examples, :through => :synset_words
+
   has_many :raw_synonym, :inverse_of => :word1, :foreign_key => :word1_id
   has_many :raw_synonyms, :through => :raw_synonym, :source => :word2
 

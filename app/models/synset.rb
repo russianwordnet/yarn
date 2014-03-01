@@ -28,17 +28,11 @@ class Synset < ActiveRecord::Base
         (SELECT unnest(definitions_ids) FROM current_synsets
           WHERE id = #{id});} }
 
-  has_many :words, finder_sql: proc {
-    %Q{SELECT * FROM current_synset_words WHERE id IN
-        (SELECT unnest(words_ids) FROM current_synsets
-          WHERE id = #{id});} }, class_name: 'SynsetWord'
+  has_and_belongs_to_many :words, class_name: 'SynsetWord',
+    join_table: 'current_synsets_synonyms'
 
-  has_many :lexemes, class_name: 'Word', finder_sql: proc {
-    %Q{SELECT * FROM current_words INNER JOIN
-        (SELECT word_id FROM current_synset_words WHERE id IN
-          (SELECT unnest(words_ids) FROM current_synsets
-            WHERE id = #{id})) AS nested_synset_words
-        ON nested_synset_words.word_id = current_words.id} }
+  has_many :lexemes, class_name: 'Word', :through => :words, :source => :word
+  has_many :definitions, :through => :words
 
   has_many :antonomy_relations
   has_many :synset_relations

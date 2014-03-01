@@ -8,8 +8,10 @@ class Definition < ActiveRecord::Base
   has_many :old_definitions, :order => :revision,
     :inverse_of => :origin
 
-  has_many :synsets, :inverse_of => :definitions, finder_sql: proc {
-    %Q{SELECT * FROM current_synsets WHERE definitions_ids @> '{#{id}}';} }
+  has_and_belongs_to_many :synset_words,
+    join_table: 'current_synset_words_definitions'
+
+  has_many :synsets, :through => :synset_words
 
   has_many :raw_synsets, :inverse_of => :definitions, finder_sql: proc {
     %Q{SELECT * FROM raw_synsets WHERE definitions_ids @> '{#{id}}';} }

@@ -7,7 +7,7 @@
     </tr>
 
     <% word.synset_words.each do |synset_word| %>
-      <% synset_word.synsets.each do |synset|%>
+      <% synset_word.synsets.where(deleted_at: nil).each do |synset|%>
       <tr>
         <td><%= link_to synset.id, synset_path(synset) %></td>
         <td>

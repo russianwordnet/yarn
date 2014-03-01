@@ -9,23 +9,17 @@ class SynsetWord < ActiveRecord::Base
 
   belongs_to :word, :inverse_of => :synset_words
 
-  has_many :synsets, finder_sql: proc {
-    %Q{SELECT * FROM current_synsets WHERE words_ids @> '{#{id}}' and deleted_at IS NULL;} }
+  has_and_belongs_to_many :synsets,
+    join_table: 'current_synsets_synonyms'
 
-  has_many :definitions, finder_sql: proc {
-    %Q{SELECT * FROM current_definitions WHERE id IN
-        (SELECT unnest(definitions_ids) FROM current_synset_words
-          WHERE id = #{id});} }
+  has_and_belongs_to_many :definitions,
+    join_table: 'current_synset_words_definitions'
 
-  has_many :samples, finder_sql: proc {
-    %Q{SELECT * FROM current_examples WHERE id IN
-        (SELECT unnest(examples_ids) FROM current_synset_words
-          WHERE id = #{id});} }
+  has_and_belongs_to_many :samples, association_foreign_key: 'example_id',
+    join_table: 'current_synset_words_examples'
 
-  has_many :marks, finder_sql: proc {
-    %Q{SELECT * FROM marks WHERE id IN
-        (SELECT unnest(marks_ids) FROM current_synset_words
-          WHERE id = #{id});} }
+  has_and_belongs_to_many :marks,
+    join_table: 'current_synset_words_marks'
 
   # Deprecated
   def update_from(new_synset_word, save_method = :save)

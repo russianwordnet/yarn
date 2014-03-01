@@ -241,7 +241,7 @@ class EditorController < ApplicationController
 
   def words_to_definitions
     @words_to_definitions ||= @word.raw_synset_words.inject({}) do |h, rsw|
-      rsw.synsets.map(&:definitions_ids).flatten.each { |id| h[id] = Array.wrap(h[id]) << rsw }
+      rsw.synsets.where(deleted_at: nil).map(&:definitions_ids).flatten.each { |id| h[id] = Array.wrap(h[id]) << rsw }
 
       h
     end

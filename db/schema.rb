@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140301102432) do
+ActiveRecord::Schema.define(:version => 20140301142507) do
 
   add_extension "pg_trgm"
 
