@@ -17,6 +17,7 @@ json.synonymes @raw_synonyms do |synonym|
     json.text    definition.text
     json.word_id synonym.id
     json.word    synonym.word
+    json.samples @samples[definition.id]
   end
 end
 

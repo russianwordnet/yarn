@@ -29,10 +29,12 @@
       var synonymes     = this.data.synonymes
       var definitions   = this.data.definitions
       var counter       = 0
+
       var accordionView = {
         count          : function() { return function (text, render) { return counter++ } },
         hasDefinitions : function() { return definitions.length > 0 },
         expandFirst    : function() { return counter == 1 },
+        hasSamples     : function() { return this.samples != null },
         synonymes      : synonymes
       }
 
