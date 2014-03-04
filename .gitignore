@@ -30,6 +30,9 @@
 
 # Ignore XML dumps
 /*.xml
+/public/yarn.xml
+
+# Ignore RVM
 .ruby-gemset
 .ruby-version
 .rvmrc
