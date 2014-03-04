@@ -1,5 +1,6 @@
 namespace :yarn do
   namespace :import do
+    desc 'Import a lexicon in the XML import format'
     task :lexicon => :environment do
       require File.expand_path('../../yarn_raw_xml', __FILE__)
 

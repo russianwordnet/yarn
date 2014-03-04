@@ -1,5 +1,6 @@
 namespace :yarn do
   namespace :import do
+    desc 'Import synonyms in the CSV import format'
     task :synonyms => :environment do
       if dry = ENV['dry'].present?
         STDERR.puts 'Working in dry mode, changes will not be made.'
