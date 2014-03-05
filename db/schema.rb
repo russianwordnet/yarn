@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140301142507) do
+ActiveRecord::Schema.define(:version => 20140305141357) do
 
   add_extension "pg_trgm"
 
@@ -181,7 +181,6 @@ ActiveRecord::Schema.define(:version => 20140301142507) do
     t.datetime "deleted_at"
     t.datetime "updated_at"
     t.integer  "words_ids",              :default => [],                 :array => true
-    t.integer  "definitions_ids",        :default => [],                 :array => true
     t.integer  "default_definition_id"
     t.integer  "default_synset_word_id"
   end
@@ -191,7 +190,6 @@ ActiveRecord::Schema.define(:version => 20140301142507) do
   add_index "current_synsets", ["author_id"], :name => "index_current_synsets_on_author_id"
   add_index "current_synsets", ["default_definition_id"], :name => "index_current_synsets_on_default_definition_id"
   add_index "current_synsets", ["default_synset_word_id"], :name => "index_current_synsets_on_default_synset_word_id"
-  add_index "current_synsets", ["definitions_ids"], :name => "index_current_synsets_on_definitions_ids", :using => :gin
   add_index "current_synsets", ["deleted_at"], :name => "index_current_synsets_on_deleted_at"
   add_index "current_synsets", ["revision"], :name => "index_current_synsets_on_revision"
   add_index "current_synsets", ["words_ids"], :name => "index_current_synsets_on_words_ids", :using => :gin
@@ -453,7 +451,6 @@ ActiveRecord::Schema.define(:version => 20140301142507) do
     t.integer  "synset_id"
     t.datetime "created_at"
     t.integer  "words_ids",              :default => [],                 :array => true
-    t.integer  "definitions_ids",        :default => [],                 :array => true
     t.integer  "default_definition_id"
     t.integer  "default_synset_word_id"
   end
@@ -461,7 +458,6 @@ ActiveRecord::Schema.define(:version => 20140301142507) do
   add_index "synsets", ["approved_at"], :name => "index_synsets_on_approved_at"
   add_index "synsets", ["approver_id"], :name => "index_synsets_on_approver_id"
   add_index "synsets", ["author_id"], :name => "index_synsets_on_author_id"
-  add_index "synsets", ["definitions_ids"], :name => "index_synsets_on_definitions_ids", :using => :gin
   add_index "synsets", ["deleted_at"], :name => "index_synsets_on_deleted_at"
   add_index "synsets", ["revision"], :name => "index_synsets_on_revision"
   add_index "synsets", ["synset_id"], :name => "index_synsets_on_synset_id"

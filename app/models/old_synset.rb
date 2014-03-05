@@ -1,7 +1,7 @@
 class OldSynset < ActiveRecord::Base
   self.table_name = 'synsets'
 
-  attr_accessible :words, :definitions
+  attr_accessible :words
 
   belongs_to :author, class_name: 'User'
   
@@ -10,7 +10,6 @@ class OldSynset < ActiveRecord::Base
   def self.from_synset(synset)
     old_synset = synset.old_synsets.build
     old_synset.words_ids = synset.words_ids
-    old_synset.definitions_ids = synset.definitions_ids
     old_synset.author_id = synset.author_id
     old_synset.approver_id = synset.approver_id
     old_synset.approved_at = synset.approved_at

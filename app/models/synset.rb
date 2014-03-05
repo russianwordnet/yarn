@@ -23,11 +23,6 @@ class Synset < ActiveRecord::Base
     end
   end
 
-  has_many :definitions, finder_sql: proc {
-    %Q{SELECT * FROM current_definitions WHERE id IN
-        (SELECT unnest(definitions_ids) FROM current_synsets
-          WHERE id = #{id});} }
-
   has_and_belongs_to_many :words, class_name: 'SynsetWord',
     join_table: 'current_synsets_synonyms'
 
