@@ -1,7 +1,7 @@
 class Synset < ActiveRecord::Base
   self.table_name = 'current_synsets'
 
-  include YarnHistory::Trackable
+  include Yarn::Trackable
 
   paginates_per 70
 

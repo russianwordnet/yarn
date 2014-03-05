@@ -1,7 +1,7 @@
 class SynsetWord < ActiveRecord::Base
   self.table_name = 'current_synset_words'
 
-  include YarnHistory::Trackable
+  include Yarn::Trackable
 
   attr_accessible :word, :definitions_ids, :examples_ids, :nsg, :marks_ids
 
