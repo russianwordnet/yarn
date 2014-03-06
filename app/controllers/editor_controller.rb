@@ -208,6 +208,7 @@ class EditorController < ApplicationController
       unless definitions.empty?
         synset_words = RawSynsetWord.find_by_content(definitions, word_id)
         samples = Sample.find_by_raw_synset_words(synset_words.map(&:id))
+        raise 'There should not be RawSynsetWords'
         synset_word.examples_ids = samples.map(&:id)
       end
 
