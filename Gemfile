@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 3.2.13'
+gem 'rails', '~> 4.0.3'
 
 gem 'pg', :platform => :ruby
 gem 'activerecord-jdbcpostgresql-adapter', :platform => :jruby
@@ -11,6 +11,7 @@ gem 'devise'
 gem 'omniauth-facebook'
 gem 'kaminari'
 gem 'cells'
+gem 'protected_attributes'
 
 gem 'rails-i18n'
 gem 'devise-i18n'
@@ -35,9 +36,9 @@ gem 'nprogress-rails'
 group :assets do
   gem 'bootstrap-sass', '~> 2.3.2.0'
   gem 'ceaser-easing'
-  gem 'compass-rails',  '1.0.3'
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'compass-rails'
+  gem 'sass-rails'
+  gem 'coffee-rails'
   gem 'therubyracer', :platform => :ruby
   gem 'therubyrhino', :platform => :jruby
   gem 'uglifier', '>= 1.0.3'

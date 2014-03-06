@@ -16,7 +16,7 @@ $linkColorHover: $base-blue;
 @import "compass";
 @import "compass/css3/transition";
 @import "compass/layout/sticky-footer";
-@import "compass/utilities/lists/bullets";
+@import "compass/typography/lists/bullets";
 @import "ceaser-easing";
 @import "editor";
 @import "nprogress";
@@ -124,7 +124,7 @@ ul.triple-columns {
 
 body {
   @include sticky-footer(60px, "main", "#footer-gap", "#footer");
-  background: $bgcolor asset-url("body_bg.gif", image);
+  background: $bgcolor asset-url("body_bg.gif");
   font-family: 'PT Sans Narrow', Arial;
   font-size: 100%;
 
@@ -292,11 +292,11 @@ ul#flash-messages {
     text-align: center;
 
     &#flash-alert {
-      background: asset-url("icons/32x32/alert.png", image) no-repeat 0 50%;
+      background: asset-url("icons/32x32/alert.png") no-repeat 0 50%;
     }
 
     &#flash-notice {
-      background: asset-url("icons/32x32/notice.png", image) no-repeat 0 50%;
+      background: asset-url("icons/32x32/notice.png") no-repeat 0 50%;
     }
 
     a {

@@ -24,7 +24,7 @@ class EditorController < ApplicationController
         options = if request.xhr?
           { :partial => 'editor/index/word_picker_listing', :locals => { :words => @words } }
         else
-          @marks_categories = MarkCategory.includes(:marks).all
+          @marks_categories = MarkCategory.includes(:marks).load
           'index'
         end
 

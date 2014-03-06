@@ -5,7 +5,7 @@ class Synset < ActiveRecord::Base
 
   paginates_per 70
 
-  attr_accessible :words_ids, :definitions_ids, :default_definition_id, :default_synset_word_id
+  attr_accessible :words_ids, :default_definition_id, :default_synset_word_id
 
   belongs_to :author, class_name: 'User'
   belongs_to :approver, class_name: 'User'

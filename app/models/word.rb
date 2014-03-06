@@ -10,7 +10,7 @@ class Word < ActiveRecord::Base
   belongs_to :approver, class_name: 'User'
   has_one :score, class_name: 'WordScore'
 
-  has_many :old_words, order: 'revision DESC', :inverse_of => :origin
+  has_many :old_words, -> { order 'revision DESC' }, :inverse_of => :origin
 
   has_many :synset_words
   has_many :raw_synset_words

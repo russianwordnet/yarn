@@ -12,9 +12,9 @@
   <p>Ещё нет ни одного слова.</p>
 <% end %>
 
-<h3>Определения <span class="badge"><%= @synset.definitions_ids.size %></span></h3>
+<h3>Определения <span class="badge"><%= @synset.definitions.size %></span></h3>
 
-<% if @synset.definitions_ids.size > 0 %>
+<% if @synset.definitions.size > 0 %>
   <table class="table table-bordered table-striped">
     <tr>
       <th>Определение</th>

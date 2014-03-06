@@ -303,7 +303,7 @@
     #add-to-current-synset-btn {
       cursor: pointer;
       height: 600px;
-      background: #FFF9CD asset-url("add-icon.png", image) no-repeat 50% 50%;
+      background: #FFF9CD asset-url("add-icon.png") no-repeat 50% 50%;
 
       &.disabled {
         cursor: default;

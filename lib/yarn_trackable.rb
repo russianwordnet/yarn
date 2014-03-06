@@ -6,7 +6,7 @@ module Yarn::Trackable
   extend ActiveSupport::Concern
 
   included do
-    has_many history_association, :order => :revision, :inverse_of => :origin
+    has_many history_association, -> { order 'revision' }, :inverse_of => :origin
   end
 
   module ClassMethods
@@ -48,7 +48,10 @@ module History
     foreign_key = origin_class.to_s.foreign_key
     inverse_of = self.name.underscore.pluralize.to_sym
 
-    belongs_to :origin, class_name: association_class, foreign_key: foreign_key, inverse_of: inverse_of
+    belongs_to :origin,
+      class_name: association_class,
+      foreign_key: foreign_key,
+      inverse_of: inverse_of
   end
 
   module ClassMethods

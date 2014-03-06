@@ -11,18 +11,13 @@ class Sample < ActiveRecord::Base
           "WHERE id IN (?))", words_ids)
   }
 
-  has_many :old_samples, :order => :revision,
-    :inverse_of => :origin
+  has_many :old_samples, -> { order 'revision' }, :inverse_of => :origin
 
   has_and_belongs_to_many :synset_words, foreign_key: 'example_id',
     join_table: 'current_synset_words_examples'
 
   has_many :synsets, :through => :synset_words
   has_many :words, :through => :synset_words
-
-  has_many :raw_synset_words, finder_sql: proc {
-    %Q{SELECT * FROM raw_synset_words WHERE examples_ids @> '{#{id}}';} },
-    class_name: 'RawSynsetWord'
 
   has_one :raw_example, :foreign_key => :example_id
 
