@@ -16,10 +16,10 @@ class SynsetWord < ActiveRecord::Base
     join_table: 'current_synset_words_definitions'
 
   has_and_belongs_to_many :samples, association_foreign_key: 'example_id',
-    join_table: 'current_synset_words_examples'
+    join_table: 'current_synset_words_examples', class_name: 'Example'
 
   has_and_belongs_to_many :examples, association_foreign_key: 'example_id',
-    join_table: 'current_synset_words_examples', class_name: 'Sample'
+    join_table: 'current_synset_words_examples'
 
   has_and_belongs_to_many :marks,
     join_table: 'current_synset_words_marks'

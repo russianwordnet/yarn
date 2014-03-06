@@ -24,7 +24,7 @@ namespace :yarn do
         ActiveRecord::Base.connection.reset_pk_sequence! Word.table_name
         ActiveRecord::Base.connection.reset_pk_sequence! Definition.table_name
         ActiveRecord::Base.connection.reset_pk_sequence! RawDefinition.table_name
-        ActiveRecord::Base.connection.reset_pk_sequence! Sample.table_name
+        ActiveRecord::Base.connection.reset_pk_sequence! Example.table_name
         ActiveRecord::Base.connection.reset_pk_sequence! RawExample.table_name
       end
 
@@ -34,7 +34,7 @@ namespace :yarn do
         Word.transaction do
         Definition.transaction do
         RawDefinition.transaction do
-        Sample.transaction do
+        Example.transaction do
         RawExample.transaction do
           words = Word.where(word: slice.map(&:word)).group_by(&:word)
 
@@ -65,7 +65,7 @@ namespace :yarn do
               dentry.text = raw_definition
 
               dentry.examples.each do |xentry|
-                example = Sample.create!(text: xentry.text, source: xentry.source, uri: xentry.url) do |example|
+                example = Example.create!(text: xentry.text, source: xentry.source, uri: xentry.url) do |example|
                   example.author_id = author_id
                 end
 
