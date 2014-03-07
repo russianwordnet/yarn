@@ -1,7 +1,7 @@
 class SynsetWord < ActiveRecord::Base
   self.table_name = 'current_synset_words'
 
-  include Yarn::Trackable
+  include Yarn::Trackable::Head
 
   attr_accessible :word, :definitions_ids, :examples_ids, :nsg, :marks_ids
 
@@ -23,23 +23,4 @@ class SynsetWord < ActiveRecord::Base
 
   has_and_belongs_to_many :marks,
     join_table: 'current_synset_words_marks'
-
-  # Deprecated
-  def update_from(new_synset_word, save_method = :save)
-    SynsetWord.transaction do
-      old_synset_words.last and
-      old_synset_words.last.created_at > 12.hours.ago and
-      old_synset_words.last.author_id == new_synset_word.author_id or
-      OldSynsetWord.from_synset_word(self).save!
-
-      self.word_id = new_synset_word.word_id
-      self.nsg = new_synset_word.nsg
-      self.marks = new_synset_word.marks
-      self.examples_ids = new_synset_word.examples_ids
-      self.author_id = new_synset_word.author_id
-      self.revision += 1
-
-      method(save_method).call.tap { |result| self.reload if result }
-    end
-  end
 end

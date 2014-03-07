@@ -1,7 +1,7 @@
 class Synset < ActiveRecord::Base
   self.table_name = 'current_synsets'
 
-  include Yarn::Trackable
+  include Yarn::Trackable::Head
 
   paginates_per 70
 
@@ -14,10 +14,6 @@ class Synset < ActiveRecord::Base
   belongs_to :default_synset_word, class_name: 'SynsetWord'
 
   before_save do |synset|
-    unless synset.definitions_ids.include? synset.default_definition_id
-      synset.default_definition_id = nil
-    end
-
     unless synset.words_ids.include? synset.default_synset_word_id
       synset.default_synset_word_id = nil
     end
@@ -45,23 +41,6 @@ class Synset < ActiveRecord::Base
     sort { |(_, s1), (_, s2)| s2.size <=> s1.size }
   end
 
-  def update_from(new_synset, save_method = :save)
-    Synset.transaction do
-      # TODO - вынести в отдельный метод
-      old_synsets.last and
-      old_synsets.last.created_at > 12.hours.ago and
-      old_synsets.last.author_id == new_synset.author_id or
-      OldSynset.from_synset(self).save!
-
-      self.words_ids = new_synset.words_ids
-      self.definitions_ids = new_synset.definitions_ids
-      self.author_id = new_synset.author_id
-      self.revision += 1
-
-      method(save_method).call.tap { |result| self.reload if result }
-    end
-  end
-
   def words_with_default_first
     return words_without_default_first unless default_synset_word_id
     words = words_without_default_first.dup
@@ -70,15 +49,6 @@ class Synset < ActiveRecord::Base
     words.prepend(default_synset_word)
   end
   alias_method_chain :words, :default_first
-
-  def definitions_with_default_first
-    return definitions_without_default_first unless default_definition_id
-    definitions = definitions_without_default_first.dup
-
-    definitions.delete(default_definition)
-    definitions.prepend(default_definition)
-  end
-  alias_method_chain :definitions, :default_first
 
   def destroy
     update_from(self)
