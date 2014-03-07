@@ -4,8 +4,8 @@ class OldSynset < ActiveRecord::Base
   attr_accessible :words
 
   belongs_to :author, class_name: 'User'
-  
-  include YarnHistory::History
+
+  include Yarn::Trackable::History
 
   def self.from_synset(synset)
     old_synset = synset.old_synsets.build

@@ -7,5 +7,5 @@ class OldSynsetWord < ActiveRecord::Base
 
   belongs_to :author, class_name: 'User'
 
-  include YarnHistory::History
+  include Yarn::Trackable::History
 end

@@ -40,7 +40,7 @@ module Yarn::Trackable
   end
 end
 
-module History
+module Yarn::Trackable::History
   extend ActiveSupport::Concern
 
   included do
