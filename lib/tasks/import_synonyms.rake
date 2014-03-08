@@ -46,6 +46,7 @@ namespace :yarn do
                   rs.author_id = author_id
                 end
               rescue ActiveRecord::RecordNotUnique
+              rescue ActiveRecord::RecordInvalid
               end
             end
 
