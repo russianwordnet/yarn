@@ -441,7 +441,7 @@
     },
 
     toggleIcon: function(e) {
-      var icon = $(e.target).closest('.accordion-heading').find('a > i.icon-collapse')
+      var icon = $(e.target).closest('.accordion-group').find('a > i.icon-collapse')
       if (icon.hasClass('icon-caret-right')) {
         icon.removeClass('icon-caret-right').addClass('icon-caret-down')
       } else {
