@@ -2,7 +2,9 @@
   <div class="listing definitions">
     <ul>
       {{#definitions}}
-        <li data-id="{{id}}" data-word="{{word}}" data-word-id="{{word_id}}">{{&text}}<span><i title="Скрыть определение" class="icon icon-eye-close"></i></span>
+        <li data-id="{{id}}" data-word="{{word}}" data-word-id="{{word_id}}">
+          <div class='content'>{{&text}}</div>
+          <span><i title="Скрыть определение" class="icon icon-eye-close"></i></span>
           <br>
           {{#hasSamples}}
             <small class="sample">
@@ -74,45 +76,7 @@
   <div id="current-synset">
     <div class="accordion" id="synset-words">
       {{#words}}
-        <div class="accordion-group">
-          <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#synset-words" data-id="{{id}}" data-synset-word-id="{{synset_word_id}}" href="#sample-collapse-{{id}}">
-
-                {{#hasSamples}}
-                  <i class="icon icon-collapse icon-caret-right"></i>
-                  &nbsp;
-                {{/hasSamples}}
-
-                {{word}}
-
-              <span id ="marks">
-                {{#marks}}
-                  <span class = "mark" data-id="{{id}}" data-category="{{category_id}}">{{name}}</span>
-                {{/marks}}
-
-                <span class="edit-marks">
-                  <i title="Редактировать пометы" class='icon icon-pencil'></i>
-                </span>
-              </span>
-
-              <span class="pull-right synset_word">
-                <i title="Удалить" class="icon icon-remove"></i>
-                <i title="Сделать первым" class="icon icon-flag"></i>
-              </span>
-            </a>
-          </div>
-          {{#hasSamples}}
-            <div id="sample-collapse-{{id}}" class="accordion-body collapse">
-              <div class="accordion-inner">
-                <ol>
-                  {{#samples}}
-                    <li>{{&text}}</li>
-                  {{/samples}}
-                <ol>
-              </div>
-            </div>
-          {{/hasSamples}}
-        </div>
+        {{> word}}
       {{/words}}
     </div>
     <section>
@@ -146,17 +110,12 @@
 
 <script id="word-tpl" type="text/html">
   {{#word}}
-    {{! Какого черта не работает при вынесении в отдельный шаблон? Разобраться }}
     <div class="accordion-group">
       <div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#synset-words" data-id="{{id}}" data-synset-word-id="{{synset_word_id}}" href="#sample-collapse-{{id}}">
-
-            {{#hasSamples}}
-              <i class="icon icon-collapse icon-caret-right"></i>
-              &nbsp;
-            {{/hasSamples}}
-
-            {{word}}
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#synset-words" data-id="{{id}}" data-synset-word-id="{{synset_word_id}}" href="#content-collapse-{{id}}">
+          <i class="icon icon-collapse icon-caret-right"></i>
+          &nbsp;
+          {{word}}
 
           <span id ="marks">
             {{#marks}}
@@ -174,17 +133,38 @@
           </span>
         </a>
       </div>
-      {{#hasSamples}}
-        <div id="sample-collapse-{{id}}" class="accordion-body collapse">
-          <div class="accordion-inner">
-            <ol>
-              {{#samples}}
-                <li>{{&text}}</li>
-              {{/samples}}
-            <ol>
+      <div id="content-collapse-{{id}}" class="accordion-body collapse" data-id="{{id}}">
+        <div class="accordion-inner">
+          <strong>Пример(ы) употребления:</strong>
+            <ol id="synset-samples">
+              {{#hasSamples}}
+                {{#samples}}
+                  <li data-id={{id}}>{{&text}}</li>
+                {{/samples}}
+              {{/hasSamples}}
+            </ol>
+          <div>
+            <a id="synset-word-add-sample" href="#add-sample-modal" data-toggle="modal" class="dashed-link" data-id="{{synset_word_id}}"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить пример употребления</a>
+          </div>
+
+          <strong>Определения:</strong>
+          
+          <ol id="synset-definitions">
+            {{#hasDefinitions}}
+              {{#definitions}}
+                {{>definition}}
+                <li data-id="{{id}}">
+                  {{&text}}
+                  <i title="Удалить" class="icon icon-remove"></i>
+                </li>
+              {{/definitions}}
+            {{/hasDefinitions}}
+          </ol>
+          <div>
+            <a id="synset-word-add-definition" href="#add-definition-modal" data-toggle="modal" data-id="{{synset_word_id}}" class="dashed-link"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить определение</a>
           </div>
         </div>
-      {{/hasSamples}}
+      </div>
     </div>
   {{/word}}
 </script>
