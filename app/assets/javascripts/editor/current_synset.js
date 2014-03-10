@@ -6,6 +6,7 @@
       definitionTemplate : $('#definition-tpl').text(),
       marksPicker        : $.fn.MarksPicker,
       onRemoveDefinition : function(definitionId) {},
+      onRemoveSample     : function(sampleId) {},
       onAfterRender      : function(data) {},
       onExpandAccordion  : function(accordion) { },
     }, o)
@@ -23,6 +24,7 @@
     initialize: function(o) {
       this.o = o
       this.handleAddCustomDefinition()
+      this.handleAddCustomSample()
     },
 
     render: function(data) {
@@ -54,6 +56,7 @@
 
       this.handleRemoveWord()
       this.handleRemoveDefinition()
+      this.handleRemoveSample()
       this.handleCloneDefinition()
       this.handleSetDefaultDefinition()
       this.handleSetDefaultSynsetWord()
@@ -76,7 +79,13 @@
 
     handleAddCustomDefinition: function() {
       var modal = $('#add-definition-modal')
-      var form  = $('#add-definition-form')
+      var form    = modal.find('form')
+
+      $(document).on('click', '#synset-word-add-definition', function() {
+        var synset_word_id = $(this).data('id')
+
+        modal.find('[name=synset_word_id]').val(synset_word_id)
+      })
 
       // Reset modal form
       modal.on('hidden', function() {
@@ -104,15 +113,78 @@
         if (!form.valid()) return
 
         var params = {
-          definition : $(e.currentTarget).serializeObject(),
-          synset_id  : this.currentSynsetId
+          definition      : $(e.currentTarget).serializeObject(),
+          synset_id       : this.currentSynsetId,
+          synset_word_id  : $(e.currentTarget).siblings('[name=synset_word_id]').val()
         }
 
         // Add new definition
         $.post('/editor/create_definition.json', params, $.proxy(function(data) {
-          console.log("timestamp before:" + this.timestamp)
           this.timestamp = data.timestamp
-          this.addDefinition(data)
+
+          if(params.synset_word_id.length) {
+            this.addDefinition(data, params.synset_word_id)
+          }
+          else {
+            this.addDefinitionToSynset(data)
+          }
+
+          modal.modal('hide')
+        }, this))
+      }, this))
+
+      // Submit form on click on dialog primary button
+      modal.find('button.btn-primary').off().click(function() {
+        form.submit()
+      })
+    },
+
+    handleAddCustomSample: function() {
+      var modal = $('#add-sample-modal')
+      var form  = modal.find('form')
+
+      $(document).on('click', '#synset-word-add-sample', function() {
+        var synset_word_id = $(this).data('id')
+
+        modal.find('[name=synset_word_id]').val(synset_word_id)
+      })
+
+      // Reset modal form
+      modal.on('hidden', function() {
+        form[0].reset()
+      })
+
+      // Add validators and its callbacks
+      form.validate({
+        rules: {
+          text: {
+            required: true
+          }
+        },
+        highlight: function(element) {
+          $(element).closest('.control-group').removeClass('success').addClass('error');
+        },
+        success: function(element) {
+          element.addClass('valid').closest('.control-group').removeClass('error')
+        }
+      })
+
+      // What to do on submit
+      form.off().on('submit', $.proxy(function(e) {
+        e.preventDefault()
+        if (!form.valid()) return
+
+        var params = {
+          sample          : $(e.currentTarget).serializeObject(),
+          synset_word_id  : $(e.currentTarget).siblings('[name=synset_word_id]').val()
+        }
+
+        // Add new definition
+        $.post('/editor/create_sample.json', params, $.proxy(function(data) {
+          this.timestamp = data.timestamp
+
+          this.addSample(data, params.synset_word_id)
+
           modal.modal('hide')
         }, this))
       }, this))
@@ -124,11 +196,14 @@
     },
 
     addWord: function(word) {
+      if(word.id == undefined || word.word == undefined) { return }
       // Do not add new word if already exists
       if ($.grep(this.selectedWords, function(obj, i) { return obj.id == word.id }).length) {
         return
       }
       // Add new word
+      word.samples = []
+      word.definitions = []
       this.selectedWords.push(word)
 
       var newWord = $(Mustache.render(this.o.wordTemplate, word))
@@ -183,7 +258,7 @@
       $('#synset-words').toggleClass('active')
     },
 
-    addDefinition: function(definition) {
+    addDefinitionToSynset: function(definition) {
       if ($.grep(this.selectedDefinitions, function(obj, i) { return obj.id == definition.id }).length) {
         return
       }
@@ -201,15 +276,70 @@
       this.save()
     },
 
-    handleRemoveDefinition: function() {
-      this.currentSynset.find('li .icon-remove').off('click', '**').click($.proxy(function(e) {
-        var item = $(e.currentTarget).closest('li')
+    addSample: function(sample, synset_word_id) {
+      var synset_word = $.grep(this.selectedWords, function(obj, i) { return obj.synset_word_id == synset_word_id }).pop()
 
-        this.selectedDefinitions = $.grep(this.selectedDefinitions, function(obj) {
+      if (synset_word == undefined) { return }
+      if ($.grep(synset_word.samples, function(obj, i) { return obj.id == sample.id }).length) { return }
+
+      synset_word.samples.push(sample)
+
+      var newSample = $(Mustache.render(this.o.definitionTemplate, sample))
+
+      $('#content-collapse-' + synset_word_id + ' ol#samples').append(newSample)
+      this.handleRemoveSample()
+      this.save()
+    },
+
+    addDefinition: function(definition, synset_word_id) {
+      var synset_word
+
+      this.addWord({ id : definition.word_id, word : definition.word })
+
+      if(synset_word_id != undefined)
+        synset_word = $.grep(this.selectedWords, function(obj, i) { return obj.synset_word_id == synset_word_id }).pop()
+      else
+        synset_word = $.grep(this.selectedWords, function(obj, i) { return obj.id == definition.word_id }).pop()
+
+      if (synset_word == undefined) { return }
+      if ($.grep(synset_word.definitions, function(obj, i) { return obj.id == definition.id }).length) { return }
+
+      synset_word.definitions.push(definition)
+
+      var newDefinition = $(Mustache.render(this.o.definitionTemplate, definition))
+
+      $('#content-collapse-' + synset_word.id + ' ol#synset-definitions').append(newDefinition)
+      this.handleRemoveDefinition()
+      this.save()
+    },
+
+    handleRemoveDefinition: function() {
+      this.currentSynset.find('ol#synset-definitions .icon-remove').off('click', '**').click($.proxy(function(e) {
+        var item = $(e.currentTarget).closest('li'),
+            word_id = item.closest('.accordion-body').data('id'),
+            synset_word = $.grep(this.selectedWords, function(obj) { return obj.id == word_id }).pop()
+
+        synset_word.definitions = $.grep(synset_word.definitions, function(obj) {
           return obj.id != item.data('id')
         })
 
         this.o.onRemoveDefinition(item.data('id'))
+        item.remove()
+        this.save()
+      }, this))
+    },
+
+    handleRemoveSample: function() {
+      this.currentSynset.find('ol#synset-samples .icon-remove').off('click', '**').click($.proxy(function(e) {
+        var item = $(e.currentTarget).closest('li'),
+            word_id = item.closest('.accordion-body').data('id'),
+            synset_word = $.grep(this.selectedWords, function(obj) { return obj.id == word_id }).pop()
+
+        synset_word.samples = $.grep(synset_word.samples, function(obj) {
+          return obj.id != item.data('id')
+        })
+
+        this.o.onRemoveSample(item.data('id'))
         item.remove()
         this.save()
       }, this))
@@ -244,7 +374,7 @@
     },
 
     isValid: function() {
-      return this.selectedDefinitions.length > 0
+      return true
     },
 
     save: function() {
@@ -253,8 +383,7 @@
       var params = {
         _method         : 'put',
         synset_id       : this.currentSynsetId,
-        definitions_ids : this.definitionIds(),
-        lexemes_ids     : this.wordIds(),
+        lexemes         : this.wordIds(),
         timestamp       : this.timestamp
       }
 
@@ -269,12 +398,14 @@
       }, this))
     },
 
-    definitionIds: function() {
-      return $.map(this.selectedDefinitions, function(n, i) { return n.id })
-    },
-
     wordIds: function() {
-      return $.map(this.selectedWords, function(n, i) { return n.id })
+      return $.map(this.selectedWords, function(n, i) {
+        return {
+          id: n.id,
+          definitions: $.map(n.definitions, function(d, i) { return d.id }),
+          samples:     $.map(n.samples, function(d, i) { return d.id })
+        }
+      })
     },
 
     handleEditMarksBtn: function() {
@@ -311,7 +442,6 @@
 
     toggleIcon: function(e) {
       var icon = $(e.target).closest('.accordion-heading').find('a > i.icon-collapse')
-
       if (icon.hasClass('icon-caret-right')) {
         icon.removeClass('icon-caret-right').addClass('icon-caret-down')
       } else {
@@ -339,7 +469,6 @@
 
     handleApproveButton: function() {
       $(document).off('click', '#approve-current-synset').on('click', '#approve-current-synset', $.proxy(function(e) {
-        console.log('clicked')
         e.preventDefault()
 
         var url = '/synsets/' + this.currentSynsetId + '/approve'

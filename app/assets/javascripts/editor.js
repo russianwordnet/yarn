@@ -70,7 +70,7 @@
             this.definition.resetInactiveDefinition(definitionId)
           }, this),
           onAfterRender: $.proxy(function(data) {
-            this.definition.inactivateDefinitions(this.currentSynset.definitionIds())
+            //this.definition.inactivateDefinitions(this.currentSynset.definitionIds())
             this.synsets.updateSelected(data.selected_synset)
           }, this),
         })
