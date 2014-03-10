@@ -4,6 +4,7 @@
       template           : $('#current-synset-tpl').text(),
       wordTemplate       : $('#word-tpl').text(),
       definitionTemplate : $('#definition-tpl').text(),
+      sampleTemplate     : $('#sample-tpl').text(),
       marksPicker        : $.fn.MarksPicker,
       onRemoveDefinition : function(definitionId) {},
       onRemoveSample     : function(sampleId) {},
@@ -18,7 +19,6 @@
     currentSynsetId     : null,
     currentSynset       : null,
     selectedWords       : [],
-    selectedDefinitions : [],
     displayed           : false,
 
     initialize: function(o) {
@@ -32,24 +32,25 @@
       $('#current-synset').off('click')
 
       this.displayed           = true
-      this.selectedDefinitions = data.definitions
       this.selectedWords       = data.words
 
       var accordionView = {
-        hasSamples     : function() { return this.samples.length > 0 },
-        hasDefinitions : function() { return this.definitions.length > 0 },
-        definitions    : data.definitions,
-        words          : data.words,
-        allow_destroy  : data.allow_destroy,
-        allow_approve  : data.allow_approve
+        hasSamples         : function() { return this.samples.length > 0 },
+        hasDefinitions     : function() { return this.definitions.length > 0 },
+        default_definition : data.default_definition,
+        words              : data.words,
+        allow_destroy      : data.allow_destroy,
+        allow_approve      : data.allow_approve
       }
 
       this.currentSynset       = $(Mustache.render(this.o.template, accordionView, {
         word:       this.o.wordTemplate,
-        definition: this.o.definitionTemplate
+        definition: this.o.definitionTemplate,
+        sample:     this.o.sampleTemplate
       }))
       this.accordions = this.currentSynset.find('.accordion')
-      this.currentSynsetId     = data.id
+      this.currentSynsetId = data.id
+      this.default_definition = data.default_definition
       this.timestamp = data.timestamp
 
       $('#synsets').append(this.currentSynset)
@@ -57,9 +58,7 @@
       this.handleRemoveWord()
       this.handleRemoveDefinition()
       this.handleRemoveSample()
-      this.handleCloneDefinition()
       this.handleSetDefaultDefinition()
-      this.handleSetDefaultSynsetWord()
       this.handleEditMarksBtn()
       this.handleDeleteButton()
       this.handleApproveButton()
@@ -121,13 +120,7 @@
         // Add new definition
         $.post('/editor/create_definition.json', params, $.proxy(function(data) {
           this.timestamp = data.timestamp
-
-          if(params.synset_word_id.length) {
-            this.addDefinition(data, params.synset_word_id)
-          }
-          else {
-            this.addDefinitionToSynset(data)
-          }
+          this.addDefinition(data, params.synset_word_id)
 
           modal.modal('hide')
         }, this))
@@ -230,22 +223,6 @@
       }, this))
     },
 
-    handleSetDefaultSynsetWord: function() {
-      this.currentSynset.off('click', '.synset_word i.icon-flag').on('click', '.synset_word i.icon-flag', $.proxy(function(e) {
-        var item = $(e.currentTarget).closest('a')
-
-        $.post('/editor/set_default_synset_word',
-        {
-          synset_id       : this.currentSynsetId,
-          synset_word_id  : item.data('synset-word-id')
-        },
-        $.proxy( function(data) {
-          this.render(data)
-        }, this)
-        )
-      }, this))
-    },
-
     highlightOn: function() {
       $('#current-synset').addClass('active')
     },
@@ -258,24 +235,6 @@
       $('#synset-words').toggleClass('active')
     },
 
-    addDefinitionToSynset: function(definition) {
-      if ($.grep(this.selectedDefinitions, function(obj, i) { return obj.id == definition.id }).length) {
-        return
-      }
-
-      this.selectedDefinitions.push(definition)
-
-      if (definition.word) {
-        this.addWord({ id :definition.word_id, word : definition.word })
-      }
-
-      var newDefinition = $(Mustache.render(this.o.definitionTemplate, definition))
-
-      $('#current-synset ol').append(newDefinition)
-      this.handleRemoveDefinition()
-      this.save()
-    },
-
     addSample: function(sample, synset_word_id) {
       var synset_word = $.grep(this.selectedWords, function(obj, i) { return obj.synset_word_id == synset_word_id }).pop()
 
@@ -284,7 +243,7 @@
 
       synset_word.samples.push(sample)
 
-      var newSample = $(Mustache.render(this.o.definitionTemplate, sample))
+      var newSample = $(Mustache.render(this.o.sampleTemplate, sample))
 
       $('#content-collapse-' + synset_word_id + ' ol#samples').append(newSample)
       this.handleRemoveSample()
@@ -345,27 +304,12 @@
       }, this))
     },
 
-    handleCloneDefinition: function() {
-      this.currentSynset.find('li .icon-copy').off('click', '**').click($.proxy(function(e) {
-        var definition = $(e.currentTarget).closest('li').find('span').text()
-        $('#current-synset a.dashed-link').trigger('click')
-        $('#add-definition-modal #inputText').val(definition)
-      }, this))
-    },
-
     handleSetDefaultDefinition: function() {
-      this.currentSynset.find('li .icon-flag.definition').off('click', '**').click($.proxy(function(e) {
-        var item = $(e.currentTarget).closest('li')
+      this.currentSynset.find('#synset-definitions i.icon-flag').off('click', '**').click($.proxy(function(e) {
+        var definition_id = $(e.currentTarget).closest('li').data('id')
 
-        $.post('/editor/set_default_definition',
-        {
-          synset_id     : this.currentSynsetId,
-          definition_id : item.data('id')
-        },
-        $.proxy( function(data) {
-          this.render(data)
-        }, this)
-        )
+        this.default_definition = definition_id
+        this.save()
       }, this))
     },
 
@@ -384,6 +328,7 @@
         _method         : 'put',
         synset_id       : this.currentSynsetId,
         lexemes         : this.wordIds(),
+        definition      : this.default_definition,
         timestamp       : this.timestamp
       }
 

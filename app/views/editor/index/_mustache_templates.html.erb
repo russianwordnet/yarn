@@ -79,22 +79,21 @@
         {{> word}}
       {{/words}}
     </div>
-    <section>
+    <section class='p5' id='default-definition'>
+      <strong>Главное определение:</strong>
       <div>
-        <ol>
-          {{#definitions}}
-            <li data-id="{{id}}" data-word="{{word}}">
-              <span>{{&text}}</span>
-              <i title="Добавить новое определение на основе этого" class="icon icon-copy"></i>
-              <i title="Удалить" class="icon icon-remove"></i>
-              <i title="Сделать первым" class="icon icon-flag definition"></i>
-            </li>
-          {{/definitions}}
-        </ol>
-      </div>
-
-      <div>
-        <a href="#add-definition-modal" data-toggle="modal" class="dashed-link"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить определение</a>
+        {{#default_definition}}
+          <div data-id="{{id}}">
+            {{&text}}
+            <i title="Редактировать" class="icon icon-pencil"></i>
+          </div>
+        {{/default_definition}}
+        {{^default_definition}}
+          <div>
+            Н/д
+            <i title="Редактировать" class="icon icon-pencil"></i>
+          </div>
+        {{/default_definition}}
       </div>
     </section>
 
@@ -139,7 +138,7 @@
             <ol id="synset-samples">
               {{#hasSamples}}
                 {{#samples}}
-                  {{>definition}}
+                  {{>sample}}
                 {{/samples}}
               {{/hasSamples}}
             </ol>
@@ -166,6 +165,14 @@
 </script>
 
 <script id="definition-tpl" type="text/html">
+  <li data-id="{{id}}">
+    {{&text}}
+    <i title="Удалить" class="icon icon-remove"></i>
+    <i title="Сделать главным" class="icon icon-flag"></i>
+  </li>
+</script>
+
+<script id="sample-tpl" type="text/html">
   <li data-id="{{id}}">
     {{&text}}
     <i title="Удалить" class="icon icon-remove"></i>

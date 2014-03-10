@@ -3,6 +3,11 @@ json.allow_destroy current_user && @synset.allow_destroy_by?(current_user)
 json.allow_approve current_user && current_user.admin?
 json.timestamp Time.now.to_f
 
+json.default_definition Array.wrap(@synset.default_definition) do |definition|
+  json.id   definition.id
+  json.text definition.text
+end
+
 json.words @synset.words do |synset_word|
   json.id               synset_word.word.id
   json.synset_word_id   synset_word.id
@@ -29,7 +34,7 @@ json.synsets @synsets do |synset|
     json.text "Пустой синсет №#{synset.id}"
   end
 
-  json.first_definition synset.default_definition ? synset.default_definition.try(:text) : synset.definitions.first.try(:text)
+  json.first_definition synset.default_definition.try(:text)
 end
 
 json.selected_synset do

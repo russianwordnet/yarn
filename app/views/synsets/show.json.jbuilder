@@ -21,7 +21,7 @@ json.words @synset_words do |synset_word|
   end
 end
 
-json.definitions @definitions do |definition|
+json.default_definition Array.wrap(@synset.default_definition) do |definition|
   json.id   definition.id
   json.text definition.text
 end
@@ -33,5 +33,5 @@ json.selected_synset do
   else
     json.text "Пустой синсет №#{@synset.id}"
   end
-  json.first_definition  @synset.default_definition ? @synset.default_definition.try(:text) : @definitions.first.try(:text)
+  json.first_definition  @synset.default_definition.try(:text)
 end
