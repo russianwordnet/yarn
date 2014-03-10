@@ -12,13 +12,13 @@ json.words @synset.words do |synset_word|
     json.name mark.name
   end
   json.samples synset_word.samples do |sample|
+    json.id   sample.id
     json.text sample.text
   end
-end
-
-json.definitions @synset.definitions do |definition|
-  json.id   definition.id
-  json.text definition.text
+  json.definitions synset_word.definitions do |definition|
+    json.id   definition.id
+    json.text definition.text
+  end
 end
 
 json.synsets @synsets do |synset|

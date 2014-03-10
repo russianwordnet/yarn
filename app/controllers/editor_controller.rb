@@ -116,15 +116,31 @@ class EditorController < ApplicationController
   end
 
   def create_definition
-    @synset = Synset.find(params[:synset_id])
+    entity = if params[:synset_word_id].present?
+      SynsetWord.find(params[:synset_word_id])
+    else
+      Synset.find(params[:synset_id])
+    end
 
     @definition = Definition.new(params[:definition])
     @definition.author = current_user
     @definition.save!
 
-    @synset.update_with_tracking(author: current_user) {|synset| synset.definitions_ids += [@definition.id]}
+    entity.update_with_tracking(author: current_user) {|synset| synset.definitions_ids += [@definition.id]}
 
     render 'create_definition'
+  end
+
+  def create_sample
+    synset_word = SynsetWord.find(params[:synset_word_id])
+
+    @sample = Sample.new(params[:sample])
+    @sample.author = current_user
+    @sample.save!
+
+    synset_word.update_with_tracking(author: current_user) {|synset| synset.examples_ids += [@sample.id] }
+
+    render 'create_sample'
   end
 
   def show_synset
@@ -177,49 +193,39 @@ class EditorController < ApplicationController
     @synset = Synset.find(params[:synset_id])
     return head 409 if params[:timestamp].to_f < @synset.updated_at.to_f
 
-    @new_synset = @synset.dup
-
-    @new_synset.definitions_ids = (params[:definitions_ids] || []).map(&:to_i)
-    @new_synset.words_ids = []
-
     # retrieve existent word associations
     words_mapping = @synset.words.inject({}) do |h, sw|
       h[sw.word_id] = sw; h
     end
 
     # the word 'lexeme' is used to distinguish `synset_word` from `word`
-    lexemes_ids = (params[:lexemes_ids] || []).map(&:to_i)
+    lexemes = (params[:lexemes].values || [])
 
-    lexemes_mapping = Word.find(lexemes_ids).inject({}) do |h, w|
-      h[w.id] = w; h
-    end
-
-    lexemes_ids.each do |word_id|
-      synset_word = if words_mapping[word_id]
-        SynsetWord.find(words_mapping[word_id].id)
+    words_ids = lexemes.map do |word|
+      synset_word = if words_mapping[word[:id]]
+        SynsetWord.find(words_mapping[word[:id]].id)
       else
-        synset_word = SynsetWord.new(word: lexemes_mapping[word_id])
+        synset_word = SynsetWord.new
+        synset_word.word_id = word[:id]
         synset_word.author = current_user
+        synset_word.save
+
         synset_word
       end
 
-      definitions = @new_synset.definitions_ids - @synset.definitions_ids
-
-      unless definitions.empty?
-        synset_words = RawSynsetWord.find_by_content(definitions, word_id)
-        samples = Sample.find_by_raw_synset_words(synset_words.map(&:id))
-        raise 'There should not be RawSynsetWords'
-        synset_word.examples_ids = samples.map(&:id)
+      synset_word.update_with_tracking do |s|
+        s.examples_ids = Array.wrap(word[:samples]).map(&:to_i)
+        s.definitions_ids = Array.wrap(word[:definitions]).map(&:to_i)
       end
+      synset_word.reload
 
-      synset_word.save!
-
-      @new_synset.words_ids += [synset_word.id]
+      synset_word.id
     end
 
-    @synset.update_from(@new_synset, :save!)
+    @synset.update_with_tracking(author: current_user) do |synset|
+      synset.words_ids = words_ids
+    end
     @synset.reload
-
     render 'create_synset'
   end
 
