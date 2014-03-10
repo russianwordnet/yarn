@@ -2,7 +2,7 @@
   $.fn.EditorDefinition = function(o) {
     var o = $.extend({
       lists         : $('#editor-area .definitions'),
-      current       : $('.definitions li.active'),
+      current       : $('.definitions ul > li.active'),
       onSelect      : function(definition) {},
       onChange      : function(definition) {},
       onBlur        : function(definition) {}
@@ -24,7 +24,7 @@
     },
 
     handleLists: function() {
-      $('#editor-area').on('click', '.definitions li', $.proxy(function(e) {
+      $('#editor-area').on('click', '.definitions > ul > li', $.proxy(function(e) {
         e.stopPropagation()
 
         if (this.currentDefinition != null) {
@@ -35,14 +35,14 @@
         this.o.onSelect(this.currentDefinition)
       }, this))
 
-      $('#editor-area').on('dblclick', '.definitions li', $.proxy(function(e) {
+      $('#editor-area').on('dblclick', '.definitions ul > li', $.proxy(function(e) {
         e.stopPropagation()
         this.o.onChange(this.currentDefinition)
       }, this))
     },
 
     handleHideButtons: function() {
-      $('#editor-area').on('click', '.definitions li i.icon', $.proxy(function(e) {
+      $('#editor-area').on('click', '.definitions ul > li i.icon', $.proxy(function(e) {
         $(e.target).closest('li').addClass('hide')
         $('#expand-hidden').show()
       }, this))
@@ -50,7 +50,7 @@
 
     handleExpandHiddenButton: function() {
       $('#expand-hidden').on('click', $.proxy(function(e) {
-        $('#editor-area .definitions li.hide').removeClass('hide')
+        $('#editor-area .definitions ul > li.hide').removeClass('hide')
         $(e.currentTarget).hide()
       }, this))
     },
@@ -68,7 +68,7 @@
     current: function() {
       return {
         id      : this.currentDefinition.data('id'),
-        text    : this.currentDefinition.html(),
+        text    : this.currentDefinition.find('.content').html(),
         word_id : this.currentDefinition.data('word-id'),
         word    : this.currentDefinition.data('word')
       }
