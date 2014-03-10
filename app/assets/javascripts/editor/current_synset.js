@@ -35,13 +35,17 @@
 
       var accordionView = {
         hasSamples     : function() { return this.samples.length > 0 },
+        hasDefinitions : function() { return this.definitions.length > 0 },
         definitions    : data.definitions,
         words          : data.words,
         allow_destroy  : data.allow_destroy,
         allow_approve  : data.allow_approve
       }
 
-      this.currentSynset       = $(Mustache.render(this.o.template, accordionView))
+      this.currentSynset       = $(Mustache.render(this.o.template, accordionView, {
+        word:       this.o.wordTemplate,
+        definition: this.o.definitionTemplate
+      }))
       this.accordions = this.currentSynset.find('.accordion')
       this.currentSynsetId     = data.id
       this.timestamp = data.timestamp

@@ -139,7 +139,7 @@
             <ol id="synset-samples">
               {{#hasSamples}}
                 {{#samples}}
-                  <li data-id={{id}}>{{&text}}</li>
+                  {{>definition}}
                 {{/samples}}
               {{/hasSamples}}
             </ol>
@@ -153,10 +153,6 @@
             {{#hasDefinitions}}
               {{#definitions}}
                 {{>definition}}
-                <li data-id="{{id}}">
-                  {{&text}}
-                  <i title="Удалить" class="icon icon-remove"></i>
-                </li>
               {{/definitions}}
             {{/hasDefinitions}}
           </ol>
