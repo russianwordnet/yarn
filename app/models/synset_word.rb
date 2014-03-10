@@ -23,4 +23,10 @@ class SynsetWord < ActiveRecord::Base
 
   has_and_belongs_to_many :marks,
     join_table: 'current_synset_words_marks'
+
+
+private
+  def definition_ids
+    raise 'Use #definitions_ids instead'
+  end
 end
