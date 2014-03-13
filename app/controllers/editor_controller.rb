@@ -243,14 +243,6 @@ class EditorController < ApplicationController
     end
   end
 
-  def words_to_definitions
-    @words_to_definitions ||= @word.raw_synset_words.inject({}) do |h, rsw|
-      rsw.synsets.where(deleted_at: nil).map(&:definitions_ids).flatten.each { |id| h[id] = Array.wrap(h[id]) << rsw }
-
-      h
-    end
-  end
-
   def timestamp_required
     head 500 unless params[:timestamp].present?
   end
