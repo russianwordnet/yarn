@@ -41,14 +41,6 @@ class Synset < ActiveRecord::Base
     sort { |(_, s1), (_, s2)| s2.size <=> s1.size }
   end
 
-  def words_with_default_first
-    return words_without_default_first unless default_synset_word_id
-    words = words_without_default_first.dup
-
-    words.delete(default_synset_word)
-    words.prepend(default_synset_word)
-  end
-  alias_method_chain :words, :default_first
 
   def destroy
     update_with_tracking { |s| s.deleted_at = Time.now.utc }
