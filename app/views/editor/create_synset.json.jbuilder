@@ -3,9 +3,13 @@ json.allow_destroy current_user && @synset.allow_destroy_by?(current_user)
 json.allow_approve current_user && current_user.admin?
 json.timestamp Time.now.to_f
 
-json.default_definition Array.wrap(@synset.default_definition) do |definition|
-  json.id   definition.id
-  json.text definition.text
+json.default_definition do
+  if @synset.default_definition.blank?
+    json.null!
+  else
+    json.id   @synset.default_definition.id
+    json.text @synset.default_definition.text
+  end
 end
 
 json.words @synset.words do |synset_word|

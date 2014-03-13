@@ -21,9 +21,13 @@ json.words @synset_words do |synset_word|
   end
 end
 
-json.default_definition Array.wrap(@synset.default_definition) do |definition|
-  json.id   definition.id
-  json.text definition.text
+json.default_definition do
+  if @synset.default_definition.blank?
+    json.null!
+  else
+    json.id   @synset.default_definition.id
+    json.text @synset.default_definition.text
+  end
 end
 
 json.selected_synset do

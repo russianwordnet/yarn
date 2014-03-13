@@ -220,7 +220,7 @@ class EditorController < ApplicationController
 
     @synset.update_with_tracking(author: current_user) do |synset|
       synset.words_ids = words_ids
-      synset.default_definition_id = params[:definition]
+      synset.default_definition_id = params[:definition][:id] if params[:definition].present?
     end
     @synset.reload
     render 'create_synset'

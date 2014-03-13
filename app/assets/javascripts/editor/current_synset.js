@@ -308,7 +308,7 @@
       this.currentSynset.find('#synset-definitions i.icon-flag').off('click', '**').click($.proxy(function(e) {
         var definition_id = $(e.currentTarget).closest('li').data('id')
 
-        this.default_definition = definition_id
+        this.default_definition = {id: definition_id}
         this.save()
       }, this))
     },
