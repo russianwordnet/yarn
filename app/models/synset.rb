@@ -51,8 +51,7 @@ class Synset < ActiveRecord::Base
   alias_method_chain :words, :default_first
 
   def destroy
-    update_from(self)
-    update_attribute(:deleted_at, Time.now.utc)
+    update_with_tracking { |s| s.deleted_at = Time.now.utc }
   end
 
   def origin_author
