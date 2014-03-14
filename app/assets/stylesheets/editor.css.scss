@@ -291,6 +291,11 @@
     }
   }
 
+  #current-word {
+    color: white;
+    background-color: $base-gray;
+  }
+
   .dashed-link {
     border-bottom: 1px dashed rgba(0, 96, 192, 0.25);
     @include background-image(none);

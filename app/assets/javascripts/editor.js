@@ -1,6 +1,5 @@
 //= require editor/word_picker
 //= require editor/add_to_current_synset_button
-//= require editor/definitions
 //= require editor/definition
 //= require editor/synonymes
 //= require editor/synsets
@@ -12,7 +11,6 @@
     // Editor options
     var o = $.extend({
       wordPicker    : $.fn.WordPicker,
-      definitions   : $.fn.EditorDefinitions,
       definition    : $.fn.EditorDefinition,
       synonymes     : $.fn.EditorSynonymes,
       synsets       : $.fn.EditorSynsets,
@@ -52,7 +50,6 @@
 
       build: function(data) {
         this.addToCurrentSynsetButton = null
-        this.definitions   = null
         this.definition    = null
         this.synonymes     = null
         this.synsets       = null
@@ -92,14 +89,6 @@
             if (this.currentSynset.isDisplayed())
               this.currentSynset.highlightOff()
           }, this),
-        })
-
-        // Create definitions area
-        this.definitions = new o.definitions(this.data, {
-          onAfterRender: $.proxy(function() {
-            this.addToCurrentSynsetButton.adjustHeight()
-            this.currentSynset.remove()
-          }, this)
         })
 
         // Create synonymes area

@@ -80,8 +80,7 @@ class EditorController < ApplicationController
       Word.find(params[:word_id])
     end
 
-    @raw_synonyms = @word.raw_synonyms.where(deleted_at: nil)
-    @definitions = Definition.joins(:raw_definition).where(deleted_at: nil, raw_definitions: {word_id: @word.id})
+    @raw_synonyms = @word.raw_synonyms.where(deleted_at: nil).prepend(@word)
     @synonyms_definitions =  Definition.select('current_definitions.*, word_id').
                                         joins(:raw_definition).
                                         where(raw_definitions: {word_id: @raw_synonyms.map(&:id)}).
@@ -229,7 +228,7 @@ class EditorController < ApplicationController
   protected
 
   def build_samples
-    definition_ids = @definitions.map(&:id) + @synonyms_definitions.values.flatten.map(&:id)
+    definition_ids = @synonyms_definitions.values.flatten.map(&:id)
 
     @samples = Sample.select('current_examples.*, definition_id').
                       joins(:raw_example => :raw_definition).

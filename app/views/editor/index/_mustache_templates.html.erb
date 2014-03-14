@@ -43,7 +43,7 @@
       <!-- {{#count}}{{/count}} -->
       <div class="accordion-group">
         <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#synonymes" href="#collapse-{{word_id}}">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#synonymes" href="#collapse-{{word_id}}" {{#expandFirst}} id="current-word" {{/expandFirst}}>
             {{#hasDefinitions}}
               {{#expandFirst}}<i class="icon icon-caret-down"></i>{{/expandFirst}}
               {{^expandFirst}}<i class="icon icon-caret-right"></i>{{/expandFirst}}

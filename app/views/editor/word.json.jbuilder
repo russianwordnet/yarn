@@ -1,16 +1,5 @@
 json.(@word, :id, :word)
 
-json.definitions @definitions do |definition|
-  json.id   definition.id
-  json.text definition.text
-  json.word_id @word.id
-  json.word    @word.word
-  json.samples @samples[definition.id] do |sample|
-    json.id   sample[:id]
-    json.text sample[:text]
-  end
-end
-
 json.synonymes @raw_synonyms do |synonym|
   json.word_id synonym.id
   json.word    synonym.word
