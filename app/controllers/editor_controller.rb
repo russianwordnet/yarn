@@ -237,7 +237,7 @@ class EditorController < ApplicationController
                       group_by(&:definition_id)
 
     @samples.inject({}) do |hash, (definition_id, samples)|
-      hash[definition_id] = samples.map! {|sample| '%s (%s)' % [sample.text, sample.source || 'н/д'] }
+      hash[definition_id] = samples.map! {|sample| {id: sample.id, text: '%s (%s)' % [sample.text, sample.source || 'н/д']} }
 
       hash
     end

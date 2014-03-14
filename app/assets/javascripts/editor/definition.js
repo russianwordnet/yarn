@@ -70,7 +70,10 @@
         id      : this.currentDefinition.data('id'),
         text    : this.currentDefinition.find('.content').html(),
         word_id : this.currentDefinition.data('word-id'),
-        word    : this.currentDefinition.data('word')
+        word    : this.currentDefinition.data('word'),
+        samples : $.map(this.currentDefinition.find('.sample li'), function(obj) {
+          return {id: $(obj).data('id'), text: $(obj).text()}
+        })
       }
     },
 

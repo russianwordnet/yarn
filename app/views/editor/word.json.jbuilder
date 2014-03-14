@@ -5,7 +5,10 @@ json.definitions @definitions do |definition|
   json.text definition.text
   json.word_id @word.id
   json.word    @word.word
-  json.samples @samples[definition.id]
+  json.samples @samples[definition.id] do |sample|
+    json.id   sample[:id]
+    json.text sample[:text]
+  end
 end
 
 json.synonymes @raw_synonyms do |synonym|
@@ -17,7 +20,10 @@ json.synonymes @raw_synonyms do |synonym|
     json.text    definition.text
     json.word_id synonym.id
     json.word    synonym.word
-    json.samples @samples[definition.id]
+    json.samples @samples[definition.id] do |sample|
+      json.id   sample[:id]
+      json.text sample[:text]
+    end
   end
 end
 

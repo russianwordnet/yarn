@@ -235,10 +235,10 @@
       $('#synset-words').toggleClass('active')
     },
 
-    addSample: function(sample, synset_word_id) {
-      var synset_word = $.grep(this.selectedWords, function(obj, i) { return obj.synset_word_id == synset_word_id }).pop()
+    addSample: function(sample, synset_word_id, save) {
+      if (save == undefined) { save = true }
 
-      if (synset_word == undefined) { return }
+      var synset_word = $.grep(this.selectedWords, function(obj, i) { return obj.synset_word_id == synset_word_id }).pop()
       if ($.grep(synset_word.samples, function(obj, i) { return obj.id == sample.id }).length) { return }
 
       synset_word.samples.push(sample)
@@ -247,29 +247,40 @@
 
       $('#content-collapse-' + synset_word_id + ' ol#samples').append(newSample)
       this.handleRemoveSample()
-      this.save()
+
+      if (save) { this.save() }
     },
 
     addDefinition: function(definition, synset_word_id) {
-      var synset_word
-
       this.addWord({ id : definition.word_id, word : definition.word })
 
-      if(synset_word_id != undefined)
-        synset_word = $.grep(this.selectedWords, function(obj, i) { return obj.synset_word_id == synset_word_id }).pop()
-      else
-        synset_word = $.grep(this.selectedWords, function(obj, i) { return obj.id == definition.word_id }).pop()
-
+      var synset_word = this.findSynsetWord(synset_word_id, definition.word_id)
       if (synset_word == undefined) { return }
-      if ($.grep(synset_word.definitions, function(obj, i) { return obj.id == definition.id }).length) { return }
 
-      synset_word.definitions.push(definition)
+      if (definition.samples != undefined && definition.samples.length > 0) {
+        $.map(definition.samples, $.proxy(function(sample) {
+          return this.addSample(sample, synset_word.synset_word_id, false)
+        }, this))
+      }
 
-      var newDefinition = $(Mustache.render(this.o.definitionTemplate, definition))
+      delete definition.samples
 
-      $('#content-collapse-' + synset_word.id + ' ol#synset-definitions').append(newDefinition)
-      this.handleRemoveDefinition()
+      if (!$.grep(synset_word.definitions, function(obj, i) { return obj.id == definition.id }).length) {
+        synset_word.definitions.push(definition)
+        var newDefinition = $(Mustache.render(this.o.definitionTemplate, definition))
+
+        $('#content-collapse-' + synset_word.id + ' ol#synset-definitions').append(newDefinition)
+        this.handleRemoveDefinition()
+      }
+
       this.save()
+    },
+
+    findSynsetWord: function(synset_word_id, word_id) {
+      if(synset_word_id != undefined)
+        return $.grep(this.selectedWords, function(obj, i) { return obj.synset_word_id == synset_word_id }).pop()
+      else
+        return $.grep(this.selectedWords, function(obj, i) { return obj.id == word_id }).pop()
     },
 
     handleRemoveDefinition: function() {
