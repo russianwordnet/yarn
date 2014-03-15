@@ -377,7 +377,7 @@ ActiveRecord::Schema.define(version: 20140308194904) do
   end
 
   add_index "raw_synset_words", ["author_id"], name: "index_raw_synset_words_on_author_id", using: :btree
-  add_index "raw_synset_words", ["examples_ids"], name: "index_raw_synset_words_on_examples_ids", using: :gin
+  add_index "raw_synset_words", ["examples_ids"], name: "index_raw_synset_words_on_examples_ids", using: :btree
   add_index "raw_synset_words", ["marks"], name: "index_raw_synset_words_on_marks", using: :btree
   add_index "raw_synset_words", ["nsg"], name: "index_raw_synset_words_on_nsg", using: :btree
   add_index "raw_synset_words", ["word_id"], name: "index_raw_synset_words_on_word_id", using: :btree
