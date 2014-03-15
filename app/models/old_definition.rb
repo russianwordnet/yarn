@@ -1,6 +1,8 @@
 class OldDefinition < ActiveRecord::Base
   self.table_name = 'definitions'
 
+  include Yarn::Trackable::Tail
+
   belongs_to :origin, class_name: 'Definition', foreign_key: 'definition_id',
     :inverse_of => :old_definitions
 

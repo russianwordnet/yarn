@@ -126,6 +126,12 @@ class EditorController < ApplicationController
     render 'create_definition'
   end
 
+  def update_definition
+    @definition = Definition.find(params[:id])
+
+    @definition.update_with_tracking(params[:definition].permit(:text, :source, :uri))
+  end
+
   def create_sample
     synset_word = SynsetWord.find(params[:synset_word_id])
 

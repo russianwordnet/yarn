@@ -1,6 +1,8 @@
 class Definition < ActiveRecord::Base
   self.table_name = 'current_definitions'
 
+  include Yarn::Trackable::Head
+
   attr_accessible :text, :source, :uri
 
   belongs_to :author, class_name: 'User'

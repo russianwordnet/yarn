@@ -59,6 +59,7 @@
       this.handleRemoveDefinition()
       this.handleRemoveSample()
       this.handleSetDefaultDefinition()
+      this.handleEditSynsetDefinition()
       this.handleEditMarksBtn()
       this.handleDeleteButton()
       this.handleApproveButton()
@@ -177,6 +178,69 @@
           this.timestamp = data.timestamp
 
           this.addSample(data, params.synset_word_id)
+
+          modal.modal('hide')
+        }, this))
+      }, this))
+
+      // Submit form on click on dialog primary button
+      modal.find('button.btn-primary').off().click(function() {
+        form.submit()
+      })
+    },
+
+    handleEditSynsetDefinition: function() {
+      var modal = $('#add-definition-modal')
+      var form    = modal.find('form')
+
+      $(document).on('click', '#default-definition i.icon-pencil', $.proxy(function() {
+        if (this.default_definition) {
+          form.find('[name=text]').val(this.default_definition.text)
+          form.find('[name=source]').val(this.default_definition.source)
+          form.find('[name=uri]').val(this.default_definition.uri)
+        }
+
+        modal.modal()
+      }, this))
+
+      // Reset modal form
+      modal.on('hidden', function() {
+        form[0].reset()
+      })
+
+      // Add validators and its callbacks
+      form.validate({
+        rules: {
+          text: {
+            required: true
+          }
+        },
+        highlight: function(element) {
+          $(element).closest('.control-group').removeClass('success').addClass('error');
+        },
+        success: function(element) {
+          element.addClass('valid').closest('.control-group').removeClass('error')
+        }
+      })
+
+      // What to do on submit
+      form.off().on('submit', $.proxy(function(e) {
+        e.preventDefault()
+        if (!form.valid()) return
+
+        var definition = $(e.currentTarget).serializeObject()
+        definition.id = this.default_definition.id
+
+        params = {
+          id         : definition.id,
+          definition : definition
+        }
+
+        $.post('/editor/update_definition.json', params, $.proxy(function(data) {
+          this.timestamp = data.timestamp
+          this.default_definition = definition
+
+          $('#default-definition > div').text(definition.text)
 
           modal.modal('hide')
         }, this))

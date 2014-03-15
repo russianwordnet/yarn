@@ -25,8 +25,10 @@ json.default_definition do
   if @synset.default_definition.blank?
     json.null!
   else
-    json.id   @synset.default_definition.id
-    json.text @synset.default_definition.text
+    json.id     @synset.default_definition.id
+    json.text   @synset.default_definition.text
+    json.source @synset.default_definition.source
+    json.uri    @synset.default_definition.uri
   end
 end
 

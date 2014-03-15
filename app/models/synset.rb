@@ -11,6 +11,8 @@ class Synset < ActiveRecord::Base
   belongs_to :approver, class_name: 'User'
 
   belongs_to :default_definition, class_name: 'Definition'
+  accepts_nested_attributes_for :default_definition
+
   belongs_to :default_synset_word, class_name: 'SynsetWord'
 
   before_save do |synset|
