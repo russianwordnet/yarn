@@ -12,7 +12,7 @@ json.default_definition do
   end
 end
 
-json.words @synset.words do |synset_word|
+json.words @synset.words_with_default_first do |synset_word|
   json.id               synset_word.word.id
   json.synset_word_id   synset_word.id
   json.word             synset_word.word.word

@@ -20,7 +20,7 @@ class SynsetsController < ApplicationController
 
   def show
     @definitions = @synset.definitions
-    @synset_words = @synset.words
+    @synset_words = @synset.words_with_default_first
     @lexemes = @synset.lexemes.to_a
   end
 

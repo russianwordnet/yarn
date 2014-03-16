@@ -21,6 +21,14 @@ class Synset < ActiveRecord::Base
     end
   end
 
+  def words_with_default_first
+    return words.to_a unless default_synset_word_id
+    result = words.to_a
+  
+    result.delete(default_synset_word)
+    result.prepend(default_synset_word)
+  end
+
   has_and_belongs_to_many :words, class_name: 'SynsetWord',
     join_table: 'current_synsets_synonyms'
 

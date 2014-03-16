@@ -60,6 +60,7 @@
       this.handleRemoveSample()
       this.handleSetDefaultDefinition()
       this.handleEditSynsetDefinition()
+      this.handleSetDefaultSynsetWord()
       this.handleEditMarksBtn()
       this.handleDeleteButton()
       this.handleApproveButton()
@@ -286,6 +287,21 @@
         this.save()
       }, this))
     },
+
+     handleSetDefaultSynsetWord: function() {
+       this.currentSynset.off('click', '.synset_word i.icon-flag').on('click', '.synset_word i.icon-flag', $.proxy(function(e) {
+        var item = $(e.currentTarget).closest('a')
+ 
+        $.post('/editor/set_default_synset_word',
+        {
+          synset_id       : this.currentSynsetId,
+          synset_word_id  : item.data('synset-word-id')
+        },
+        $.proxy( function(data) {
+          this.render(data)
+        }, this))
+       }, this))
+     },
 
     highlightOn: function() {
       $('#current-synset').addClass('active')
