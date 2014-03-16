@@ -173,7 +173,7 @@ class EditorController < ApplicationController
     synset_word = SynsetWord.find(params[:synset_word_id])
     return head 409 if params[:timestamp].to_f < synset_word.updated_at.to_f
 
-    synset_word.update_with_tracking(marks_ids: Array.wrap(params[:marks]), author: current_user)
+    synset_word.update_with_tracking(marks_ids: Array.wrap(params[:marks]).map(&:to_i), author: current_user)
 
     show_synset
   end
