@@ -33,7 +33,7 @@
         count          : function() { return function (text, render) { return counter++ } },
         hasDefinitions : function() { return this.definitions.length > 0 },
         expandFirst    : function() { return counter == 1 },
-        hasSamples     : function() { return this.samples != null },
+        hasSamples     : function() { return this.samples != null && this.samples.length > 0 },
         synonymes      : synonymes
       }
 
