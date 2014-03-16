@@ -81,20 +81,18 @@
     </div>
     <section class='p5' id='default-definition'>
       <strong>Главное определение:</strong>
-      <div>
-        {{#default_definition}}
-          <div data-id="{{id}}">
-            {{&text}}
-            <i title="Редактировать" class="icon icon-pencil"></i>
-          </div>
-        {{/default_definition}}
-        {{^default_definition}}
-          <div>
-            н/д
-            <i title="Редактировать" class="icon icon-pencil"></i>
-          </div>
-        {{/default_definition}}
-      </div>
+      {{#default_definition}}
+        <div data-id="{{id}}" class='inline p5'>
+          {{&text}}
+          <i title="Редактировать" class="icon icon-pencil"></i>
+        </div>
+      {{/default_definition}}
+      {{^default_definition}}
+        <div class='inline p5'>
+          н/д
+          <i title="Редактировать" class="icon icon-pencil"></i>
+        </div>
+      {{/default_definition}}
     </section>
 
     {{#allow_destroy}}
