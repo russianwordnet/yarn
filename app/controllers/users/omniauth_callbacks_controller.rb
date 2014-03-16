@@ -1,4 +1,6 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  skip_before_action :verify_authenticity_token unless Rails.env.production?
+
   def action_missing(provider)
     return redirect_to root_url if user_signed_in?
 
