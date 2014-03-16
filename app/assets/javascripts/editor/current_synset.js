@@ -277,6 +277,7 @@
 
     handleRemoveWord: function() {
       this.currentSynset.off('click', '.synset_word i.icon-remove').on('click', '.synset_word i.icon-remove', $.proxy(function(e) {
+        if (this.selectedWords.length == 1) { return }
         var item = $(e.currentTarget).closest('a')
 
         this.selectedWords = $.grep(this.selectedWords, function(obj) {
