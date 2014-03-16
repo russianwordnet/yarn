@@ -1,6 +1,5 @@
 <div id="editor-bar">
   <div class="container">
-
     <h2>
       <%= link_to 'YARN', root_url %> &nbsp
       Редактор синсетов
@@ -16,7 +15,9 @@
       <%= render 'editor/index/right_pane' %>
     </div>
 
+    <% # Refactor this %>
     <%= render 'editor/index/add_definition_modal' %>
+    <%= render 'editor/index/edit_definition_modal' %>
     <%= render 'editor/index/add_sample_modal' %>
   </div>
 </div>

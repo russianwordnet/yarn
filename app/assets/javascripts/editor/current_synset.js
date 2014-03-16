@@ -190,7 +190,7 @@
     },
 
     handleEditSynsetDefinition: function() {
-      var modal = $('#add-definition-modal')
+      var modal = $('#edit-definition-modal')
       var form    = modal.find('form')
 
       $(document).on('click', '#default-definition i.icon-pencil', $.proxy(function() {
