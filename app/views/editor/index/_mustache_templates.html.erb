@@ -134,18 +134,6 @@
       </div>
       <div id="content-collapse-{{id}}" class="accordion-body collapse" data-id="{{id}}">
         <div class="accordion-inner">
-          <strong>Пример(ы) употребления:</strong>
-            <ol id="synset-samples">
-              {{#hasSamples}}
-                {{#samples}}
-                  {{>sample}}
-                {{/samples}}
-              {{/hasSamples}}
-            </ol>
-          <div>
-            <a id="synset-word-add-sample" href="#add-sample-modal" data-toggle="modal" class="dashed-link" data-id="{{synset_word_id}}"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить пример употребления</a>
-          </div>
-
           <strong>Определения:</strong>
           
           <ol id="synset-definitions">
@@ -157,6 +145,18 @@
           </ol>
           <div>
             <a id="synset-word-add-definition" href="#add-definition-modal" data-toggle="modal" data-id="{{synset_word_id}}" class="dashed-link"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить определение</a>
+          </div>
+
+          <strong>Пример(ы) употребления:</strong>
+            <ol id="synset-samples">
+              {{#hasSamples}}
+                {{#samples}}
+                  {{>sample}}
+                {{/samples}}
+              {{/hasSamples}}
+            </ol>
+          <div>
+            <a id="synset-word-add-sample" href="#add-sample-modal" data-toggle="modal" class="dashed-link" data-id="{{synset_word_id}}"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить пример употребления</a>
           </div>
         </div>
       </div>
