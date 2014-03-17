@@ -39,5 +39,5 @@ json.selected_synset do
   else
     json.text "Пустой синсет №#{@synset.id}"
   end
-  json.first_definition  @synset.default_definition.try(:text)
+  json.first_definition  @synset.default_definition.try(:text) || @synset.definitions.first.try(:text)
 end
