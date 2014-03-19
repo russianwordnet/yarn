@@ -114,18 +114,6 @@ class EditorController < ApplicationController
     render 'create_synset'
   end
 
-  def create_definition
-    synset_word = SynsetWord.find(params[:synset_word_id])
-
-    @definition = Definition.new(params[:definition])
-    @definition.author = current_user
-    @definition.save!
-
-    synset_word.update_with_tracking(author: current_user) {|synset| synset.definitions_ids += [@definition.id]}
-
-    render 'create_definition'
-  end
-
   def update_definition
     @definition = Definition.find(params[:id])
 

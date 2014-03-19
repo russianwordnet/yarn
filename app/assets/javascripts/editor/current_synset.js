@@ -23,7 +23,6 @@
 
     initialize: function(o) {
       this.o = o
-      this.handleAddCustomDefinition()
       this.handleAddCustomSample()
     },
 
@@ -76,62 +75,6 @@
 
     remove: function() {
       $('#current-synset').remove()
-    },
-
-    handleAddCustomDefinition: function() {
-      var modal = $('#add-definition-modal')
-      var form    = modal.find('form')
-
-      $(document).on('click', '#synset-word-add-definition', function() {
-        var synset_word_id = $(this).data('id')
-
-        modal.find('[name=synset_word_id]').val(synset_word_id)
-      })
-
-      // Reset modal form
-      modal.on('hidden', function() {
-        form[0].reset()
-      })
-
-      // Add validators and its callbacks
-      form.validate({
-        rules: {
-          text: {
-            required: true
-          }
-        },
-        highlight: function(element) {
-          $(element).closest('.control-group').removeClass('success').addClass('error');
-        },
-        success: function(element) {
-          element.addClass('valid').closest('.control-group').removeClass('error')
-        }
-      })
-
-      // What to do on submit
-      form.off().on('submit', $.proxy(function(e) {
-        e.preventDefault()
-        if (!form.valid()) return
-
-        var params = {
-          definition      : $(e.currentTarget).serializeObject(),
-          synset_id       : this.currentSynsetId,
-          synset_word_id  : $(e.currentTarget).siblings('[name=synset_word_id]').val()
-        }
-
-        // Add new definition
-        $.post('/editor/create_definition.json', params, $.proxy(function(data) {
-          this.timestamp = data.timestamp
-          this.addDefinition(data, params.synset_word_id)
-
-          modal.modal('hide')
-        }, this))
-      }, this))
-
-      // Submit form on click on dialog primary button
-      modal.find('button.btn-primary').off().click(function() {
-        form.submit()
-      })
     },
 
     handleAddCustomSample: function() {

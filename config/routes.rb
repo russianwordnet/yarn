@@ -68,7 +68,6 @@ Yarn::Application.routes.draw do
     post 'set_default_definition', :as => :set_default_definition
     post 'set_default_synset_word', :as => :set_default_synset_word
     post 'create_synset', :as => :create_synset
-    post 'create_definition', :as => :create_definition
     post 'update_definition', :as => :update_definition
     post 'create_sample', :as => :create_sample
     post 'edit_marks', :as => :edit_marks
