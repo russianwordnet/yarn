@@ -194,8 +194,8 @@ class EditorController < ApplicationController
     lexemes = (params[:lexemes].values || [])
 
     words_ids = lexemes.map do |word|
-      synset_word = if words_mapping[word[:id]]
-        SynsetWord.find(words_mapping[word[:id]].id)
+      synset_word = if words_mapping[word[:id].to_i]
+        words_mapping[word[:id].to_i]
       else
         synset_word = SynsetWord.new
         synset_word.word_id = word[:id]
