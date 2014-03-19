@@ -200,7 +200,6 @@ class EditorController < ApplicationController
         synset_word = SynsetWord.new
         synset_word.word_id = word[:id]
         synset_word.author = current_user
-        synset_word.save
 
         synset_word
       end
