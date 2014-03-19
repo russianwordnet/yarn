@@ -43,7 +43,7 @@ end
 
 json.selected_synset do
   json.id @synset.id
-  if (synset_words = @synset.words.to_a).any?
+  if (synset_words = @synset.words_with_default_first).any?
     json.text synset_words.uniq(&:word_id).map(&:word).map(&:word).join ', '
   else
     json.text "Пустой синсет №#{@synset.id}"
