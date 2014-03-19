@@ -253,7 +253,8 @@
       })
     },
 
-    addWord: function(word) {
+    addWord: function(word, save) {
+      if (save == undefined) { save = true }
       if(word.id == undefined || word.word == undefined) { return }
       // Do not add new word if already exists
       if ($.grep(this.selectedWords, function(obj, i) { return obj.id == word.id }).length) {
@@ -272,7 +273,7 @@
 
       $('#synset-words').append(newWord)
       this.handleRemoveWord()
-      this.save()
+      if (save) { this.save() }
     },
 
     handleRemoveWord: function() {
@@ -333,7 +334,7 @@
     },
 
     addDefinition: function(definition, synset_word_id) {
-      this.addWord({ id : definition.word_id, word : definition.word })
+      this.addWord({ id : definition.word_id, word : definition.word }, false)
 
       var synset_word = this.findSynsetWord(synset_word_id, definition.word_id)
       if (synset_word == undefined) { return }
