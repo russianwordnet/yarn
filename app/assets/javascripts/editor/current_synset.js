@@ -1,15 +1,16 @@
 (function( $ ) {
   $.fn.EditorCurrentSynset = function(o) {
     var o = $.extend({
-      template           : $('#current-synset-tpl').text(),
-      wordTemplate       : $('#word-tpl').text(),
-      definitionTemplate : $('#definition-tpl').text(),
-      sampleTemplate     : $('#sample-tpl').text(),
-      marksPicker        : $.fn.MarksPicker,
-      onRemoveDefinition : function(definitionId) {},
-      onRemoveSample     : function(sampleId) {},
-      onAfterRender      : function(data) {},
-      onExpandAccordion  : function(accordion) { },
+      template                : $('#current-synset-tpl').text(),
+      wordTemplate            : $('#word-tpl').text(),
+      definitionTemplate      : $('#definition-tpl').text(),
+      defaultDefitionTemplate : $('#default-definition-tpl').text(),
+      sampleTemplate          : $('#sample-tpl').text(),
+      marksPicker             : $.fn.MarksPicker,
+      onRemoveDefinition      : function(definitionId) {},
+      onRemoveSample          : function(sampleId) {},
+      onAfterRender           : function(data) {},
+      onExpandAccordion       : function(accordion) { },
     }, o)
 
     this.initialize(o)
@@ -42,10 +43,11 @@
         allow_approve      : data.allow_approve
       }
 
-      this.currentSynset       = $(Mustache.render(this.o.template, accordionView, {
-        word:       this.o.wordTemplate,
-        definition: this.o.definitionTemplate,
-        sample:     this.o.sampleTemplate
+      this.currentSynset = $(Mustache.render(this.o.template, accordionView, {
+        word:               this.o.wordTemplate,
+        definition:         this.o.definitionTemplate,
+        default_definition: this.o.defaultDefitionTemplate,
+        sample:             this.o.sampleTemplate
       }))
       this.accordions = this.currentSynset.find('.accordion')
       this.currentSynsetId = data.id
@@ -173,10 +175,9 @@
         if (!form.valid()) return
 
         var definition = $(e.currentTarget).serializeObject()
-        definition.id = this.default_definition.id
 
         params = {
-          id         : definition.id,
+          id         : this.currentSynsetId,
           definition : definition
         }
 
@@ -184,7 +185,8 @@
           this.timestamp = data.timestamp
           this.default_definition = definition
 
-          $('#default-definition > div').text(definition.text)
+          var defaultDefinition = $(Mustache.render(this.o.defaultDefitionTemplate, definition))
+          $('#default-definition').html(defaultDefinition)
 
           modal.modal('hide')
         }, this))

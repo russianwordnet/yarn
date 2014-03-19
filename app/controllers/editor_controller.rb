@@ -115,9 +115,12 @@ class EditorController < ApplicationController
   end
 
   def update_definition
-    @definition = Definition.find(params[:id])
+    synset = Synset.find(params[:id])
+    @definition = synset.default_definition || Definition.new
 
     @definition.update_with_tracking(params[:definition].permit(:text, :source, :uri))
+
+    synset.update_with_tracking(default_definition_id: @definition.id) if synset.default_definition.blank?
   end
 
   def create_sample

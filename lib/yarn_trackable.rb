@@ -35,6 +35,8 @@ module Yarn::Trackable
     end
 
     def need_track?
+      return false if new_record?
+
       send(self.class.history_association).last.blank? ||
       send(self.class.history_association).last.created_at < 12.hours.ago ||
       send(self.class.history_association).last.author_id != author_id
