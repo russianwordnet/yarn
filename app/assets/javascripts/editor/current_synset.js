@@ -34,9 +34,12 @@
       this.displayed           = true
       this.selectedWords       = data.words
 
+      var currentWord = this.currentWord
+
       var accordionView = {
         hasSamples         : function() { return this.samples.length > 0 },
         hasDefinitions     : function() { return this.definitions.length > 0 },
+        currentWord        : function() { return this.id == currentWord },
         default_definition : data.default_definition,
         words              : data.words,
         allow_destroy      : data.allow_destroy,
@@ -69,8 +72,8 @@
       this.o.onAfterRender(data)
 
       this.accordions
-        .on('show', this.toggleIcon)
-        .on('hide', this.toggleIcon)
+        .on('show', $.proxy(function(e) { this.toggleIcon(e); this.setCurrentWord(e) }, this))
+        .on('hide', $.proxy(function(e) { this.toggleIcon(e); this.clearCurrentWord(e) }, this))
         .on('shown', $.proxy(this.fireOnExpandAccordion, this))
         .on('hidden', $.proxy(this.fireOnExpandAccordion, this))
     },
@@ -430,6 +433,16 @@
       } else {
         icon.removeClass('icon-caret-down').addClass('icon-caret-right')
       }
+    },
+
+    setCurrentWord: function(e) {
+      var id = $(e.target).closest('.accordion-group').find('.accordion-toggle').data('id')
+
+      this.currentWord = id
+    },
+
+    clearCurrentWord: function(e) {
+      this.currentWord = null
     },
 
     fireOnExpandAccordion: function() {

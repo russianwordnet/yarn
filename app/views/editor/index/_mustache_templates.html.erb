@@ -106,7 +106,8 @@
     <div class="accordion-group">
       <div class="accordion-heading">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#synset-words" data-id="{{id}}" data-synset-word-id="{{synset_word_id}}" href="#content-collapse-{{id}}">
-          <i class="icon icon-collapse icon-caret-right"></i>
+          {{#currentWord}}<i class="icon icon-collapse icon-caret-down"></i>{{/currentWord}}
+          {{^currentWord}}<i class="icon icon-collapse icon-caret-right"></i>{{/currentWord}}
           &nbsp;
           {{word}}
 
@@ -126,7 +127,7 @@
           </span>
         </a>
       </div>
-      <div id="content-collapse-{{id}}" class="accordion-body collapse" data-id="{{id}}">
+      <div id="content-collapse-{{id}}" class="accordion-body collapse {{#currentWord}}in{{/currentWord}}" data-id="{{id}}">
         <div class="accordion-inner">
           <strong>Определения:</strong>
           
