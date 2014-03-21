@@ -52,7 +52,7 @@ namespace :yarn do
           xml.synsets do
             Synset.where(deleted_at: nil).find_each do |synset|
               xml.synsetEntry(version[synset]) do
-                synset.words_without_default_first.where(deleted_at: nil).each do |synset_word|
+                synset.words.where(deleted_at: nil).each do |synset_word|
                   xml.word({ ref: xmlid[synset_word.word], nonStandardGrammar: !!synset_word.nsg }.compact) do
                     synset_word.marks.each do |mark|
                       xml.mark(mark.name)
