@@ -1,0 +1,36 @@
+<div id="edit-definition-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="add-definition-modal-label" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="add-definition-modal-label">Редактировать определение</h3>
+  </div>
+  <div class="modal-body">
+    <input type="hidden" name="synset_word_id" value="">
+
+    <form class="form-horizontal" id="add-definition-form">
+      <div class="control-group">
+        <label class="control-label" for="inputText">Текст</label>
+        <div class="controls">
+          <textarea id="inputText" name="text" placeholder="Обязательно для заполнения"></textarea>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputSource">Источник</label>
+        <div class="controls">
+          <input type="text" id="inputSource" name="source">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputUri">URL</label>
+        <div class="controls">
+          <input type="text" id="inputUri" name="uri">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Отменить</button>
+    <button class="btn btn-primary">Сохранить</button>
+  </div>
+</div>

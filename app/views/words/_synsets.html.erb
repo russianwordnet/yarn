@@ -1,0 +1,29 @@
+<% if word.synset_words.size > 0 %>
+  <h3>Связанные синсеты <span class="badge"><%= word.synset_words.size %></span></h3>
+  <table class="table table-bordered table-striped">
+    <tr>
+      <th>Синсет</th>
+      <th>Пример</th>
+    </tr>
+
+    <% word.synset_words.each do |synset_word| %>
+      <% synset_word.synsets.where(deleted_at: nil).each do |synset|%>
+      <tr>
+        <td><%= link_to synset.id, synset_path(synset) %></td>
+        <td>
+          <% if synset_word.examples.size > 0%>
+            <% synset_word.examples.each do |example| %>
+              <div><%= example.text %></div>
+            <% end %>
+          <% else %>
+            &mdash;
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    <% end %>
+  </table>
+<% else %>
+  <p>Ещё нет ни одного связанного синсета.</p>
+<% end %>
+

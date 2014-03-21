@@ -1,0 +1,28 @@
+<div id="editor-bar">
+  <div class="container">
+    <h2>
+      <%= link_to 'YARN', root_url %> &nbsp
+      Редактор синсетов
+    </h2>
+    <%= render 'editor/index/searchbar' %>
+  </div>
+</div>
+
+<div id="editor-ui">
+  <div id="editor-area">
+    <div class="row-fluid">
+      <%= render 'editor/index/left_pane' %>
+      <%= render 'editor/index/right_pane' %>
+    </div>
+
+    <% # Refactor this %>
+    <%= render 'editor/index/add_definition_modal' %>
+    <%= render 'editor/index/edit_definition_modal' %>
+    <%= render 'editor/index/add_sample_modal' %>
+  </div>
+</div>
+
+<%= render 'editor/index/word_picker_modal', :words => @words, :html_class => 'word-picker-modal' %>
+<%= render 'editor/index/word_picker_modal', :words => @words, :html_class => 'synonym-picker-modal' %>
+<%= render 'editor/index/marks_picker', :marks_categories => @marks_categories %>
+<%= render 'editor/index/mustache_templates' %>

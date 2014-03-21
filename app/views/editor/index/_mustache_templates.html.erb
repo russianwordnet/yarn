@@ -1,0 +1,179 @@
+<script id="listing-tpl" type="text/html">
+  <div class="listing definitions">
+    <ul>
+      {{#definitions}}
+        <li data-id="{{id}}" data-word="{{word}}" data-word-id="{{word_id}}">
+          <div class='content'>{{&text}}</div>
+          <span><i title="Скрыть определение" class="icon icon-eye-close"></i></span>
+          {{#hasSamples}}
+            <small class="sample">
+                <strong>Пример(ы) употребления:</strong>
+                <ul>
+                  {{#samples}}
+                    <li data-id="{{id}}"> {{&text}} </li>
+                  {{/samples}}
+                </ul>
+            </small>
+          {{/hasSamples}}
+        </li>
+
+      {{/definitions}}
+    </ul>
+  </div>
+</script>
+
+<script id="synsets-tpl" type="text/html">
+  <div class="listing listing-synsets">
+    <ul>
+      {{#synsets}}
+        <li data-id="{{id}}" class="{{state}}"><strong>{{text}}</strong><span>{{&first_definition}}</span></li>
+      {{/synsets}}
+    </ul>
+  </div>
+</script>
+
+<script id="selected-synset-tpl" type="text/html">
+  <strong>{{text}}</strong><span>{{first_definition}}</span>
+</script>
+
+<script id="accordion-tpl" type="text/html">
+  <div class="accordion" id="synonymes">
+    {{#synonymes}}
+      <!-- {{#count}}{{/count}} -->
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#synonymes" href="#collapse-{{word_id}}" {{#expandFirst}} id="current-word" {{/expandFirst}}>
+            {{#hasDefinitions}}
+              {{#expandFirst}}<i class="icon icon-caret-down"></i>{{/expandFirst}}
+              {{^expandFirst}}<i class="icon icon-caret-right"></i>{{/expandFirst}}
+              &nbsp;
+            {{/hasDefinitions}}
+
+            {{word}}
+
+            <span class="add-word" title="Добавить слово в текущий синсет" data-word="{{word}}" data-word-id="{{word_id}}" >
+              <i class="icon icon-plus-sign-alt"></i>
+            </span>
+          </a>
+        </div>
+        {{#hasDefinitions}}
+          <div id="collapse-{{word_id}}" class="accordion-body collapse {{#expandFirst}}in{{/expandFirst}}">
+            <div class="accordion-inner">
+              {{>definitions}}
+            </div>
+          </div>
+        {{/hasDefinitions}}
+      </div>
+    {{/synonymes}}
+  </div>
+  <div>
+    <a href="#" id="add-synonym" class="dashed-link"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить синоним</a>
+  </div>
+</script>
+
+<script id="current-synset-tpl" type="text/html">
+  <div id="current-synset">
+    <div class="accordion" id="synset-words">
+      {{#words}}
+        {{> word}}
+      {{/words}}
+    </div>
+    <section class='p5' id='default-definition'>
+      {{#default_definition}}
+        {{>default_definition}}
+      {{/default_definition}}
+      {{^default_definition}}
+        <strong>Главное определение:</strong>
+        <div class='inline p5'>
+          н/д
+          <i title="Редактировать" class="icon icon-pencil"></i>
+        </div>
+      {{/default_definition}}
+    </section>
+
+    {{#allow_destroy}}
+      <a class='btn btn-danger' id='destroy-current-synset' href='#'> Удалить синсет </a>
+    {{/allow_destroy}}
+
+    {{#allow_approve}}
+      <a class='btn btn-success' id='approve-current-synset' href='#'> Подтвердить синсет </a>
+    {{/allow_approve}}
+  </div>
+</script>
+
+<script id="word-tpl" type="text/html">
+  {{#word}}
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#synset-words" data-id="{{id}}" data-synset-word-id="{{synset_word_id}}" href="#content-collapse-{{id}}">
+          {{#currentWord}}<i class="icon icon-collapse icon-caret-down"></i>{{/currentWord}}
+          {{^currentWord}}<i class="icon icon-collapse icon-caret-right"></i>{{/currentWord}}
+          &nbsp;
+          {{word}}
+
+          <span id ="marks">
+            {{#marks}}
+              <span class = "mark" data-id="{{id}}" data-category="{{category_id}}">{{name}}</span>
+            {{/marks}}
+
+            <span class="edit-marks">
+              <i title="Редактировать пометы" class='icon icon-pencil'></i>
+            </span>
+          </span>
+
+          <span class="pull-right synset_word">
+            <i title="Удалить" class="icon icon-remove"></i>
+            <i title="Сделать первым" class="icon icon-flag"></i>
+          </span>
+        </a>
+      </div>
+      <div id="content-collapse-{{id}}" class="accordion-body collapse {{#currentWord}}in{{/currentWord}}" data-id="{{id}}">
+        <div class="accordion-inner">
+          {{#hasDefinitions}}
+            <strong>Определения:</strong>
+
+            <ol id="synset-definitions">
+                {{#definitions}}
+                  {{>definition}}
+                {{/definitions}}
+            </ol>
+          {{/hasDefinitions}}
+          <strong>Пример(ы) употребления:</strong>
+            <ol id="synset-samples">
+              {{#hasSamples}}
+                {{#samples}}
+                  {{>sample}}
+                {{/samples}}
+              {{/hasSamples}}
+            </ol>
+          <div>
+            <a id="synset-word-add-sample" href="#add-sample-modal" data-toggle="modal" class="dashed-link" data-id="{{synset_word_id}}"><small><i class="icon icon-plus-sign"></i></small>&nbsp;Добавить пример употребления</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/word}}
+</script>
+
+<script id="definition-tpl" type="text/html">
+  <li data-id="{{id}}">
+    {{&text}}
+    <i title="Удалить" class="icon icon-remove"></i>
+    <i title="Сделать главным" class="icon icon-flag"></i>
+  </li>
+</script>
+
+<script id="default-definition-tpl" type="text/html">
+  <strong>Главное определение:</strong>
+  <div data-id="{{id}}"  class='inline p5'>
+    {{&text}}
+    <i title="Редактировать" class="icon icon-pencil"></i>
+  </div>
+</script>
+
+<script id="sample-tpl" type="text/html">
+  <li data-id="{{id}}">
+    {{&text}}
+    <i title="Удалить" class="icon icon-remove"></i>
+  </li>
+</script>
