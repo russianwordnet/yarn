@@ -22,11 +22,14 @@ module Yarn::Trackable
 
     def update_with_tracking(attrs = {}, save_method = :save)
       self.class.transaction do
-        self.class.history_class.from_origin(self).save! if need_track?
+        old_version = self.class.history_class.from_origin(self) if need_track?
 
         self.author = attrs.delete(:author) if attrs[:author].present?
         self.attributes = attrs if attrs.present?
         yield self if block_given?
+
+        return self unless self.changed?
+        old_version.save! if old_version.present?
 
         self.revision += 1
 
