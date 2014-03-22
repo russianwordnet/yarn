@@ -5,9 +5,9 @@
 <p><strong>Правок в синсетах:</strong> <%= @stats ? @stats.score : 0 %></p>
 
 <h2>Синсеты</h2>
-<% if synsets = Synset.retrieve_creators[current_user.id] %>
+<% unless @synsets.blank? %>
   <ul class="triple-columns">
-    <% synsets.each do |synset| %>
+    <% @synsets.each do |synset| %>
       <li>
         <%= link_to synset.id, synset_path(synset) %>
         <%= synset_words(synset) %>
