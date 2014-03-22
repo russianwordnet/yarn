@@ -5,7 +5,7 @@
 <p><strong>Правок в синсетах:</strong> <%= @stats ? @stats.score : 0 %></p>
 
 <h2>Синсеты</h2>
-<% if synsets = Synset.retrieve_creators(current_user.id) %>
+<% if synsets = Synset.retrieve_creators[current_user.id] %>
   <ul class="triple-columns">
     <% synsets.each do |synset| %>
       <li>
