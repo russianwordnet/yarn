@@ -20,6 +20,7 @@
 /bin/*.log
 /bin/*.pid
 /tmp
+*.swp
 
 # Ignore all database backups.
 *.sql.gz
