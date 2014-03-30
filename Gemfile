@@ -14,6 +14,8 @@ gem 'kaminari'
 gem 'cells'
 gem 'protected_attributes'
 
+gem 'dalli'
+
 gem 'rails-i18n'
 gem 'devise-i18n'
 
