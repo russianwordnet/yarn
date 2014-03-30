@@ -12,8 +12,11 @@ class SynsetWord < ActiveRecord::Base
   has_and_belongs_to_many :synsets,
     join_table: 'current_synsets_synonyms'
 
-  has_and_belongs_to_many :definitions,
-    join_table: 'current_synset_words_definitions'
+  has_many :synsets_synonyms
+  has_many :synsets, through: :synsets_synonyms
+
+  has_many :synset_words_definitions
+  has_many :definitions, through: :synset_words_definitions
 
   has_and_belongs_to_many :samples, association_foreign_key: 'example_id',
     join_table: 'current_synset_words_examples', class_name: 'Example'

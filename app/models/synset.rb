@@ -29,8 +29,8 @@ class Synset < ActiveRecord::Base
     result.prepend(default_synset_word)
   end
 
-  has_and_belongs_to_many :words, class_name: 'SynsetWord',
-    join_table: 'current_synsets_synonyms'
+  has_many :synsets_synonyms
+  has_many :words, :through => :synsets_synonyms, :source => :synset_word, class_name: 'SynsetWord'
 
   has_many :lexemes, class_name: 'Word', :through => :words, :source => :word
   has_many :definitions, :through => :words
