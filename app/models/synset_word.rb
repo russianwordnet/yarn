@@ -9,9 +9,6 @@ class SynsetWord < ActiveRecord::Base
 
   belongs_to :word, :inverse_of => :synset_words
 
-  has_and_belongs_to_many :synsets,
-    join_table: 'current_synsets_synonyms'
-
   has_many :synsets_synonyms
   has_many :synsets, through: :synsets_synonyms
 
