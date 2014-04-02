@@ -13,8 +13,8 @@ class Example < ActiveRecord::Base
 
   has_many :old_examples, -> { order 'revision' }, :inverse_of => :origin
 
-  has_and_belongs_to_many :synset_words, foreign_key: 'example_id',
-    join_table: 'current_synset_words_examples'
+  has_many :synset_words_examples
+  has_many :synset_words, :through => :synset_words_examples
 
   has_many :synsets, :through => :synset_words
   has_many :words, :through => :synset_words

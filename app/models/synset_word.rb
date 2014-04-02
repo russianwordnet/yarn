@@ -18,8 +18,8 @@ class SynsetWord < ActiveRecord::Base
   has_many :synset_words_definitions
   has_many :definitions, through: :synset_words_definitions
 
-  has_and_belongs_to_many :samples, association_foreign_key: 'example_id',
-    join_table: 'current_synset_words_examples', class_name: 'Example'
+  has_many :synset_words_examples
+  has_many :samples, :through => :synset_words_examples, :source => :example
 
   has_and_belongs_to_many :examples, association_foreign_key: 'example_id',
     join_table: 'current_synset_words_examples'
