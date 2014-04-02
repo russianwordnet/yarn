@@ -23,8 +23,8 @@ class SynsetWord < ActiveRecord::Base
 
   has_many :examples, :through => :synset_words_examples
 
-  has_and_belongs_to_many :marks,
-    join_table: 'current_synset_words_marks'
+  has_many :synset_words_marks
+  has_many :marks, :through => :synset_words_marks
 
 
 private
