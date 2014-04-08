@@ -49,6 +49,7 @@ end
 
 group :development do
   gem 'railroady'
+  gem 'meta_request'
 end
 
 group :test do
