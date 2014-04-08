@@ -138,8 +138,10 @@
 
     #searchbar-buttons {
       top: 0;
-      right: -160px;
       position: absolute;
+      left: 180px;
+      display: inline;
+      width: 240px;
     }
   }
 

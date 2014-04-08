@@ -46,6 +46,7 @@
 
         this.handlePickWordBtn()
         this.handleWordDoneBtn()
+        this.handleDeleteWordBtn()
       },
 
       build: function(data) {
@@ -162,6 +163,13 @@
         }, this))
       },
 
+      handleDeleteWordBtn: function() {
+        $('#delete-word').on('click', $.proxy(function(e) {
+          e.preventDefault()
+          this.deleteWord()
+        }, this))
+      },
+
       handleWordDoneBtn: function() {
         $('#word-is-done').on('click', $.proxy(function(e) {
           e.preventDefault()
@@ -214,6 +222,14 @@
           if(needLoadSynset && this.isSynsetPicked()) {
             this.loadSynset(this.synsetCookie())
           }
+        }, this))
+      },
+
+      deleteWord: function() {
+        var url = '/words/' + this.wordId + '.json'
+
+        $.post(url, {_method : 'delete'}, $.proxy(function() {
+          this.loadWord(this.wordId, true)
         }, this))
       },
 

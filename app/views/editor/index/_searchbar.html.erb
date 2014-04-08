@@ -6,6 +6,9 @@
     <div id="searchbar-buttons">
       <a href="#" id="word-is-done" class="btn" title="Текущее слово готово. Переход к следующему слову">Готово</a>
       <a href="#" id="pick-word" class="btn btn-link" title="Выбор другого слова">Выбрать слово</a>
+      <% if current_user.try(:admin?) %>
+        <a href="#" id="delete-word" class="btn btn-danger" title="Удалить слово">Удалить</a>
+      <% end %>
     </div>
   </div>
 </div>

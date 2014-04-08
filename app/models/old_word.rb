@@ -1,6 +1,8 @@
 class OldWord < ActiveRecord::Base
   self.table_name = 'words'
 
+  include Yarn::Trackable::Tail
+
   belongs_to :origin, class_name: 'Word', foreign_key: 'word_id',
     :inverse_of => :old_words
 

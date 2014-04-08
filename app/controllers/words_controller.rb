@@ -111,6 +111,16 @@ class WordsController < ApplicationController
     redirect_to word_url(@word)
   end
 
+  def destroy
+    if @word.destroy
+      flash[:notice] = 'Слово удалено.'
+    else
+      flash[:alert] = 'Не удалось удалить слово.'
+    end
+
+    render json: []
+  end
+
   def history
     @history = @word.old_words
   end

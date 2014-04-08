@@ -2,6 +2,8 @@
 class Word < ActiveRecord::Base
   self.table_name = 'current_words'
 
+  include Yarn::Trackable::Head
+
   paginates_per 150
 
   attr_accessible :word, :grammar, :accents, :uris, :frequency
@@ -76,5 +78,9 @@ class Word < ActiveRecord::Base
 
   def approved?
     approved_at && approver
+  end
+
+  def destroy
+    update_with_tracking { |s| s.deleted_at = Time.now.utc }
   end
 end
