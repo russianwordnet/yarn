@@ -20,8 +20,8 @@ class SynsetWord < ActiveRecord::Base
 
   has_many :examples, :through => :synset_words_examples
 
-  has_many :synset_words_marks
-  has_many :marks, :through => :synset_words_marks
+  has_many :synset_word_marks
+  has_many :marks, :through => :synset_word_marks
 
 
 private
