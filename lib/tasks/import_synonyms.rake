@@ -34,6 +34,8 @@ namespace :yarn do
                     (words[w] ||= []) << word
                   end
                 end
+
+                raise ActiveRecord::Rollback if dry
               end
             end
 
