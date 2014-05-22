@@ -27,8 +27,14 @@ namespace :yarn do
             words = Word.where(word: entries).group_by(&:word)
 
             if (diff = entries - words.keys).any?
-              diff.each { |w| puts 'Unknown word "%s"' % w }
-              raise 'Insufficient lexicon'
+              Word.transaction do
+                diff.each do |w|
+                  Word.create(word: w) do |word|
+                    word.author_id = author_id
+                    (words[w] ||= []) << word
+                  end
+                end
+              end
             end
 
             slice.each do |row|
