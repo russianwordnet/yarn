@@ -63,6 +63,8 @@ Yarn::Application.routes.draw do
     get 'word', :as => :word
     get 'next', :as => :next
 
+    get 'ruscorpora_examples', :as => :ruscorpora_examples
+
     get 'show_synset', :as => :show_synset
     get 'sample', :as => :sample
     post 'set_default_definition', :as => :set_default_definition

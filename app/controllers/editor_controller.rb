@@ -169,6 +169,23 @@ class EditorController < ApplicationController
     show_synset
   end
 
+  def ruscorpora_examples
+    uri = URI('http://search.ruscorpora.ru/download-xml.xml')
+    uri.query = { req: params[:text], text: 'lexform', mode: 'main', doc_tagging: 'manual' }.to_query
+    doc = Nokogiri::XML(Net::HTTP.get(uri)).remove_namespaces!
+
+    @examples = doc.xpath('(/Workbook/Worksheet/Table/Row)[position()>1]/Cell[last()]').map do |cell|
+      md = cell.text.strip.match(/\A(?<text>.+) +\[(?<source>.+)\] +\[.+\]\z/)
+      { source: md[:source].tap(&:strip!).gsub(/ *\((\d+(|-\d+))\)\z/, ', \1') << ', НКРЯ',
+        text: md[:text].strip }
+    end
+
+    respond_to do |format|
+      format.json { render json: @examples }
+      format.xml { render xml: @examples }
+    end
+  end
+
   #   .-´¯¯¯`-.
   # ,´         `.
   # |            \
