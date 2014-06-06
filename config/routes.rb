@@ -64,6 +64,7 @@ Yarn::Application.routes.draw do
     get 'next', :as => :next
 
     get 'ruscorpora_examples', :as => :ruscorpora_examples
+    get 'opencorpora_examples', :as => :opencorpora_examples
 
     get 'show_synset', :as => :show_synset
     get 'sample', :as => :sample

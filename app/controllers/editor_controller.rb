@@ -186,6 +186,24 @@ class EditorController < ApplicationController
     end
   end
 
+  def opencorpora_examples
+    uri = URI('http://opencorpora.org/api.php')
+    uri.query = { action: 'search', all_forms: 1, query: params[:text] }.to_query
+    doc = JSON.load(Net::HTTP.get(uri))
+
+    @examples = doc['answer']['results'].map do |result|
+      mainword = result['mainword'].to_i
+      result['context'][mainword] = '[b]%s[/b]' % result['context'][mainword]
+      { source: 'OpenCorpora',
+        text: result['context'].join(' ').gsub(/ +([,.!])/, '\1').gsub(/([«\(\[<]) /, '\1').gsub(/ ([»\)\]>])/, '\1').strip }
+    end
+
+    respond_to do |format|
+      format.json { render json: @examples }
+      format.xml { render xml: @examples }
+    end
+  end
+
   #   .-´¯¯¯`-.
   # ,´         `.
   # |            \
