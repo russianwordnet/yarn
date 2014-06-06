@@ -25,6 +25,7 @@
     initialize: function(o) {
       this.o = o
       this.handleAddCustomSample()
+      this.handleAddSampleRuscorpora()
     },
 
     render: function(data) {
@@ -136,6 +137,62 @@
       modal.find('button.btn-primary').off().click(function() {
         form.submit()
       })
+    },
+
+    handleAddSampleRuscorpora: function() {
+      var modal = $('#add-sample-ruscorpora-modal')
+
+      $(document).on('click', '#synset-word-add-sample-ruscorpora', function() {
+        var synset_word_id = $(this).data('id')
+        var synset_word = $(this).data('word')
+
+        $.getJSON('/editor/ruscorpora_examples.json', {text: synset_word}, function(data) {
+          var rendered_samples = $(Mustache.render($('#ruscorpora-sample-tpl').text(), {samples: data}, {}))
+          modal.find('#ruscorpora-samples').append(rendered_samples)
+        })
+
+        modal.find('[name=synset_word_id]').val(synset_word_id)
+      })
+
+      // Reset modal form
+      modal.on('hidden', function() {
+        modal.find('#ruscorpora-samples').empty()
+      })
+
+      modal.on('click', 'ul > li', $.proxy(function(e) {
+        e.stopPropagation()
+        var target = $(e.currentTarget)
+
+        if (target.hasClass('active')) {
+          target.removeClass('active')
+          modal.find('#add-sample').attr('disabled', 'disabled')
+        } else {
+          modal.find('.active').removeClass('active')
+          target.addClass('active')
+          modal.find('#add-sample').removeAttr('disabled')
+        }
+      }, this))
+
+      modal.find('#add-sample').off().click($.proxy(function() {
+        var current_sample = modal.find('.active').first()
+        var params = {
+          sample : {
+            text    : current_sample.find(".sample-text").text(),
+            source  : current_sample.find(".sample-source").text()
+          },
+          synset_word_id  : modal.find('[name=synset_word_id]').val()
+        }
+
+        // Add new definition
+        $.post('/editor/create_sample.json', params, $.proxy(function(data) {
+          this.timestamp = data.timestamp
+
+          this.addSample(data, params.synset_word_id)
+
+          modal.modal('hide')
+        }, this))
+
+      }, this))
     },
 
     handleEditSynsetDefinition: function() {
