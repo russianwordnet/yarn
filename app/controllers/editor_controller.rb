@@ -192,10 +192,8 @@ class EditorController < ApplicationController
     doc = JSON.load(Net::HTTP.get(uri))
 
     @examples = doc['answer']['results'].map do |result|
-      mainword = result['mainword'].to_i
-      result['context'][mainword] = '[b]%s[/b]' % result['context'][mainword]
-      { source: 'OpenCorpora',
-        text: result['context'].join(' ').gsub(/ +([,.!])/, '\1').gsub(/([«\(\[<]) /, '\1').gsub(/ ([»\)\]>])/, '\1').strip }
+      { source: 'OpenCorpora, предложение №%s' % result['sentence_id'],
+        text: result['sentence_text'].strip }
     end
 
     respond_to do |format|
