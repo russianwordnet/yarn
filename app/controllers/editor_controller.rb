@@ -192,7 +192,7 @@ class EditorController < ApplicationController
     doc = JSON.load(Net::HTTP.get(uri))
 
     @examples = doc['answer']['results'].map do |result|
-      { source: 'OpenCorpora, предложение №%s' % result['sentence_id'],
+      { source: result['text_fullname'] << ', OpenCorpora',
         text: result['sentence_text'].strip }
     end
 
