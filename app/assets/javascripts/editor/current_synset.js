@@ -140,7 +140,7 @@
     },
 
     handleAddSampleRuscorpora: function() {
-      var modal = $('#add-sample-ruscorpora-modal')
+      var modal = $('#add-example-external-corpora-modal')
 
       $(document).on('click', '#synset-word-add-sample-ruscorpora', function() {
         var synset_word_id = $(this).data('id')
@@ -148,15 +148,29 @@
 
         $.getJSON('/editor/ruscorpora_examples.json', {text: synset_word}, function(data) {
           var rendered_samples = $(Mustache.render($('#ruscorpora-sample-tpl').text(), {samples: data}, {}))
-          modal.find('#ruscorpora-samples').append(rendered_samples)
+          modal.find('#external-corpora-examples').append(rendered_samples)
         })
 
         modal.find('[name=synset_word_id]').val(synset_word_id)
+        modal.find('#add-example-modal-label').text('Добавление определения из НКРЯ')
+      })
+
+      $(document).on('click', '#synset-word-add-sample-opencorpora', function() {
+        var synset_word_id = $(this).data('id')
+        var synset_word = $(this).data('word')
+
+        $.getJSON('/editor/opencorpora_examples.json', {text: synset_word}, function(data) {
+          var rendered_samples = $(Mustache.render($('#ruscorpora-sample-tpl').text(), {samples: data}, {}))
+          modal.find('#external-corpora-examples').append(rendered_samples)
+        })
+
+        modal.find('[name=synset_word_id]').val(synset_word_id)
+        modal.find('#add-example-modal-label').text('Добавление определения из OpenCorpora')
       })
 
       // Reset modal form
       modal.on('hidden', function() {
-        modal.find('#ruscorpora-samples').empty()
+        modal.find('#external-corpora-examples').empty()
       })
 
       modal.on('click', 'ul > li', $.proxy(function(e) {
@@ -165,15 +179,15 @@
 
         if (target.hasClass('active')) {
           target.removeClass('active')
-          modal.find('#add-sample').attr('disabled', 'disabled')
+          modal.find('#add-example').attr('disabled', 'disabled')
         } else {
           modal.find('.active').removeClass('active')
           target.addClass('active')
-          modal.find('#add-sample').removeAttr('disabled')
+          modal.find('#add-example').removeAttr('disabled')
         }
       }, this))
 
-      modal.find('#add-sample').off().click($.proxy(function() {
+      modal.find('#add-example').off().click($.proxy(function() {
         var current_sample = modal.find('.active').first()
         var params = {
           sample : {
