@@ -60,7 +60,7 @@
       this.data.synonymes.push({
         word_id     : data.id,
         word        : data.word,
-        definitions : data.definitions
+        definitions : data.synonymes[0].definitions
       })
 
       this.render()
