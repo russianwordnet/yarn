@@ -20,6 +20,7 @@
       this.o = o
       this.wordId = data.id
 
+      $("#current-synset").empty()
       this.render(data)
       this.handleAdd()
     },
