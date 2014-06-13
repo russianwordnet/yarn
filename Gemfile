@@ -36,7 +36,7 @@ gem 'jbuilder'
 gem 'jquery-validation-rails'
 gem 'nprogress-rails'
 
-group :assets do
+group :assets, :production do
   gem 'bootstrap-sass', '~> 2.3.2.0'
   gem 'ceaser-easing'
   gem 'compass-rails'
@@ -50,6 +50,10 @@ end
 group :development do
   gem 'railroady'
   gem 'meta_request'
+  gem 'capistrano'
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rvm', require: false
+  gem 'capistrano-rails', require: false
 end
 
 group :test do
@@ -58,6 +62,10 @@ group :test do
   gem 'shoulda-matchers'
   gem 'factory_girl_rails'
   gem 'faker'
+end
+
+group :production do
+  gem 'unicorn'
 end
 
 gem 'jquery-rails'
