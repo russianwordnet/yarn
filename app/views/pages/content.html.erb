@@ -1,16 +1,15 @@
 <div class="row-fluid">
-  <h1>Данные</h1>
-  <p>В настоящее время тезаурус содержит:</p>
-  <ul class="disc">
-    <li>слов &mdash; <%= Word.where(deleted_at: nil).count %>;</li>
-    <li>определений&mdash; <%= Definition.where(deleted_at: nil).count %>;</li>
-    <li>примеров&mdash; <%= Sample.where(deleted_at: nil).count %>;</li>
-    <li>синсетов &mdash; <%= Synset.where(deleted_at: nil).count %>;</li>
-    <li>&laquo;сырых&raquo; пар синонимов &mdash; <%= RawSynonymy.count %>.</li>
-  </ul>
-  <p>Словари представляются в соответствии с нашей
-  <a href="https://github.com/russianwordnet/yarn/blob/master/formats/yarn.xsd"
-    >XML Schema</a></p>
+  <div class="span12">
+    <h1>Данные</h1>
+    <p>Тезаурус <strong>доступен для скачивания</strong> в формате <a href="http://russianword.net/yarn.xml">XML</a> на условиях лицензии <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA</a>. Данные представляются в соответствии с нашей <a href="https://github.com/russianwordnet/yarn-formats/blob/master/yarn.xsd">XML Schema</a>. В настоящее время тезаурус содержит:</p>
+    <ul class="disc">
+      <li>слов &mdash; <%= Word.where(deleted_at: nil).count %>;</li>
+      <li>определений&mdash; <%= Definition.where(deleted_at: nil).count %>;</li>
+      <li>примеров&mdash; <%= Sample.where(deleted_at: nil).count %>;</li>
+      <li>синсетов &mdash; <%= Synset.where(deleted_at: nil).count %>;</li>
+      <li>&laquo;сырых&raquo; пар синонимов &mdash; <%= RawSynonymy.count %>.</li>
+    </ul>
+  </div>
 </div>
 <% if current_user && current_user.admin? %>
   <div class="row-fluid">
