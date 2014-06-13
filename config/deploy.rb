@@ -32,7 +32,7 @@ namespace :unicorn do
   task :start do
     on roles(:app), :in => :sequence do
       within current_path do
-        with rack_env: fetch(:rack_env) do
+        with rack_env: fetch(:rails_env) do
           execute :bundle, "exec unicorn -c #{fetch(:unicorn_conf)} -D"
         end
       end
