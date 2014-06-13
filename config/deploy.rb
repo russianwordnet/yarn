@@ -11,7 +11,8 @@ set :linked_files, %w{config/database.yml public/yarn.xml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # Default value for default_env is {}
-set :default_env, { lang: 'ru_RU.utf8' }
+set :default_env, { lang: 'ru_RU.utf8', ruby_gc_malloc_limit: 90000000,
+                    ld_preload: '/usr/lib64/libtcmalloc_minimal.so.4' }
 
 set :bundle_bins, fetch(:bundle_bins, []).push('unicorn')
 set :bundle_jobs, 4
