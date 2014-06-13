@@ -2,7 +2,6 @@ lock '3.2.1'
 
 set :application, 'yarn'
 set :repo_url, 'git://github.com/russianwordnet/yarn.git'
-set :branch, 'develop'
 set :deploy_to, '/home/dmchk/yarn'
 
 # Default value for :linked_files is []
