@@ -19,7 +19,7 @@ namespace :yarn do
           id: xmlid[entry],
           author: entry.author_id,
           version: entry.revision,
-          timestamp: entry.updated_at
+          timestamp: entry.updated_at.iso8601
         }
       end
 
@@ -31,9 +31,10 @@ namespace :yarn do
       end
 
       builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
+        xml.comment(' Generated on http://russianword.net/ at %s. ' % DateTime.now.iso8601)
         xml.yarn('xmlns' => 'http://russianword.net',
                  'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-                 'xsi:schemaLocation' => 'http://russianword.net ' << XSD) do
+                 'xsi:schemaLocation' => XSD) do
           xml.words do
             Word.where(deleted_at: nil).find_each do |word|
               xml.wordEntry(version[word]) do
@@ -67,6 +68,12 @@ namespace :yarn do
                 end
               end
             end
+          end
+
+          xml.synsetRelations do
+          end
+
+          xml.wordRelations do
           end
         end
       end
