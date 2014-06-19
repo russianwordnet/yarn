@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
-# https://trello.com/c/IW91nof2/94-rails-4-0-3-4-0-4
-gem 'rails', '4.0.3'
+gem 'rails', '~> 4.0.0'
 
 gem 'pg', :platform => :ruby
 gem 'activerecord-jdbcpostgresql-adapter', :platform => :jruby
