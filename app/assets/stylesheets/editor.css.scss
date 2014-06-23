@@ -1,6 +1,6 @@
 .word-picker-modal, .synonym-picker-modal {
-  width: 400px; 
-  margin-left: -200px !important; 
+  width: 400px;
+  margin-left: -200px !important;
 
   .modal-body {
     max-height: 600px;
@@ -45,7 +45,7 @@
       text-align: center;
 
       ul > li > a:hover,
-      ul > li > a:focus, 
+      ul > li > a:focus,
       ul > .active > a,
       ul > .active > span {
         background-color: $base-blue;
@@ -55,16 +55,17 @@
   }
 }
 
-#marks-picker {
-  width: 240px;
-  margin-left: 20px !important;
-  margin-top: 190px !important;
-
-  .selected {
-    background: #999999;
-    
-    a:hover, a:focus {
-      background: #999999;
+#select-marks-modal {
+ // width: 700px;
+  .navbar {
+    margin-bottom: 3px;
+  }
+  ul {
+    margin-top: 0px;
+    li {
+      padding: 3px;
+      text-decoration: none;
+      a { background-image: none; }
     }
   }
 }
@@ -266,7 +267,7 @@
       li {
         overflow: hidden;
         white-space: nowrap;
-        word-wrap: normal; /* IE */ 
+        word-wrap: normal; /* IE */
         text-overflow: ellipsis;
 
         &:hover, &.active {
