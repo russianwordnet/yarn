@@ -9,7 +9,7 @@
 
     this.initialize(el, o)
   }
-  
+
   $.fn.WordPicker.prototype = {
     currentWord: null,
     currentWordId: null,
@@ -22,7 +22,7 @@
 
       this.content.on('click', '.pagination a', $.proxy(function(e) {
         e.preventDefault()
-        
+
         $.get($(e.currentTarget).attr('href'), $.proxy(function(data) {
           this.content.html(data)
         }, this))
@@ -31,7 +31,6 @@
       this.handleSeachForm()
       this.handleSeachInput()
       this.handleListing()
-      this.handlePrimaryBtn()
       this.disallowClose()
     },
 
@@ -72,7 +71,6 @@
               this.content.html(data)
               this.currentWord   = null
               this.currentWordId = null
-              this.togglePrimaryBtn()
             }, this))
           }
         }, this), 150)
@@ -90,28 +88,12 @@
         this.currentWord   = $(e.currentTarget).addClass('active')
         this.currentWordId = this.currentWord.data('id')
 
-        this.togglePrimaryBtn()
         this.o.onSelectWord(this.currentWord, this.currentWordId)
       }, this))
 
       this.content.on('dblclick', '.word-picker-listing li', $.proxy(function(e) {
         e.stopPropagation()
-        this.el.find('.btn-primary').trigger('click')
-      }, this))      
-    },
 
-    togglePrimaryBtn: function() {
-      var btn = this.el.find('.btn-primary')
-
-      if (this.currentWord == null) {
-        btn.addClass('disabled')
-      } else {
-        btn.removeClass('disabled')
-      }
-    },
-
-    handlePrimaryBtn: function() {
-      this.el.find('.btn-primary').on('click', $.proxy(function() {
         if (this.currentWord) {
           this.o.onPickWord(this.currentWord, this.currentWordId)
           this.el.modal('hide')
