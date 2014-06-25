@@ -37,17 +37,13 @@ class Word < ActiveRecord::Base
     where("(to_tsvector('russian', word) @@ query OR word ~* %s)" % regexp)
   }
 
-  # TODO: scope!
-  def self.next_word(id)
-    find_by_sql([
-      "SELECT * FROM #{table_name} ORDER BY frequency DESC OFFSET (" \
-        'SELECT position FROM (' \
-          'SELECT id, row_number() OVER () AS position ' \
-            "FROM #{table_name} ORDER BY frequency DESC" \
-        ') AS ordered_words WHERE id = ?' \
-      ') LIMIT 1', id
-    ]).first
-  end
+  scope :next_word, ->(id) {
+    joins('JOIN (SELECT *, lead(id, 1) OVER (ORDER BY score DESC) AS next_word_id FROM current_words ' \
+          'JOIN current_words_scores ON current_words_scores.word_id = current_words.id ' \
+          'WHERE id = %1$d OR deleted_at IS NULL) AS ordered_words ON ordered_words.id = %1$d' % id).
+    where('current_words.id = ordered_words.next_word_id').
+    first
+  }
 
   def update_from(new_word, save_method = :save)
     Word.transaction do
