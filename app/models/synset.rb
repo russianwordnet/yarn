@@ -22,9 +22,9 @@ class Synset < ActiveRecord::Base
   end
 
   def words_with_default_first
-    return words.to_a unless default_synset_word_id
-    result = words.to_a
-  
+    result = words.includes(:word).to_a.sort { |sw1, sw2| sw1.word.word <=> sw2.word.word }
+    return result unless default_synset_word_id
+
     result.delete(default_synset_word)
     result.prepend(default_synset_word)
   end
