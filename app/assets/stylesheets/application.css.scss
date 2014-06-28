@@ -291,14 +291,6 @@ ul#flash-messages {
     position: relative;
     text-align: center;
 
-    &#flash-alert {
-      background: asset-url("icons/32x32/alert.png") no-repeat 0 50%;
-    }
-
-    &#flash-notice {
-      background: asset-url("icons/32x32/notice.png") no-repeat 0 50%;
-    }
-
     a {
       color: #fff;
       display: inline-block;
