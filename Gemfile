@@ -57,10 +57,6 @@ end
 
 group :test do
   gem 'rspec-rails'
-  gem 'database_cleaner'
-  gem 'shoulda-matchers'
-  gem 'factory_girl_rails'
-  gem 'faker'
 end
 
 group :production do
