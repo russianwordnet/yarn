@@ -30,6 +30,8 @@ gem 'puma'
 gem 'pry'
 gem 'parallel'
 
+gem 'jquery-rails'
+gem 'active_link_to'
 gem 'font-awesome-sass-rails', '3.0.2.2'
 gem 'jbuilder'
 gem 'jquery-validation-rails'
@@ -62,6 +64,3 @@ end
 group :production do
   gem 'unicorn'
 end
-
-gem 'jquery-rails'
-gem 'active_link_to'
