@@ -42,18 +42,21 @@ class Synset < ActiveRecord::Base
   has_many :synset_domains
   has_many :domains, :through => :synset_domains
 
-  def self.retrieve_creators
-    find_by_sql('SELECT ranked_synsets.id, ranked_synsets.author_id FROM ' \
-      '(SELECT synsets.*, rank() OVER (' \
-        'PARTITION BY synset_id ORDER BY synsets.revision' \
-      ') AS rank FROM synsets) AS ranked_synsets ' \
-      'INNER JOIN current_synsets ON synset_id = current_synsets.id ' \
-      'WHERE array_length(current_synsets.words_ids, 1) > 1 ' \
-      'AND rank = 1 AND current_synsets.deleted_at IS NULL').
-    group_by(&:author).
-    sort { |(_, s1), (_, s2)| s2.size <=> s1.size }
-  end
+  scope :by_author, ->(author) { from_origins.where(author_id: author.id) }
 
+  scope :from_origins, -> {
+    old = history_class.select('synset_id as id, author_id, revision')
+    new = self.select('id, author_id, revision')
+
+    from("(#{new.to_sql} union #{old.to_sql}) as current_synsets").where(revision: 1)
+  }
+
+  def self.retrieve_creators
+    from_origins
+    .includes(:author)
+    .group_by(&:author)
+    .sort { |(_, s1), (_, s2)| s2.size <=> s1.size }
+  end
 
   def destroy
     update_with_tracking { |s| s.deleted_at = Time.now.utc }
