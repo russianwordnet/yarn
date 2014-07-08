@@ -15,7 +15,7 @@
 
     this.initialize(o)
   }
-  
+
   $.fn.EditorCurrentSynset.prototype = {
     currentSynsetId     : null,
     currentSynset       : null,
@@ -53,6 +53,10 @@
         default_definition: this.o.defaultDefitionTemplate,
         sample:             this.o.sampleTemplate
       }))
+
+      this.currentSynset.find('#domain-select option[value=' + data.domain + ']').
+                         attr('selected', 'selected')
+
       this.accordions = this.currentSynset.find('.accordion')
       this.currentSynsetId = data.id
       this.default_definition = data.default_definition
@@ -69,6 +73,7 @@
       this.handleEditMarksBtn()
       this.handleDeleteButton()
       this.handleApproveButton()
+      this.handleDomainSelect()
 
       this.o.onAfterRender(data)
 
@@ -312,7 +317,7 @@
      handleSetDefaultSynsetWord: function() {
        this.currentSynset.off('click', '.synset_word i.icon-flag').on('click', '.synset_word i.icon-flag', $.proxy(function(e) {
         var item = $(e.currentTarget).closest('a')
- 
+
         $.post('/editor/set_default_synset_word',
         {
           synset_id       : this.currentSynsetId,
@@ -484,7 +489,7 @@
       this.marksPicker = new this.o.marksPicker(data, {
         onAfterEditMarks : $.proxy(function(edited_data) {
           this.render(edited_data)
-        }, this), 
+        }, this),
       })
       this.marksPicker.show()
     },
@@ -545,6 +550,17 @@
             location.reload()
           })
         }
+      }, this))
+    },
+
+    handleDomainSelect: function() {
+      console.log('handled')
+      $('#domain-select').off('change', '**').on('change', $.proxy(function(e) {
+        console.log('posted')
+        var url = '/synsets/' + this.currentSynsetId + '/set_domain.json'
+        var params = { domain: $('#domain-select').val() }
+
+        $.post(url, params)
       }, this))
     }
 }

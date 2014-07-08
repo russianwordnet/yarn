@@ -91,6 +91,13 @@
       {{/default_definition}}
     </section>
 
+    <section class='p5' id='domain'>
+      <strong>Предметная область: &nbsp;</strong>
+      <select id='domain-select'>
+        <%= domain_select %>
+      </select>
+    </section>
+
     {{#allow_destroy}}
       <a class='btn btn-danger' id='destroy-current-synset' href='#'> Удалить синсет </a>
     {{/allow_destroy}}

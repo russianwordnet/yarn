@@ -37,7 +37,8 @@ Yarn::Application.routes.draw do
     end
 
     member do
-      get :approve
+      get  :approve
+      post :set_domain
     end
   end
 

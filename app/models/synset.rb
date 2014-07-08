@@ -39,8 +39,8 @@ class Synset < ActiveRecord::Base
   has_many :synset_relations
   has_many :interlinks
 
-  has_many :synset_domains
-  has_many :domains, :through => :synset_domains
+  has_one  :synset_domain
+  has_one  :domain, :through => :synset_domain
 
   scope :by_author, ->(author) { from_origins.where(author_id: author.id) }
 

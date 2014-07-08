@@ -1,5 +1,5 @@
 class SynsetsController < ApplicationController
-  before_filter :find_synset, :only => [:show, :destroy, :edit, :approve]
+  before_filter :find_synset, :only => [:show, :destroy, :edit, :approve, :set_domain]
   before_filter :find_word, :only => :search
   before_filter :set_top_bar_synset, :only => :show
   before_filter :allow_destroy?, :only => :destroy
@@ -58,6 +58,16 @@ class SynsetsController < ApplicationController
     cookies['synsetId'] = @synset.id
 
     redirect_to editor_url
+  end
+
+  def set_domain
+    @domain = Domain.find(params[:domain])
+    @synset.domain = @domain
+
+    respond_to do |format|
+      format.html { redirect_to action: :index }
+      format.json { head :no_content }
+    end
   end
 
   protected

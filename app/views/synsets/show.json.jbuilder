@@ -2,6 +2,7 @@ json.id @synset.id
 json.allow_destroy current_user && @synset.allow_destroy_by?(current_user)
 json.allow_approve current_user && current_user.admin?
 json.timestamp Time.now.to_f
+json.domain @synset.domain.try(:id)
 
 json.words @synset_words do |synset_word|
   json.id               synset_word.word.id
