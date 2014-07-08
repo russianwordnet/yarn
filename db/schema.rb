@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140308194904) do
+ActiveRecord::Schema.define(version: 20140708102758) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
-  enable_extension "plpgsql"
 
   create_table "antonomy_relations", force: true do |t|
     t.integer  "antonomy_relation_id",             null: false
@@ -265,6 +264,16 @@ ActiveRecord::Schema.define(version: 20140308194904) do
   add_index "definitions", ["source"], name: "index_definitions_on_source", using: :btree
   add_index "definitions", ["uri"], name: "index_definitions_on_uri", using: :btree
 
+  create_table "domains", force: true do |t|
+    t.string   "name",       null: false
+    t.integer  "author_id",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "domains", ["author_id"], name: "index_domains_on_author_id", using: :btree
+  add_index "domains", ["name"], name: "index_domains_on_name", unique: true, using: :btree
+
   create_table "examples", force: true do |t|
     t.integer  "author_id"
     t.integer  "approver_id"
@@ -393,6 +402,16 @@ ActiveRecord::Schema.define(version: 20140308194904) do
   add_index "raw_synsets", ["author_id"], name: "index_raw_synsets_on_author_id", using: :btree
   add_index "raw_synsets", ["definitions_ids"], name: "index_raw_synsets_on_definitions_ids", using: :gin
   add_index "raw_synsets", ["words_ids"], name: "index_raw_synsets_on_words_ids", using: :gin
+
+  create_table "synset_domains", force: true do |t|
+    t.integer  "domain_id",  null: false
+    t.integer  "synset_id",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "synset_domains", ["domain_id"], name: "index_synset_domains_on_domain_id", using: :btree
+  add_index "synset_domains", ["synset_id"], name: "index_synset_domains_on_synset_id", using: :btree
 
   create_table "synset_relations", force: true do |t|
     t.integer  "synset_relation_id",             null: false
@@ -577,6 +596,8 @@ ActiveRecord::Schema.define(version: 20140308194904) do
   add_foreign_key "definitions", "users", name: "definitions_approver_id_fk", column: "approver_id", dependent: :delete
   add_foreign_key "definitions", "users", name: "definitions_author_id_fk", column: "author_id", dependent: :delete
 
+  add_foreign_key "domains", "users", name: "domains_author_id_fk", column: "author_id", dependent: :delete
+
   add_foreign_key "examples", "current_examples", name: "examples_example_id_fk", column: "example_id", dependent: :delete
   add_foreign_key "examples", "users", name: "examples_approver_id_fk", column: "approver_id", dependent: :delete
   add_foreign_key "examples", "users", name: "examples_author_id_fk", column: "author_id", dependent: :delete
@@ -603,6 +624,9 @@ ActiveRecord::Schema.define(version: 20140308194904) do
   add_foreign_key "raw_synset_words", "users", name: "raw_synset_words_author_id_fk", column: "author_id", dependent: :delete
 
   add_foreign_key "raw_synsets", "users", name: "raw_synsets_author_id_fk", column: "author_id", dependent: :delete
+
+  add_foreign_key "synset_domains", "current_synsets", name: "synset_domains_synset_id_fk", column: "synset_id", dependent: :delete
+  add_foreign_key "synset_domains", "domains", name: "synset_domains_domain_id_fk", dependent: :delete
 
   add_foreign_key "synset_relations", "current_synset_relations", name: "synset_relations_synset_relation_id_fk", column: "synset_relation_id", dependent: :delete
   add_foreign_key "synset_relations", "current_synsets", name: "synset_relations_synset1_id_fk", column: "synset1_id", dependent: :delete

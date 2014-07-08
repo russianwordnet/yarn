@@ -39,6 +39,9 @@ class Synset < ActiveRecord::Base
   has_many :synset_relations
   has_many :interlinks
 
+  has_many :synset_domains
+  has_many :domains, :through => :synset_domains
+
   def self.retrieve_creators
     find_by_sql('SELECT ranked_synsets.id, ranked_synsets.author_id FROM ' \
       '(SELECT synsets.*, rank() OVER (' \
