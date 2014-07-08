@@ -8,8 +8,10 @@ json.default_definition do
   if @synset.default_definition.blank?
     json.null!
   else
-    json.id   @synset.default_definition.id
-    json.text @synset.default_definition.text
+    json.id     @synset.default_definition.id
+    json.text   @synset.default_definition.text
+    json.source @synset.default_definition.source
+    json.uri    @synset.default_definition.uri
   end
 end
 
@@ -22,12 +24,14 @@ json.words @synset.words_with_default_first do |synset_word|
     json.name mark.name
   end
   json.samples synset_word.samples do |sample|
-    json.id   sample.id
-    json.text sample.text
+    json.id     sample.id
+    json.text   sample.text
+    json.source sample.source
   end
   json.definitions synset_word.definitions do |definition|
-    json.id   definition.id
-    json.text definition.text
+    json.id     definition.id
+    json.text   definition.text
+    json.source definition.source.presence
   end
 end
 
