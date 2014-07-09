@@ -2,6 +2,6 @@
 
 module EditorHelper
   def domain_select
-    options_for_select(Domain.all.map {|d| [d.name, d.id] }.prepend(['другое', nil]))
+    options_for_select(Domain.order(:name).map { |d| [d.name, d.id] }.prepend(['<другое>', nil]))
   end
 end
