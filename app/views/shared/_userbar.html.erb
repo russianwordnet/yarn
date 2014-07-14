@@ -12,6 +12,10 @@
       <%= link_to 'Тестовый вход', user_omniauth_authorize_path(:developer) %>
     <% end %>
 
+    <%= link_to user_omniauth_authorize_path(:github), :id => 'github-auth' do %>
+      <i class="icon icon-user"></i>&nbsp;Войти при помощи GitHub
+    <% end %>
+
     <%= link_to user_omniauth_authorize_path(:facebook), :id => 'facebook-auth' do %>
       <i class="icon icon-user"></i>&nbsp;Войти при помощи Facebook
     <% end %>
