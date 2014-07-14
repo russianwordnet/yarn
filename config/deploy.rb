@@ -20,6 +20,7 @@ set :bundle_env_variables, { nokogiri_use_system_libraries: 1 }
 
 set :rvm_ruby_version, '2.1.2'
 set :rvm_roles, :app
+set :rvm_type, :system
 
 set :unicorn_conf, -> { shared_path.join('yarn.unicorn.rb') }
 set :unicorn_pid, -> { shared_path.join('tmp/pids/yarn.pid') }
