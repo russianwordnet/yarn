@@ -211,12 +211,6 @@
 
         &:nth-child(even) { background-color: #f9f9f9; }
 
-        &:hover, &.active {
-          cursor: pointer;
-          background: $base-blue;
-          color: #fff;
-        }
-
         &.inactive {
           background: #eee;
           color: #999;
@@ -225,28 +219,31 @@
     }
   }
 
+  .listing ul li:hover,
+  .listing ul li:hover .sample li,
+  .listing ul li.active {
+    cursor: pointer;
+    background: $base-blue;
+    color: #fff;
+  }
+
   .definitions {
     ul {
       li {
         position: relative;
-        padding-right: 30px;
+        padding-right: 40px;
 
         span {
           position: absolute;
           top: 3px;
           right: 5px;
           height: 100%;
-          visibility: hidden;
 
           i.icon {
             &:hover {
               color: maroon;
             }
           }
-        }
-
-        &:hover span {
-          visibility: visible;
         }
       }
     }
