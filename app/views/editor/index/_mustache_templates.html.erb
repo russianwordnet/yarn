@@ -4,7 +4,10 @@
       {{#definitions}}
         <li data-id="{{id}}" data-word="{{word}}" data-word-id="{{word_id}}">
           <div class='content'>{{&text}}</div>
-          <span><i title="Скрыть определение" class="icon icon-eye-close"></i></span>
+          <span>
+            <i title="Добавить определение" class="icon icon-plus oput"></i>
+            <i title="Скрыть определение" class="icon icon-eye-close"></i>
+          </span>
           {{#hasSamples}}
             <small class="sample">
                 <strong>Пример(ы) употребления:</strong>

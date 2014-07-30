@@ -1,5 +1,4 @@
 //= require editor/word_picker
-//= require editor/add_to_current_synset_button
 //= require editor/definition
 //= require editor/synonymes
 //= require editor/synsets
@@ -15,7 +14,6 @@
       synonymes     : $.fn.EditorSynonymes,
       synsets       : $.fn.EditorSynsets,
       currentSynset : $.fn.EditorCurrentSynset,
-      addToCurrentSynsetButton: $.fn.EditorAddToCurrentSynsetButton,
       options : {
         uri:         '/editor/word.json',
         wordInput:   $("#searchbar #word"),
@@ -50,7 +48,6 @@
       },
 
       build: function(data) {
-        this.addToCurrentSynsetButton = null
         this.definition    = null
         this.synonymes     = null
         this.synsets       = null
@@ -73,30 +70,8 @@
           }, this),
         })
 
-        // Big 'addToCurrentSynsetButton' button
-        this.addToCurrentSynsetButton = new o.addToCurrentSynsetButton({
-          onClick: $.proxy(function() {
-            if (this.currentSynset.isDisplayed()) {
-              this.currentSynset.addDefinition(this.definition.current())
-              this.currentSynset.highlightOff()
-              this.definition.reset()
-            }
-          }, this),
-          onBtnOver: $.proxy(function() {
-            if (this.currentSynset.isDisplayed())
-              this.currentSynset.highlightOn()
-          }, this),
-          onBtnOut: $.proxy(function() {
-            if (this.currentSynset.isDisplayed())
-              this.currentSynset.highlightOff()
-          }, this),
-        })
-
         // Create synonymes area
         this.synonymes = new o.synonymes(this.data, {
-          onExpandAccordion: $.proxy(function(accordion) {
-            this.addToCurrentSynsetButton.adjustHeight()
-          }, this),
           onAddWordBtnOver: $.proxy(function(e) {
             if (this.currentSynset.isDisplayed())
               this.currentSynset.highlightWords()
@@ -108,9 +83,6 @@
           onAddWordBtnClick: $.proxy(function(word) {
             if (this.currentSynset.isDisplayed())
               this.currentSynset.addWord(word)
-          }, this),
-          onAfterRender: $.proxy(function() {
-            this.addToCurrentSynsetButton.adjustHeight()
           }, this)
         })
 
@@ -128,18 +100,18 @@
         // Handle current definition
         this.definition = new o.definition({
           onSelect: $.proxy(function(definition) {
-            if (this.currentSynset.isDisplayed()) {
-              this.addToCurrentSynsetButton.enable()
-            } else {
+            if (!this.currentSynset.isDisplayed()) {
               this.definition.clear()
             }
           }, this),
           onChange: $.proxy(function(definition) {
             this.currentSynset.addDefinition(this.definition.current())
           }, this),
-          onBlur: $.proxy(function(definition) {
-            if (this.currentSynset.isDisplayed())
-              this.addToCurrentSynsetButton.disable()
+          onAdd: $.proxy(function(definition) {
+            if(this.currentSynset.isDisplayed()) {
+              console.log(definition)
+              this.currentSynset.addDefinition(definition)
+            }
           }, this)
         })
 

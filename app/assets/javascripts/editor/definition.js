@@ -5,12 +5,13 @@
       current       : $('.definitions ul > li.active'),
       onSelect      : function(definition) {},
       onChange      : function(definition) {},
-      onBlur        : function(definition) {}
+      onBlur        : function(definition) {},
+      onAdd         : function(definition) {}
     }, o)
 
     this.initialize(o)
   }
-  
+
   $.fn.EditorDefinition.prototype = {
     currentDefinition : null,
 
@@ -20,6 +21,7 @@
       this.handleLists()
       this.handleHideButtons()
       this.handleExpandHiddenButton()
+      this.handleAddButtons()
       this.handleBlur()
     },
 
@@ -27,12 +29,7 @@
       $('#editor-area').on('click', '.definitions > ul > li', $.proxy(function(e) {
         e.stopPropagation()
 
-        if (this.currentDefinition != null) {
-          this.currentDefinition.removeClass('active')
-        }
-
-        this.currentDefinition = $(e.currentTarget).addClass('active')
-        this.o.onSelect(this.currentDefinition)
+        this.setCurrent($(e.currentTarget))
       }, this))
 
       $('#editor-area').on('dblclick', '.definitions ul > li', $.proxy(function(e) {
@@ -42,7 +39,7 @@
     },
 
     handleHideButtons: function() {
-      $('#editor-area').on('click', '.definitions ul > li i.icon', $.proxy(function(e) {
+      $('#editor-area').on('click', '.definitions ul > li i.icon.icon-eye-close', $.proxy(function(e) {
         $(e.target).closest('li').addClass('hide')
         $('#expand-hidden').show()
       }, this))
@@ -52,6 +49,13 @@
       $('#expand-hidden').on('click', $.proxy(function(e) {
         $('#editor-area .definitions ul > li.hide').removeClass('hide')
         $(e.currentTarget).hide()
+      }, this))
+    },
+
+    handleAddButtons: function () {
+      $('#editor-area').on('click', '.definitions ul > li i.icon.icon-plus', $.proxy(function(e) {
+        this.setCurrent($(e.currentTarget).closest('li'))
+        this.o.onAdd(this.current())
       }, this))
     },
 
@@ -90,7 +94,7 @@
     },
 
     resetInactiveDefinition: function(definitionId) {
-      this.o.lists.find('li[data-id=' + definitionId + ']').removeClass('inactive')      
+      this.o.lists.find('li[data-id=' + definitionId + ']').removeClass('inactive')
     },
 
     inactivateDefinitions: function(definitionIds) {
@@ -104,6 +108,15 @@
     clear: function() {
       this.o.lists.find('li.active').removeClass('active')
       this.currentDefinition = null
+    },
+
+    setCurrent: function(definition) {
+      if (this.currentDefinition != null) {
+          this.currentDefinition.removeClass('active')
+        }
+
+        this.currentDefinition = definition.addClass('active')
+        this.o.onSelect(this.currentDefinition)
     }
   }
 })(jQuery);
