@@ -18,7 +18,7 @@
       this.el = $(el)
       this.o  = o
       this.content = this.el.find('.word-picker-content')
-      this.searching = 0
+      this.lock = false
 
       this.content.on('click', '.pagination a', $.proxy(function(e) {
         e.preventDefault()
@@ -60,20 +60,17 @@
       var input = this.el.find('input.search-query')
 
       input.on('keyup', $.proxy(function(e) {
-        if (this.searching) {
-            clearTimeout(this.searching);
-        }
-        searching = setTimeout($.proxy(function() {
-          var code = (e.keyCode ? e.keyCode : e.which)
+        var code = (e.keyCode ? e.keyCode : e.which)
 
-          if (code != 13) {
-            $.get('/editor', { word : input.val() }, $.proxy(function(data) {
-              this.content.html(data)
-              this.currentWord   = null
-              this.currentWordId = null
-            }, this))
-          }
-        }, this), 150)
+        if (code != 13 && !this.lock) {
+          this.lock = true
+          $.get('/editor', { word : input.val() }, $.proxy(function(data) {
+            this.content.html(data)
+            this.currentWord   = null
+            this.currentWordId = null
+            this.lock = false
+          }, this))
+        }
       }, this))
     },
 
