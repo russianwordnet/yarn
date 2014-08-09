@@ -9,6 +9,7 @@ json.synonymes @raw_synonyms do |synonym|
     json.text    definition.text
     json.word_id synonym.id
     json.word    synonym.word
+    json.source definition.source.presence
     json.samples @samples[definition.id] do |sample|
       json.id   sample[:id]
       json.text sample[:text]

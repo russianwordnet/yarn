@@ -3,7 +3,12 @@
     <ul>
       {{#definitions}}
         <li data-id="{{id}}" data-word="{{word}}" data-word-id="{{word_id}}">
-          <div class='content'>{{&text}}</div>
+          <div class='content'>
+            {{&text}}
+            <small class="sample-source">
+              {{#sourceText}}{{&source}}{{/sourceText}}
+            </small>
+          </div>
           <span>
             <i title="Добавить определение" class="icon icon-plus oput"></i>
             <i title="Скрыть определение" class="icon icon-eye-close"></i>
@@ -171,7 +176,7 @@
 <script id="definition-tpl" type="text/html">
   <li data-id="{{id}}">
     {{&text}}
-    <small class="sample-source">// {{&source}}</small>
+    <small class="sample-source">{{#sourceText}}{{&source}}{{/sourceText}}</small>
     <i title="Удалить" class="icon icon-remove"></i>
     <i title="Сделать главным" class="icon icon-flag"></i>
   </li>
@@ -181,7 +186,7 @@
   <strong>Главное определение:</strong>
   <div data-id="{{id}}"  class='inline p5'>
     {{&text}}
-    <small class="sample-source">// {{&source}}</small>
+    <small class="sample-source">{{#sourceText}}{{&source}}{{/sourceText}}</small>
     <i title="Редактировать" class="icon icon-pencil"></i>
   </div>
 </script>
@@ -189,7 +194,7 @@
 <script id="sample-tpl" type="text/html">
   <li data-id="{{id}}">
     {{&text}}
-    <small class="sample-source">// {{&source}}</small>
+    <small class="sample-source">{{#sourceText}}{{&source}}{{/sourceText}}</small>
     <i title="Удалить" class="icon icon-remove"></i>
   </li>
 </script>
@@ -198,8 +203,8 @@
   {{#samples}}
     <li>
       <div>
-        <p class="sample-text inline">{{&text}}</p> <br />
-        <small class="sample-source">{{&source}}</small>
+        <p class="sample-text inline">({{&text}})</p> <br />
+        <small class="sample-source">({{&source}})</small>
       <div>
     </li>
   {{/samples}}

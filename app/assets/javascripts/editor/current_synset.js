@@ -41,6 +41,14 @@
         hasSamples         : function() { return this.samples.length > 0 },
         hasDefinitions     : function() { return this.definitions.length > 0 },
         currentWord        : function() { return this.id == currentWord },
+        sourceText         : function() {
+          return function (source, render) {
+            rendered_source = render(source)
+
+            if (rendered_source === "") { return '' }
+            else { return '(' + rendered_source + ')'}
+          }
+        },
         default_definition : data.default_definition,
         words              : data.words,
         allow_destroy      : data.allow_destroy,

@@ -15,12 +15,12 @@ json.words @synset_words do |synset_word|
   json.samples synset_word.samples do |sample|
     json.id     sample.id
     json.text   sample.text
-    json.source sample.source
+    json.source sample.source.presence
   end
   json.definitions synset_word.definitions do |definition|
     json.id     definition.id
     json.text   definition.text
-    json.source definition.source
+    json.source definition.source.presence
   end
 end
 
@@ -30,7 +30,7 @@ json.default_definition do
   else
     json.id     @synset.default_definition.id
     json.text   @synset.default_definition.text
-    json.source @synset.default_definition.source
+    json.source @synset.default_definition.source.presence
     json.uri    @synset.default_definition.uri
   end
 end

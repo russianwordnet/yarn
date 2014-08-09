@@ -13,7 +13,7 @@
 
     this.initialize(data, o)
   }
-  
+
   $.fn.EditorSynonymes.prototype = {
     data      : null,
     accordion : null,
@@ -34,6 +34,14 @@
         hasDefinitions : function() { return this.definitions != null && this.definitions.length > 0 },
         expandFirst    : function() { return counter == 1 },
         hasSamples     : function() { return this.samples != null && this.samples.length > 0 },
+        sourceText     : function() {
+          return function (source, render) {
+            rendered_source = render(source)
+
+            if (rendered_source === "") { return '' }
+            else { return '(' + rendered_source + ')'}
+          }
+        },
         synonymes      : synonymes
       }
 
@@ -99,7 +107,7 @@
     handleAddSynonym: function() {
       $('#add-synonym').on('click', $.proxy(function(e) {
         e.preventDefault()
-        
+
         var wordPicker = new $.fn.WordPicker($('.synonym-picker-modal'), {
           onPickWord: $.proxy(function(word, wordId) {
             $.getJSON('/editor/word.json', { word_id: wordId }, $.proxy(function(data) {
