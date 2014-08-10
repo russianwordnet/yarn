@@ -5,6 +5,10 @@ Yarn::Application.routes.draw do
     delete 'signout' => 'devise/sessions#destroy', :as => :destroy_user_session
   end
 
+  authenticate :user, lambda { |user| user.admin? } do
+    mount PgHero::Engine, at: 'pghero'
+  end
+
   resource :profile, controller: 'users', only: [:show]
 
   resources :words do

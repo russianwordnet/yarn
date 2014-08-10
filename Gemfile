@@ -5,6 +5,7 @@ gem 'rails', '~> 4.0.0'
 gem 'pg', :platform => :ruby
 gem 'activerecord-jdbcpostgresql-adapter', :platform => :jruby
 gem 'postgres_ext'
+gem 'pghero'
 
 gem 'foreigner'
 gem 'devise'
