@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20140709140031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
+  enable_extension "pg_stat_statements"
 
   create_table "antonomy_relations", force: true do |t|
     t.integer  "antonomy_relation_id",             null: false
