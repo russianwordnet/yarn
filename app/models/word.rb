@@ -28,13 +28,11 @@ class Word < ActiveRecord::Base
   has_many :raw_synonyms, :through => :raw_synonym, :source => :word2
 
   scope :search, ->(query) {
-    tsquery = sanitize(query.to_s)
-    regexp = sanitize('.*%s.*' % Regexp.escape(query.to_s).
-      gsub(/[ЕеЁё]/, '[ЕеЁё]'))
-
-    select(['%s.*' % table_name, "ts_rank(to_tsvector('russian', word), query) AS rank"]).
-    from("%s, plainto_tsquery('russian', %s) query" % [table_name, tsquery]).
-    where("(to_tsvector('russian', word) @@ query OR word ~* %s)" % regexp)
+    tokens = query.to_s.split
+    regexps = tokens.map { |w| Regexp.escape(w).gsub(/[ЕеЁё]/, '[ЕеЁё]') }
+    bregexps = regexps.map { |r| "(word ~* '\\m%s')::integer" % r }
+    select(['%s.*' % table_name, '%s AS rank' % bregexps.join(' + ')]).
+    where(regexps.map { |r| "word ~* '%s'" % r }.join(' AND '))
   }
 
   scope :next_word, ->(id) {
