@@ -8,7 +8,7 @@ set :deploy_to, '/home/dmchk/yarn'
 set :linked_files, %w{config/database.yml config/yarn.yml public/yarn.xml}
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # Default value for default_env is {}
 set :default_env, { lang: 'ru_RU.utf8', ruby_gc_malloc_limit: 90000000,
