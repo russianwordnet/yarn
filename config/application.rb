@@ -67,6 +67,6 @@ module Yarn
     config.assets.version = '1.0'
 
     # Load the local configuration.
-    config.local = YAML.load_file(File.join(Rails.root, 'config', 'yarn.yml')) rescue {}
+    config.local = YAML.load_file(Rails.root.join(*%w(config yarn.yml))) rescue {}
   end
 end
