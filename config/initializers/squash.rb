@@ -1,3 +1,3 @@
-Squash::Ruby.configure api_host: ENV['SQUASH_HOST'],
-                       api_key: ENV['SQUASH_KEY'],
+Squash::Ruby.configure api_host: Rails.configuration.local['squash_host'],
+                       api_key: Rails.configuration.local['squash_key'],
                        disabled: !Rails.env.production?

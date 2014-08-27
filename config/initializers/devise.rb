@@ -219,8 +219,15 @@ Devise.setup do |config|
   config.omniauth :developer unless Rails.env.production?
 
   require 'omniauth-facebook'
-  config.omniauth :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET'], scope: 'email,public_profile'
-  config.omniauth :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
+
+  config.omniauth :facebook,
+    Rails.configuration.local['facebook_key'],
+    Rails.configuration.local['facebook_secret'],
+    scope: 'email,public_profile'
+
+  config.omniauth :github,
+    Rails.configuration.local['github_key'],
+    Rails.configuration.local['github_secret']
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
