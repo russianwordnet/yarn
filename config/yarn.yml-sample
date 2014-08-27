@@ -1,0 +1,10 @@
+# OAuth2
+facebook_key: ''
+facebook_secret: ''
+
+github_key: ''
+github_secret: ''
+
+# Squash
+squash_host: ''
+squash_key: ''

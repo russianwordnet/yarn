@@ -65,5 +65,8 @@ module Yarn
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # Load the local configuration.
+    config.local = YAML.load_file(File.join(Rails.root, 'config', 'yarn.yml')) rescue {}
   end
 end

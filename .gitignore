@@ -28,6 +28,7 @@
 
 # Prevent git-checkout from erasing production configuration
 /config/database.yml
+/config/yarn.yml
 
 # Ignore XML dumps
 /*.xml
