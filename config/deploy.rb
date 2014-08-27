@@ -14,10 +14,9 @@ set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/sys
 set :default_env, { lang: 'ru_RU.utf8', ruby_gc_malloc_limit: 90000000,
                     ld_preload: '/usr/lib64/libtcmalloc_minimal.so.4' }
 
-set :bundle_bins, fetch(:bundle_bins, []).push('unicorn')
+set :bundle_binstubs, nil
 set :bundle_jobs, 4
 set :bundle_env_variables, { nokogiri_use_system_libraries: 1 }
-set :bundle_binstubs, nil
 
 set :rvm_ruby_version, '2.1.2'
 set :rvm_roles, :app
