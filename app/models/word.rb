@@ -65,6 +65,7 @@ class Word < ActiveRecord::Base
   end  
 
   validates :word, presence: true
+  validates :word, uniqueness: true, if: ->(w) { w.new_record? }
 
   def to_s
     word

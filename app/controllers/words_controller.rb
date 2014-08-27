@@ -54,7 +54,9 @@ class WordsController < ApplicationController
   end
 
   def create
-    @word = Word.new(params[:word])
+    @word = Word.new(params[:word]) do |word|
+      word.author = current_user
+    end
 
     if @word.save
       flash[:notice] = 'Слово добавлено.'
