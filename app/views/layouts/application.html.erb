@@ -1,7 +1,9 @@
 <%= with_header_and_footer do %>
   <aside class="span3" id="sidebar">
     <%= render 'shared/yarn_logo' %>
-    <%= render 'shared/search' %>
+    <% if current_user.try(:admin?) -%>
+      <%= render 'shared/search' %>
+    <% end -%>
     <%= render 'shared/navigation' %>
   </aside>
   <div class="span9">

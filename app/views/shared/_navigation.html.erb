@@ -4,19 +4,15 @@
   <%= active_link_to 'Данные', page_path(:content), :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Технологии', page_path(:technologies), :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Инструкция', 'http://nlpub.ru/YARN/Инструкция', :wrap_tag => :li, :active => :exclusive %>
-  <li class="divider"></li>
-  <%= active_link_to 'Все слова', words_path, :wrap_tag => :li, :active => :exclusive %>
-  <%= active_link_to 'Утверждённые слова', approved_words_path, :wrap_tag => :li %>
-  <li><%= top_link_to('Слово №%d' % top_bar_word.id, word_url(top_bar_word)) if top_bar_word %></li>
-  <li class="divider"></li>
-  <%= active_link_to 'Синсеты', synsets_path, :wrap_tag => :li %>
-  <li class="divider"></li>
-  <li><%= top_link_to('Cинсет №%d' % top_bar_synset.id, synset_url(top_bar_synset)) if top_bar_synset %></li>
-  <li><%= top_link_to('Cинсет-слово №%d' % top_bar_synset_word.id, synset_word_url(top_bar_synset, top_bar_synset_word)) if top_bar_synset_word %></li>
+  <% if current_user.try(:admin?) -%>
+    <li class="divider"></li>
+    <%= active_link_to 'Все слова', words_path, :wrap_tag => :li, :active => :exclusive %>
+    <%= active_link_to 'Утверждённые слова', approved_words_path, :wrap_tag => :li %>
+    <li><%= top_link_to('Слово №%d' % top_bar_word.id, word_url(top_bar_word)) if top_bar_word %></li>
+    <li class="divider"></li>
+    <%= active_link_to 'Синсеты', synsets_path, :wrap_tag => :li %>
+    <li class="divider"></li>
+    <li><%= top_link_to('Cинсет №%d' % top_bar_synset.id, synset_url(top_bar_synset)) if top_bar_synset %></li>
+    <li><%= top_link_to('Cинсет-слово №%d' % top_bar_synset_word.id, synset_word_url(top_bar_synset, top_bar_synset_word)) if top_bar_synset_word %></li>
+  <% end -%>
 </ul>
-
-<div id="editor-btn">
-  <%= link_to editor_path, class: 'btn btn-large' do %>
-    <i class="icon icon-chevron-right"></i>&nbsp;Редактор синсетов
-  <% end %>
-</div>
