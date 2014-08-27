@@ -1,6 +1,9 @@
 # encoding: utf-8
 
 class EditorController < ApplicationController
+  include Squash::Ruby::ControllerMethods
+  enable_squash_client
+
   before_filter :authenticate_user!, except:
     [:index, :word, :show_synset, :definitions, :synonymes]
   before_filter :timestamp_required, only: [:edit_marks, :save]

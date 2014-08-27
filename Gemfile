@@ -17,6 +17,9 @@ gem 'protected_attributes'
 
 gem 'dalli'
 
+gem 'squash_ruby', require: 'squash/ruby'
+gem 'squash_rails', require: 'squash/rails'
+
 gem 'rails-i18n'
 gem 'devise-i18n'
 

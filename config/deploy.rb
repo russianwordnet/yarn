@@ -74,6 +74,7 @@ namespace :deploy do
     invoke 'unicorn:restart'
   end
 
+  before :publishing, 'squash:write_revision'
   after :publishing, :restart
 
 end
