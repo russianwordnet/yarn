@@ -43,6 +43,7 @@ json.synsets @synsets do |synset|
     json.text "Пустой синсет №#{synset.id}"
   end
 
+  json.state synset.state(current_user)
   json.first_definition synset.default_definition.try(:text)
 end
 
