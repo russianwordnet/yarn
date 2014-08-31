@@ -270,6 +270,7 @@
 
         $.post('/editor/update_definition.json', params, $.proxy(function(data) {
           this.timestamp = data.timestamp
+          definition.id = data.id
           this.default_definition = definition
 
           var defaultDefinition = $(Mustache.render(this.o.defaultDefitionTemplate, definition))
