@@ -37,10 +37,10 @@ end
 
 json.selected_synset do
   json.id @synset.id
-  if @lexemes.size > 0
-    json.text @lexemes.map(&:word).join ', '
+  if @synset_words.present?
+    json.text @synset_words.map(&:word).map(&:word).join ', '
   else
     json.text "Пустой синсет №#{@synset.id}"
   end
-  json.first_definition  @synset.default_definition.try(:text) || @synset.definitions.first.try(:text)
+  json.first_definition default_definition(@synset)
 end
