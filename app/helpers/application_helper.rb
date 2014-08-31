@@ -17,4 +17,12 @@ module ApplicationHelper
 
     content_tag :ul, raw(items.join), :id => 'flash-messages'
   end
+
+  def default_definition(synset)
+    if synset.default_definition.present?
+      synset.default_definition.try(:text)
+    else
+      synset.definitions.first.try(:text)
+    end
+  end
 end

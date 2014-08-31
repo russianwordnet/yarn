@@ -44,7 +44,7 @@ json.synsets @synsets do |synset|
   end
 
   json.state synset.state(current_user)
-  json.first_definition synset.default_definition.try(:text)
+  json.first_definition default_definition(synset)
 end
 
 json.selected_synset do
