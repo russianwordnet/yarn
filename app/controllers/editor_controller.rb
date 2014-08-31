@@ -92,7 +92,9 @@ class EditorController < ApplicationController
 
     build_samples
 
-    @synsets = @word.synset_words.includes(:synsets => [:definitions, :default_definition, :words => :word]).map(&:synsets).flatten.uniq
+    @synsets = @word.synset_words.
+                     includes(:synsets => [:definitions, :default_definition, :words => :word]).
+                     map(&:synsets).flatten.delete_if(&:deleted_at).uniq
 
     respond_with @word, @definitions, @synsets, @samples
   end
