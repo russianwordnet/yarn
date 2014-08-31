@@ -54,7 +54,7 @@ class SynsetsController < ApplicationController
 
   def edit
     synset_word = @synset.default_synset_word || @synset.words.first
-    cookies['wordId']   = synset_word.word_id
+    cookies['wordId']   = synset_word.word_id if synset_word.present?
     cookies['synsetId'] = @synset.id
 
     redirect_to editor_url
