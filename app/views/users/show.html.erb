@@ -1,7 +1,7 @@
 <%= heading_with_title "Профиль" %>
 
-<p><strong>Имя:</strong> <%= current_user %></p>
-<p><strong>Роль:</strong> <%= current_user.admin? ? 'администратор' : 'участник' %></p>
+<p><strong>Имя:</strong> <%= @user %></p>
+<p><strong>Роль:</strong> <%= @user.admin? ? 'администратор' : 'участник' %></p>
 <p><strong>Правок в синсетах:</strong> <%= @stats ? @stats.score : 0 %></p>
 
 <h2>Синсеты</h2>
