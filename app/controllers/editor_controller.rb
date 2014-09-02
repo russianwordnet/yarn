@@ -196,7 +196,7 @@ class EditorController < ApplicationController
     uri.query = { action: 'search', all_forms: 1, query: params[:text] }.to_query
     doc = JSON.load(Net::HTTP.get(uri))
 
-    @examples = doc['answer']['results'].map do |result|
+    @examples = doc.try(:[], 'answer').try(:[], 'results').try(:map) do |result|
       { source: result['text_fullname'] << ', OpenCorpora',
         text: result['sentence_text'].strip }
     end
