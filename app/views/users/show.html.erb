@@ -3,6 +3,7 @@
 <p><strong>Имя:</strong> <%= @user %></p>
 <p><strong>Роль:</strong> <%= @user.admin? ? 'администратор' : 'участник' %></p>
 <p><strong>Правок в синсетах:</strong> <%= @stats ? @stats.score : 0 %></p>
+<p><strong>Уровень:</strong> <%= @user.level %></p>
 
 <h2>Значки</h2>
 <% unless @user.badges.empty? -%>
