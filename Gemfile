@@ -14,6 +14,7 @@ gem 'omniauth-github'
 gem 'kaminari'
 gem 'cells'
 gem 'protected_attributes'
+gem 'merit'
 
 gem 'dalli'
 

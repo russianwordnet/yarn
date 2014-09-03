@@ -4,6 +4,17 @@
 <p><strong>Роль:</strong> <%= @user.admin? ? 'администратор' : 'участник' %></p>
 <p><strong>Правок в синсетах:</strong> <%= @stats ? @stats.score : 0 %></p>
 
+<h2>Значки</h2>
+<% unless @user.badges.empty? -%>
+  <ul>
+    <% @user.badges.each do |badge| -%>
+      <li><%= badge.description %></li>
+    <% end -%>
+  </ul>
+<% else -%>
+  <p>Нет значков.</p>
+<% end -%>
+
 <h2>Синсеты</h2>
 <% unless @synsets.blank? %>
   <ul class="triple-columns">

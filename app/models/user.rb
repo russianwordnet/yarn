@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  has_merit
+
   devise :omniauthable
 
   attr_accessible :name, :provider, :uid
