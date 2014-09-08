@@ -167,7 +167,15 @@ class EditorController < ApplicationController
 
   def edit_marks
     synset_word = SynsetWord.find(params[:synset_word_id])
-    return head 409 if params[:timestamp].to_f < synset_word.updated_at.to_f
+
+    if params[:timestamp].to_f < synset_word.updated_at.to_f
+      begin
+        raise 'The synset is locked'
+      rescue RuntimeError => ex
+        notify_squash ex
+      end
+      return head 409
+    end
 
     synset_word.update_with_tracking(marks_ids: Array.wrap(params[:marks]).map(&:to_i), author: current_user)
 
@@ -221,7 +229,15 @@ class EditorController < ApplicationController
   #
   def save
     @synset = Synset.find(params[:synset_id])
-    return head 409 if params[:timestamp].to_f < @synset.updated_at.to_f
+
+    if params[:timestamp].to_f < synset_word.updated_at.to_f
+      begin
+        raise 'The synset is locked'
+      rescue RuntimeError => ex
+        notify_squash ex
+      end
+      return head 409
+    end
 
     # retrieve existent word associations
     words_mapping = @synset.words.inject({}) do |h, sw|
