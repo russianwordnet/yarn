@@ -230,7 +230,7 @@ class EditorController < ApplicationController
   def save
     @synset = Synset.find(params[:synset_id])
 
-    if params[:timestamp].to_f < synset_word.updated_at.to_f
+    if params[:timestamp].to_f < @synset.updated_at.to_f
       begin
         raise 'The synset is locked'
       rescue RuntimeError => ex
