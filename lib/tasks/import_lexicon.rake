@@ -39,8 +39,10 @@ namespace :yarn do
           words = Word.where(word: slice.map(&:word)).group_by(&:word)
 
           slice.each do |entry|
-            candidates = words[entry.word].sort_by! do |c|
-              [-c.frequency, !c.deleted_at ? 1 : 0, c.id]
+            unless words[entry.word].nil?
+              candidates = words[entry.word].sort_by! do |c|
+                [-c.frequency, !c.deleted_at ? 1 : 0, c.id]
+              end
             end
 
             entry.word = if candidates
