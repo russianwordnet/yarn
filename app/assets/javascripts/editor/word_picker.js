@@ -33,7 +33,6 @@
       this.handleSeachInput()
       this.handleListing()
       this.disallowClose()
-
     },
 
     disallowClose: function() {
@@ -83,7 +82,6 @@
     handleListing: function() {
       this.content.on('click', '.word-picker-listing li', $.proxy(function(e) {
         e.stopPropagation()
-
 
         if (this.currentWord != null) {
           this.currentWord.removeClass('active')
