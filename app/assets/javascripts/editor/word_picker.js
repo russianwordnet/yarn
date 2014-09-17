@@ -19,6 +19,7 @@
       this.o  = o
       this.content = this.el.find('.word-picker-content')
       this.lock = false
+      this.choiceButton = $('button.btn.choice')
 
       this.content.on('click', '.pagination a', $.proxy(function(e) {
         e.preventDefault()
@@ -32,6 +33,7 @@
       this.handleSeachInput()
       this.handleListing()
       this.disallowClose()
+
     },
 
     disallowClose: function() {
@@ -54,6 +56,10 @@
       this.el.find('form').on('submit', function(e) {
         e.preventDefault()
       })
+
+      this.choiceButton.on('click', $.proxy(function(e) {
+        this.tryPickWord(e)
+      }, this))
     },
 
     handleSeachInput: function() {
@@ -78,6 +84,7 @@
       this.content.on('click', '.word-picker-listing li', $.proxy(function(e) {
         e.stopPropagation()
 
+
         if (this.currentWord != null) {
           this.currentWord.removeClass('active')
         }
@@ -86,21 +93,24 @@
         this.currentWordId = this.currentWord.data('id')
 
         this.o.onSelectWord(this.currentWord, this.currentWordId)
+        this.choiceButton.removeAttr('disabled')
       }, this))
 
       this.content.on('dblclick', '.word-picker-listing li', $.proxy(function(e) {
-        e.stopPropagation()
-
-        if (this.currentWord) {
-          this.o.onPickWord(this.currentWord, this.currentWordId)
-          this.el.modal('hide')
-        }
+        this.tryPickWord(e)
       }, this))
     },
 
     show: function() {
       this.el.modal('show')
-    }
+    },
 
+    tryPickWord: function(event) {
+      event.stopPropagation()
+      if (this.currentWord) {
+        this.o.onPickWord(this.currentWord, this.currentWordId)
+        this.el.modal('hide')
+      }
+    }
   }
 })(jQuery);
