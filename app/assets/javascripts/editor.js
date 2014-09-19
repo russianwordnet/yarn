@@ -151,17 +151,13 @@
 
       wordPickerDialog: function() {
         this.wordPicker = new o.wordPicker($('.word-picker-modal'), {
-          allowClose : this.allowCloseWordPickerDialog(),
+          allowClose : true,
           onPickWord : $.proxy(function(word, wordId) {
             this.loadWord(wordId)
           }, this)
         })
 
         this.wordPicker.show()
-      },
-
-      allowCloseWordPickerDialog: function() {
-        return this.wordId != undefined
       },
 
       isWordPicked: function() {
