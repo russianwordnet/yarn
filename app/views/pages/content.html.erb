@@ -27,7 +27,7 @@
         <tr>
           <td style="vertical-align: top;"><%= user.id %></td>
           <td style="vertical-align: top;">
-            <%= user.name %> (синсетов: <strong><%= synsets.size %></strong>)
+            <%= link_to user, user_path(user) %> (синсетов: <strong><%= synsets.size %></strong>)
           </td>
           <td style="vertical-align: top;">
             <%= synsets.map do |synset|
@@ -55,7 +55,7 @@
       <% User.scores.each do |user| %>
         <tr>
           <td style="vertical-align: top;"><%= user.id %></td>
-          <td style="vertical-align: top;"><%= user.name %></td>
+          <td style="vertical-align: top;"><%= link_to user, user_path(user) %></td>
           <td style="vertical-align: top;"><%= user.score %></td>
         </tr>
       <% end %>

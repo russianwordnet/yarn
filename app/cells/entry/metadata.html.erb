@@ -5,7 +5,7 @@
       <dd><%= @entry.revision %></dd>
 
       <dt>Автор</dt>
-      <dd><%= @entry.author ? link_to(@entry.author, '#') : 'н/д' %></dd>
+      <dd><%= @entry.author ? link_to(@entry.author, @entry.author) : 'н/д' %></dd>
 
       <dt>Обновлено</dt>
       <dd><%= @entry.updated_at.strftime('%H:%M:%S %d.%m.%Y') %></dd>
