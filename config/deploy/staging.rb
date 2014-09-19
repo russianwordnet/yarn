@@ -8,7 +8,7 @@ role :app, %w{dmchk@172.19.2.121}
 role :web, %w{dmchk@172.19.2.121}
 role :db, %w{dmchk@172.19.2.121}
 
-set :branch, 'develop'
+set :branch, 'merit'
 
 # Extended Server Syntax
 # ======================

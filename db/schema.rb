@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140709140031) do
+ActiveRecord::Schema.define(version: 20140901154217) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_trgm"
+  enable_extension "pg_stat_statements"
 
   create_table "antonomy_relations", force: true do |t|
     t.integer  "antonomy_relation_id",             null: false
@@ -42,6 +43,17 @@ ActiveRecord::Schema.define(version: 20140709140031) do
   add_index "antonomy_relations", ["updated_at"], name: "index_antonomy_relations_on_updated_at", using: :btree
   add_index "antonomy_relations", ["word1_id"], name: "index_antonomy_relations_on_word1_id", using: :btree
   add_index "antonomy_relations", ["word2_id"], name: "index_antonomy_relations_on_word2_id", using: :btree
+
+  create_table "badges_sashes", force: true do |t|
+    t.integer  "badge_id"
+    t.integer  "sash_id"
+    t.boolean  "notified_user", default: false
+    t.datetime "created_at"
+  end
+
+  add_index "badges_sashes", ["badge_id", "sash_id"], name: "index_badges_sashes_on_badge_id_and_sash_id", using: :btree
+  add_index "badges_sashes", ["badge_id"], name: "index_badges_sashes_on_badge_id", using: :btree
+  add_index "badges_sashes", ["sash_id"], name: "index_badges_sashes_on_sash_id", using: :btree
 
   create_table "current_antonomy_relations", force: true do |t|
     t.integer  "synset1_id",              null: false
@@ -339,6 +351,38 @@ ActiveRecord::Schema.define(version: 20140709140031) do
   add_index "marks", ["mark_category_id"], name: "index_marks_on_mark_category_id", using: :btree
   add_index "marks", ["name"], name: "index_marks_on_name", unique: true, using: :btree
 
+  create_table "merit_actions", force: true do |t|
+    t.integer  "user_id"
+    t.string   "action_method"
+    t.integer  "action_value"
+    t.boolean  "had_errors",    default: false
+    t.string   "target_model"
+    t.integer  "target_id"
+    t.boolean  "processed",     default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "merit_activity_logs", force: true do |t|
+    t.integer  "action_id"
+    t.string   "related_change_type"
+    t.integer  "related_change_id"
+    t.string   "description"
+    t.datetime "created_at"
+  end
+
+  create_table "merit_score_points", force: true do |t|
+    t.integer  "score_id"
+    t.integer  "num_points", default: 0
+    t.string   "log"
+    t.datetime "created_at"
+  end
+
+  create_table "merit_scores", force: true do |t|
+    t.integer "sash_id"
+    t.string  "category", default: "default"
+  end
+
   create_table "raw_definitions", force: true do |t|
     t.integer  "word_id",       null: false
     t.integer  "definition_id", null: false
@@ -403,6 +447,11 @@ ActiveRecord::Schema.define(version: 20140709140031) do
   add_index "raw_synsets", ["author_id"], name: "index_raw_synsets_on_author_id", using: :btree
   add_index "raw_synsets", ["definitions_ids"], name: "index_raw_synsets_on_definitions_ids", using: :gin
   add_index "raw_synsets", ["words_ids"], name: "index_raw_synsets_on_words_ids", using: :gin
+
+  create_table "sashes", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "synset_domains", force: true do |t|
     t.integer  "domain_id",  null: false
@@ -486,12 +535,14 @@ ActiveRecord::Schema.define(version: 20140709140031) do
   add_index "synsets", ["words_ids"], name: "index_synsets_on_words_ids", using: :gin
 
   create_table "users", force: true do |t|
-    t.string   "name",       null: false
+    t.string   "name",                   null: false
     t.string   "provider"
     t.string   "uid"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "role"
+    t.integer  "sash_id"
+    t.integer  "level",      default: 0
   end
 
   add_index "users", ["name"], name: "index_users_on_name", using: :btree
