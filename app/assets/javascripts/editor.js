@@ -138,7 +138,9 @@
       handleDeleteWordBtn: function() {
         $('#delete-word').on('click', $.proxy(function(e) {
           e.preventDefault()
-          this.deleteWord()
+          if(confirm('Вы действительно хотите удалить это слово?')) {
+            this.deleteWord()
+          }
         }, this))
       },
 
