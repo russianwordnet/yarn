@@ -1,8 +1,9 @@
 json.(@word, :id, :word)
 
 json.synonymes @raw_synonyms do |synonym|
-  json.word_id synonym.id
-  json.word    synonym.word
+  json.word_id        synonym.id
+  json.word           synonym.word
+  json.encoded_word   URI.encode(synonym.word.encode('Windows-1251','UTF-8'))
 
   json.definitions @synonyms_definitions[synonym.id] do |definition|
     json.id      definition.id

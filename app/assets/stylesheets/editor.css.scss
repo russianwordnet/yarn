@@ -353,8 +353,18 @@
       }
     }
 
+    .check-word {
+      margin-left: 10px;
+      visibility: hidden;
+
+      &:hover {
+        color: $base-blue;
+      }
+    }
+
     &:hover {
       .add-word { visibility: visible; }
+      .check-word { visibility: visible; }
     }
   }
 
