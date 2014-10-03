@@ -9,6 +9,8 @@
 //= require nprogress
 //= require jquery.cookie
 
+//= require bootstrap-tour/beginners_tutorial
+
 // Editor
 //= require editor
 
@@ -97,4 +99,7 @@
   if (editorUi.length) {
     editorUi.editor()
   }
+
+  var tutorial = new BeginnersTutorial();
+  tutorial.run();
 }).call(this);

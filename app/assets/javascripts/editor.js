@@ -26,6 +26,7 @@
     // Global options
     $.fn.editorOptions = function() { return o }
 
+
     // Main object
     $.fn.editor = function(el) { this.initialize(el) }
 
