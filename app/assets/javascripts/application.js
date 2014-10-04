@@ -99,7 +99,4 @@
   if (editorUi.length) {
     editorUi.editor()
   }
-
-  var tutorial = new BeginnersTutorial();
-  tutorial.run();
 }).call(this);

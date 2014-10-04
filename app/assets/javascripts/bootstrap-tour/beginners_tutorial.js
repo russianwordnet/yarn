@@ -3,7 +3,21 @@
 
 function BeginnersTutorial()
 {
-  this.tour = new Tour({});
+  this.tour = new Tour({
+    template:  "<div class='popover tour'> \
+    <div class='arrow'></div> \
+    <h3 class='popover-title'></h3> \
+    <div class='popover-content'></div> \
+    <div class='popover-navigation'> \
+        <button class='btn btn-default' data-role='prev'>« Назад</button> \
+        <span data-role='separator'>|</span> \
+        <button class='btn btn-default' data-role='next'>Далее »</button> \
+    <button class='btn btn-default' data-role='end'>Выйти</button> \
+    </div> \
+    </nav> \
+  </div>"
+  });
+
   this.tour.addStep({
     title: "Начальный туториал",
     content: "Тебя привествует многоуважаемый компьютер. \
@@ -34,6 +48,8 @@ function BeginnersTutorial()
     content: "В данном блоке находятся уже созданные синсеты. \
       Синсеты не должны повторяться."
   });
+  // There are "next: -1" is not exists because after click 'Добавить синсет'
+  // ajax happens and then bootstraptour fails
   this.tour.addStep({
     title: "Новый синсет",
     element: '#add-synset',
@@ -68,7 +84,7 @@ BeginnersTutorial.prototype = {
     {
       this.initHandlers();
       this.initTour();
-      this.runTour();
+      this.beginTour();
     }
   },
 
@@ -84,8 +100,10 @@ BeginnersTutorial.prototype = {
     this.tour.init();
   },
 
-  runTour: function() {
-    this.tour.start();
+  beginTour: function() {
+    this.tour.end();
+    this.tour.restart();
+    this.tour.start(true);
   },
 
   goToNextStep: function() {
@@ -93,17 +111,10 @@ BeginnersTutorial.prototype = {
   },
 
   initHandlers: function () {
-    // This needs because bootstraptour #reflex not handle <button>
-    $("#choice-word").on('click', $.proxy(function() {
-      this.tour.next();
-    }, this))
-
-    // This needs because bootstraptour needs displayed css.
-    // So we watch when display:none removing from #editor-area and then
-    // go next step by boostraptour
-    $("#editor-area").watch('display', $.proxy(function() {
+    // Bootstraptour needs displayed css. There are we watching
+    // .word-picker-modal display attribute changing to goto next step.
+    $(".word-picker-modal").watch('display', $.proxy(function() {
       this.goToNextStep();
     }, this))
   }
-
 };

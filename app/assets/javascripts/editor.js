@@ -26,7 +26,6 @@
     // Global options
     $.fn.editorOptions = function() { return o }
 
-
     // Main object
     $.fn.editor = function(el) { this.initialize(el) }
 
@@ -46,6 +45,7 @@
         this.handlePickWordBtn()
         this.handleWordDoneBtn()
         this.handleDeleteWordBtn()
+        this.handleBeginTutorialBtn()
       },
 
       build: function(data) {
@@ -133,6 +133,14 @@
         $('#pick-word').on('click', $.proxy(function(e) {
           e.preventDefault()
           this.wordPickerDialog()
+        }, this))
+      },
+
+      handleBeginTutorialBtn: function() {
+        $('#begin-tutorial').on('click', $.proxy(function(e) {
+          e.preventDefault()
+          var tutorial = new BeginnersTutorial()
+          tutorial.run()
         }, this))
       },
 

@@ -5,7 +5,7 @@ class EditorController < ApplicationController
   enable_squash_client
 
   before_filter :authenticate_user!, except:
-    [:index, :word, :show_synset, :definitions, :synonymes]
+    [:word, :show_synset, :definitions, :synonymes]
   before_filter :timestamp_required, only: [:edit_marks, :save]
 
   layout proc {|controller| controller.request.xhr? ? false : "editor" }

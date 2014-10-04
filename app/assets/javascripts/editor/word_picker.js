@@ -19,7 +19,7 @@
       this.o  = o
       this.content = this.el.find('.word-picker-content')
       this.lock = false
-      this.choiceButton = $('button.btn.choice')
+      this.choiceButton = $('#choice-word')
 
       this.content.on('click', '.pagination a', $.proxy(function(e) {
         e.preventDefault()
