@@ -231,6 +231,9 @@
           form.find('[name=text]').val(this.default_definition.text)
           form.find('[name=source]').val(this.default_definition.source)
           form.find('[name=uri]').val(this.default_definition.uri)
+        } else {
+          console.log('reseting form')
+          form["0"].reset()
         }
 
         modal.modal()
