@@ -52,7 +52,7 @@ function BeginnersTutorial()
     element: '#userbar',
     content: "Чтобы продолжить, необходимо осуществить вход в систему.",
     reflex: true,
-    placement: 'bottom',
+    placement: 'left',
     next: -1,
     onShown: $.proxy(function(tour) {
       if (this.isCurrentUserAuthorized())
@@ -97,14 +97,6 @@ function BeginnersTutorial()
     next: -1,
     content: "Осталось написать главное определение для синсета и твое \
       обучение завершится. Нажми на <карандашик>, чтобы написать определение."
-  });
-
-  this.tour.addStep({
-    title: "The End",
-    element: '#edit-definition-modal .btn.btn-primary',
-    reflex: true,
-    placement: 'bottom',
-    content: "Поздравляю с прохождением базового курса! До скорых встреч!"
   });
 }
 
@@ -175,10 +167,5 @@ BeginnersTutorial.prototype = {
     $(".word-picker-modal").watch('display', $.proxy(function() {
       this.goToNextStep();
     }, this));
-
-    // For the last "THE END" step
-    $("#edit-definition-modal").watch('display', $.proxy(function() {
-        this.goToNextStep();
-      }, this));
   }
 };
