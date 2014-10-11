@@ -65,6 +65,7 @@ function BeginnersTutorial()
     element: '#synsets',
     placement: 'bottom',
     backdrop: true,
+    orphan: true,
     content: "В данном блоке находятся уже созданные синсеты. \
       Синсеты не должны повторяться."
   });
@@ -124,7 +125,6 @@ BeginnersTutorial.prototype = {
 
   goToNextStep: function() {
     this.goToStep(this.tour.getCurrentStep()+1);
-
   },
 
   goToStep: function(stepNum) {
