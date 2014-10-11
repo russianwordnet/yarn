@@ -15,7 +15,8 @@ function BeginnersTutorial()
     <button class='btn btn-default' data-role='end'>Выйти</button> \
     </div> \
     </nav> \
-  </div>"
+  </div>",
+  debug: true
   });
 
   this.tour.addStep({
@@ -26,6 +27,7 @@ function BeginnersTutorial()
     backdrop: true,
     orphan: true
   });
+
   this.tour.addStep({
     title: "Синсет",
     content: "<b>Синсет</b> - это набор синонимов объединенных под одним \
@@ -33,6 +35,7 @@ function BeginnersTutorial()
     backdrop: true,
     orphan: true
   });
+
   this.tour.addStep({
     title: "Выбор слова",
     element: '#choice-word',
@@ -40,6 +43,20 @@ function BeginnersTutorial()
     reflex: true,
     next: -1
   });
+
+  this.tour.addStep({
+    title: "Вход",
+    element: '#userbar',
+    content: "Чтобы продолжить, необходимо осуществить вход в систему.",
+    reflex: true,
+    placement: 'bottom',
+    next: -1,
+    onShown: $.proxy(function(tour) {
+      if (this.isCurrentUserAuthorized())
+        this.goToNextStep();
+    }, this)
+  });
+
   this.tour.addStep({
     title: "Блок с синсетами",
     element: '#synsets',
@@ -48,8 +65,9 @@ function BeginnersTutorial()
     content: "В данном блоке находятся уже созданные синсеты. \
       Синсеты не должны повторяться."
   });
-  // There are "next: -1" is not exists because after click 'Добавить синсет'
-  // ajax happens and then bootstraptour fails
+
+  // "next: -1" good to be here, but its not here because after click
+  // 'Добавить синсет' ajax happens and bootstraptour fails
   this.tour.addStep({
     title: "Новый синсет",
     element: '#add-synset',
@@ -58,6 +76,7 @@ function BeginnersTutorial()
     placement: 'bottom',
     content: "Нажми <добавить синсет> для создания нового синсета."
   });
+
   this.tour.addStep({
     title: "Выбор синонимов",
     element: '#synonymes',
@@ -65,6 +84,7 @@ function BeginnersTutorial()
     content: "Выбери синонимы подходящие под данный синсет. \
       После этого нажми <далее>."
   });
+
   this.tour.addStep({
     title: "Определение для синсета",
     element: '#default-definition',
@@ -108,6 +128,16 @@ BeginnersTutorial.prototype = {
 
   goToNextStep: function() {
     this.tour.goTo(this.tour.getCurrentStep()+1);
+  },
+
+  isCurrentUserAuthorized: function() {
+    var authorized = true;
+    $.ajax({
+        url: "users/me.json",
+        async: false,
+        error: function(xhr, statusText, errorThrown){ authorized = false }
+    });
+    return authorized;
   },
 
   initHandlers: function () {

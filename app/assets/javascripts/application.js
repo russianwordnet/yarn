@@ -61,7 +61,10 @@
       } else if (jqXHR.status == 409) {
         alert('Извините, но кто-то только что отредактировал тот же синсет :( Страница будет обновлена.')
         window.location.reload();
-      } else {
+      } else if (jqXHR.status == 401) {
+        alert("Вам необходимо войти в систему или зарегистрироваться.");
+      }
+        else {
         alert('Неизвестная ошибка.\n' + jqXHR.responseText);
       }
     },

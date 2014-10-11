@@ -12,6 +12,13 @@ class UsersController < ApplicationController
     compute_statistics!
   end
 
+  def me
+    status = (current_user ? :ok : :unauthorized)
+    respond_to do |format|
+      format.json{ render(:me, formats: [:json], status: status) }
+    end
+  end
+
   protected
   def compute_statistics!
     @stats = User.scores(@user.id).first
