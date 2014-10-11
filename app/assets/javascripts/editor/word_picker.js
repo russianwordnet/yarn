@@ -49,6 +49,10 @@
           keyboard: true
         })
       }
+
+      this.el.on('shown', function () {
+        $('input:text:visible:first', this).focus();
+      });
     },
 
     handleSeachForm: function() {

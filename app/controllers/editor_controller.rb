@@ -123,9 +123,14 @@ class EditorController < ApplicationController
     synset = Synset.find(params[:id])
     @definition = synset.default_definition || Definition.new
 
-    @definition.update_with_tracking(params[:definition].permit(:text, :source, :uri))
+    definition_params = params[:definition].permit(:text, :source, :uri)
+    @definition.update_with_tracking(definition_params.merge(author: current_user))
 
-    synset.update_with_tracking(default_definition_id: @definition.id) if synset.default_definition.blank?
+    if synset.default_definition.blank?
+      synset.update_with_tracking(
+        default_definition_id: @definition.id, author: current_user
+      )
+    end
   end
 
   def create_sample
@@ -258,7 +263,7 @@ class EditorController < ApplicationController
         synset_word
       end
 
-      synset_word.update_with_tracking do |s|
+      synset_word.update_with_tracking(author: current_user) do |s|
         s.examples_ids = Array.wrap(word[:samples]).map(&:to_i)
         s.definitions_ids = Array.wrap(word[:definitions]).map(&:to_i)
       end

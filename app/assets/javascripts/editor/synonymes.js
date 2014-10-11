@@ -98,6 +98,12 @@
           word : $(e.currentTarget).data('word')
         })
       }, this))
+
+      this.accordion.find('.check-word').off('click', '**').on('click', function(e) {
+        e.preventDefault();
+        window.open($(this).data('href'), '_blank')
+        return false;
+      })
     },
 
     fireOnExpandAccordion: function() {
