@@ -94,8 +94,17 @@ function BeginnersTutorial()
     reflex: true,
     backdrop: true,
     placement: 'bottom',
+    next: -1,
     content: "Осталось написать главное определение для синсета и твое \
       обучение завершится. Нажми на <карандашик>, чтобы написать определение."
+  });
+
+  this.tour.addStep({
+    title: "The End",
+    element: '#edit-definition-modal .btn.btn-primary',
+    reflex: true,
+    placement: 'bottom',
+    content: "Поздравляю с прохождением базового курса! До скорых встреч!"
   });
 }
 
@@ -130,6 +139,10 @@ BeginnersTutorial.prototype = {
     this.tour.goTo(stepNum);
   },
 
+  tryFromSignInStep: function() {
+    this.goToStep(this.SIGN_IN_STEP);
+  },
+
   initTour: function() {
     this.tour.init();
   },
@@ -161,10 +174,11 @@ BeginnersTutorial.prototype = {
     // .word-picker-modal display attribute changing to goto next step.
     $(".word-picker-modal").watch('display', $.proxy(function() {
       this.goToNextStep();
-    }, this))
-  },
+    }, this));
 
-  tryFromSignInStep: function() {
-    this.goToStep(this.SIGN_IN_STEP);
+    // For the last "THE END" step
+    $("#edit-definition-modal").watch('display', $.proxy(function() {
+        this.goToNextStep();
+      }, this));
   }
 };
