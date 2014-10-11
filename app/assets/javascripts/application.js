@@ -101,5 +101,11 @@
   var editorUi = $('#editor-ui')
   if (editorUi.length) {
     editorUi.editor()
+
+    // Continue beginners tutorial if user was in sign in step
+    var tutorial = new BeginnersTutorial();
+    tutorial.initTour();
+    if (tutorial.isInSignInStep())
+      tutorial.tryFromSignInStep();
   }
 }).call(this);
