@@ -9,8 +9,9 @@ Yarn::Application.routes.draw do
     mount PgHero::Engine, at: 'pghero'
   end
 
-  resources :users, only: %i(show)
+  get 'users/me' => 'users#me'
   get 'profile' => 'users#profile'
+  resources :users, only: %i(show)
 
   resources :words do
     collection do

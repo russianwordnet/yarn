@@ -21,6 +21,7 @@ $linkColorHover: $base-blue;
 @import "editor";
 @import "nprogress";
 @import "nprogress-bootstrap";
+@import "bootstrap-tour/bootstrap-tour";
 
 // Fonts
 @import url(http://fonts.googleapis.com/css?family=Courgette);
@@ -337,3 +338,9 @@ h3 .badge { font-size: 12px; line-height: 16px; }
 h4 .badge { font-size: 11px; line-height: 14px;  margin-left: 7px; }
 h5 .badge { font-size: 10px; line-height: 12px; margin-left: 5px; }
 h6 .badge { font-size: 9px; line-height: 10px; margin-left: 5px; }
+
+a#begin-work{
+  background-color: #3D9956;
+  color: white;
+  text-shadow: none;
+}
