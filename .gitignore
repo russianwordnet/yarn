@@ -43,5 +43,8 @@
 /.project
 /.settings
 
+# Idea
+/.idea
+
 # Do not include the Rails documentation
 /doc/api

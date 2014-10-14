@@ -9,14 +9,17 @@
     <% end %>
   <% else %>
     <% unless Rails.env.production? %>
-      <%= link_to 'Тестовый вход', user_omniauth_authorize_path(:developer) %>
+      <%= link_to 'Тестовый вход', user_omniauth_authorize_path(:developer,
+        :origin => request.original_url) %>
     <% end %>
 
-    <%= link_to user_omniauth_authorize_path(:github), :id => 'github-auth' do %>
+    <%= link_to user_omniauth_authorize_path(:github,
+      :origin => request.original_url), :id => 'github-auth' do %>
       <i class="icon icon-user"></i>&nbsp;Войти при помощи GitHub
     <% end %>
 
-    <%= link_to user_omniauth_authorize_path(:facebook), :id => 'facebook-auth' do %>
+    <%= link_to user_omniauth_authorize_path(:facebook,
+      :origin => request.original_url), :id => 'facebook-auth' do %>
       <i class="icon icon-user"></i>&nbsp;Войти при помощи Facebook
     <% end %>
   <% end %>
