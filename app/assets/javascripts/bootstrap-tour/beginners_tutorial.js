@@ -32,8 +32,8 @@ function BeginnersTutorial()
 
   this.tour.addStep({
     title: "Синсет",
-    content: "<b>Синсет</b> - это набор синонимов объединенных под одним \
-      определением. Например: авто, автомобиль, машина - средство передвижения.",
+    content: "<b>Синсет</b> - это множество синонимов, объединенных общим \
+      смыслом. Например: авто, автомобиль, машина − средство передвижения.",
     backdrop: true,
     orphan: true
   });
@@ -41,7 +41,7 @@ function BeginnersTutorial()
   this.tour.addStep({
     title: "Выбор слова",
     element: '#choice-word',
-    content: "Выбери слово с которым хочешь работать и нажми <выбрать>.",
+    content: "Выбери слово, с которым хочешь работать, и нажми <выбрать>.",
     reflex: true,
     next: -1
   });
@@ -83,9 +83,11 @@ function BeginnersTutorial()
 
   this.tour.addStep({
     title: "Выбор синонимов",
-    element: '#synonymes',
+    element: '#left-pane',
     backdrop: true,
-    content: "Выбери синонимы подходящие под данный синсет. \
+    placement: 'top',
+    container: '#synonymes',
+    content: "Выбери <b>синонимы</b>, подходящие под данный синсет. \
       После этого нажми <далее>."
   });
 
@@ -96,7 +98,7 @@ function BeginnersTutorial()
     backdrop: true,
     placement: 'bottom',
     next: -1,
-    content: "Осталось написать главное определение для синсета и твое \
+    content: "Осталось написать <b>главное определение</b> для синсета и твое \
       обучение завершится. Нажми на <карандашик>, чтобы написать определение."
   });
 }
