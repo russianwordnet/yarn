@@ -11,10 +11,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140901154217) do
+ActiveRecord::Schema.define(version: 20141019192909) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
   enable_extension "pg_trgm"
   enable_extension "pg_stat_statements"
 
@@ -105,7 +104,7 @@ ActiveRecord::Schema.define(version: 20140901154217) do
     t.text     "source"
     t.string   "uri"
     t.integer  "author_id",               null: false
-    t.datetime "updated_at"
+    t.datetime "updated_at",              null: false
     t.integer  "approver_id"
     t.datetime "approved_at"
     t.integer  "revision",    default: 1, null: false
@@ -334,8 +333,8 @@ ActiveRecord::Schema.define(version: 20140901154217) do
 
   create_table "mark_categories", force: true do |t|
     t.string   "title",      null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "mark_categories", ["title"], name: "index_mark_categories_on_title", unique: true, using: :btree
@@ -344,8 +343,8 @@ ActiveRecord::Schema.define(version: 20140901154217) do
     t.string   "name",             null: false
     t.string   "description",      null: false
     t.integer  "mark_category_id", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   add_index "marks", ["mark_category_id"], name: "index_marks_on_mark_category_id", using: :btree
@@ -387,8 +386,8 @@ ActiveRecord::Schema.define(version: 20140901154217) do
     t.integer  "word_id",       null: false
     t.integer  "definition_id", null: false
     t.integer  "author_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   add_index "raw_definitions", ["author_id"], name: "index_raw_definitions_on_author_id", using: :btree
@@ -399,8 +398,8 @@ ActiveRecord::Schema.define(version: 20140901154217) do
     t.integer  "raw_definition_id", null: false
     t.integer  "example_id",        null: false
     t.integer  "author_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   add_index "raw_examples", ["author_id"], name: "index_raw_examples_on_author_id", using: :btree
@@ -411,8 +410,8 @@ ActiveRecord::Schema.define(version: 20140901154217) do
     t.integer  "word1_id",   null: false
     t.integer  "word2_id",   null: false
     t.integer  "author_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "raw_synonymies", ["author_id"], name: "index_raw_synonymies_on_author_id", using: :btree
@@ -426,8 +425,8 @@ ActiveRecord::Schema.define(version: 20140901154217) do
     t.string   "marks",        default: [], null: false, array: true
     t.integer  "examples_ids", default: [], null: false, array: true
     t.integer  "author_id",                 null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   add_index "raw_synset_words", ["author_id"], name: "index_raw_synset_words_on_author_id", using: :btree
@@ -440,8 +439,8 @@ ActiveRecord::Schema.define(version: 20140901154217) do
     t.integer  "words_ids",       default: [], null: false, array: true
     t.integer  "definitions_ids", default: [], null: false, array: true
     t.integer  "author_id",                    null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   add_index "raw_synsets", ["author_id"], name: "index_raw_synsets_on_author_id", using: :btree
@@ -538,8 +537,8 @@ ActiveRecord::Schema.define(version: 20140901154217) do
     t.string   "name",                   null: false
     t.string   "provider"
     t.string   "uid"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.string   "role"
     t.integer  "sash_id"
     t.integer  "level",      default: 0
@@ -575,7 +574,7 @@ ActiveRecord::Schema.define(version: 20140901154217) do
     t.integer  "author_id"
     t.integer  "approver_id"
     t.datetime "approved_at"
-    t.datetime "created_at"
+    t.datetime "created_at",                null: false
     t.integer  "revision",    default: 1,   null: false
     t.string   "word",                      null: false
     t.string   "grammar"
@@ -587,15 +586,15 @@ ActiveRecord::Schema.define(version: 20140901154217) do
   end
 
   add_index "words", ["accents"], name: "index_words_on_accents", using: :btree
-  add_index "words", ["approved_at"], name: "index_words_on_approved_at", using: :btree
-  add_index "words", ["approver_id"], name: "index_words_on_approver_id", using: :btree
-  add_index "words", ["author_id"], name: "index_words_on_author_id", using: :btree
-  add_index "words", ["deleted_at"], name: "index_words_on_deleted_at", using: :btree
+  add_index "words", ["approved_at"], name: "index_entries_on_approved_at", using: :btree
+  add_index "words", ["approver_id"], name: "index_entries_on_approver_id", using: :btree
+  add_index "words", ["author_id"], name: "index_entries_on_author_id", using: :btree
+  add_index "words", ["deleted_at"], name: "index_entries_on_deleted_at", using: :btree
   add_index "words", ["frequency"], name: "index_words_on_frequency", using: :btree
-  add_index "words", ["grammar"], name: "index_words_on_grammar", using: :btree
-  add_index "words", ["revision"], name: "index_words_on_revision", using: :btree
+  add_index "words", ["grammar"], name: "index_entries_on_grammar", using: :btree
+  add_index "words", ["revision"], name: "index_entries_on_revision", using: :btree
   add_index "words", ["uris"], name: "index_words_on_uris", using: :btree
-  add_index "words", ["word"], name: "index_words_on_word", unique: true, using: :btree
+  add_index "words", ["word"], name: "index_words_on_word", using: :btree
   add_index "words", ["word_id"], name: "index_words_on_word_id", using: :btree
 
   add_foreign_key "antonomy_relations", "current_antonomy_relations", name: "antonomy_relations_antonomy_relation_id_fk", column: "antonomy_relation_id", dependent: :delete
