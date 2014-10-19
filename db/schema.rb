@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141019192909) do
+ActiveRecord::Schema.define(version: 20141019201952) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -139,6 +139,28 @@ ActiveRecord::Schema.define(version: 20141019192909) do
   add_index "current_interlanguage_relations", ["revision"], name: "index_current_interlanguage_relations_on_revision", using: :btree
   add_index "current_interlanguage_relations", ["synset_id"], name: "index_current_interlanguage_relations_on_synset_id", using: :btree
   add_index "current_interlanguage_relations", ["updated_at"], name: "index_current_interlanguage_relations_on_updated_at", using: :btree
+
+  create_table "current_synset_interlinks", force: true do |t|
+    t.integer  "synset_id",               null: false
+    t.text     "source",                  null: false
+    t.text     "foreign_id"
+    t.integer  "author_id",               null: false
+    t.integer  "revision",    default: 1, null: false
+    t.integer  "approver_id"
+    t.datetime "approved_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+  end
+
+  add_index "current_synset_interlinks", ["approved_at"], name: "index_current_synset_interlinks_on_approved_at", using: :btree
+  add_index "current_synset_interlinks", ["approver_id"], name: "index_current_synset_interlinks_on_approver_id", using: :btree
+  add_index "current_synset_interlinks", ["author_id"], name: "index_current_synset_interlinks_on_author_id", using: :btree
+  add_index "current_synset_interlinks", ["deleted_at"], name: "index_current_synset_interlinks_on_deleted_at", using: :btree
+  add_index "current_synset_interlinks", ["foreign_id"], name: "index_current_synset_interlinks_on_foreign_id", using: :btree
+  add_index "current_synset_interlinks", ["revision"], name: "index_current_synset_interlinks_on_revision", using: :btree
+  add_index "current_synset_interlinks", ["source"], name: "index_current_synset_interlinks_on_source", using: :btree
+  add_index "current_synset_interlinks", ["synset_id"], name: "index_current_synset_interlinks_on_synset_id", using: :btree
+  add_index "current_synset_interlinks", ["updated_at"], name: "index_current_synset_interlinks_on_updated_at", using: :btree
 
   create_table "current_synset_relations", force: true do |t|
     t.integer  "synset1_id",              null: false
@@ -462,6 +484,30 @@ ActiveRecord::Schema.define(version: 20141019192909) do
   add_index "synset_domains", ["domain_id"], name: "index_synset_domains_on_domain_id", using: :btree
   add_index "synset_domains", ["synset_id"], name: "index_synset_domains_on_synset_id", using: :btree
 
+  create_table "synset_interlinks", force: true do |t|
+    t.integer  "synset_interlink_id",             null: false
+    t.integer  "synset_id",                       null: false
+    t.text     "source",                          null: false
+    t.text     "foreign_id"
+    t.integer  "author_id",                       null: false
+    t.integer  "revision",            default: 1, null: false
+    t.integer  "approver_id"
+    t.datetime "approved_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+  end
+
+  add_index "synset_interlinks", ["approved_at"], name: "index_synset_interlinks_on_approved_at", using: :btree
+  add_index "synset_interlinks", ["approver_id"], name: "index_synset_interlinks_on_approver_id", using: :btree
+  add_index "synset_interlinks", ["author_id"], name: "index_synset_interlinks_on_author_id", using: :btree
+  add_index "synset_interlinks", ["deleted_at"], name: "index_synset_interlinks_on_deleted_at", using: :btree
+  add_index "synset_interlinks", ["foreign_id"], name: "index_synset_interlinks_on_foreign_id", using: :btree
+  add_index "synset_interlinks", ["revision"], name: "index_synset_interlinks_on_revision", using: :btree
+  add_index "synset_interlinks", ["source"], name: "index_synset_interlinks_on_source", using: :btree
+  add_index "synset_interlinks", ["synset_id"], name: "index_synset_interlinks_on_synset_id", using: :btree
+  add_index "synset_interlinks", ["synset_interlink_id"], name: "index_synset_interlinks_on_synset_interlink_id", using: :btree
+  add_index "synset_interlinks", ["updated_at"], name: "index_synset_interlinks_on_updated_at", using: :btree
+
   create_table "synset_relations", force: true do |t|
     t.integer  "synset_relation_id",             null: false
     t.integer  "synset1_id",                     null: false
@@ -621,6 +667,10 @@ ActiveRecord::Schema.define(version: 20141019192909) do
   add_foreign_key "current_interlanguage_relations", "users", name: "current_interlanguage_relations_approver_id_fk", column: "approver_id", dependent: :delete
   add_foreign_key "current_interlanguage_relations", "users", name: "current_interlanguage_relations_author_id_fk", column: "author_id", dependent: :delete
 
+  add_foreign_key "current_synset_interlinks", "current_synsets", name: "current_synset_interlinks_synset_id_fk", column: "synset_id", dependent: :delete
+  add_foreign_key "current_synset_interlinks", "users", name: "current_synset_interlinks_approver_id_fk", column: "approver_id", dependent: :delete
+  add_foreign_key "current_synset_interlinks", "users", name: "current_synset_interlinks_author_id_fk", column: "author_id", dependent: :delete
+
   add_foreign_key "current_synset_relations", "current_synsets", name: "current_synset_relations_synset1_id_fk", column: "synset1_id", dependent: :delete
   add_foreign_key "current_synset_relations", "current_synsets", name: "current_synset_relations_synset2_id_fk", column: "synset2_id", dependent: :delete
   add_foreign_key "current_synset_relations", "users", name: "current_synset_relations_approver_id_fk", column: "approver_id", dependent: :delete
@@ -678,6 +728,11 @@ ActiveRecord::Schema.define(version: 20141019192909) do
 
   add_foreign_key "synset_domains", "current_synsets", name: "synset_domains_synset_id_fk", column: "synset_id", dependent: :delete
   add_foreign_key "synset_domains", "domains", name: "synset_domains_domain_id_fk", dependent: :delete
+
+  add_foreign_key "synset_interlinks", "current_synset_interlinks", name: "synset_interlinks_synset_interlink_id_fk", column: "synset_interlink_id", dependent: :delete
+  add_foreign_key "synset_interlinks", "current_synsets", name: "synset_interlinks_synset_id_fk", column: "synset_id", dependent: :delete
+  add_foreign_key "synset_interlinks", "users", name: "synset_interlinks_approver_id_fk", column: "approver_id", dependent: :delete
+  add_foreign_key "synset_interlinks", "users", name: "synset_interlinks_author_id_fk", column: "author_id", dependent: :delete
 
   add_foreign_key "synset_relations", "current_synset_relations", name: "synset_relations_synset_relation_id_fk", column: "synset_relation_id", dependent: :delete
   add_foreign_key "synset_relations", "current_synsets", name: "synset_relations_synset1_id_fk", column: "synset1_id", dependent: :delete

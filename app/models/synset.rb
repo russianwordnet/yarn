@@ -37,7 +37,7 @@ class Synset < ActiveRecord::Base
 
   has_many :antonomy_relations
   has_many :synset_relations
-  has_many :interlinks
+  has_many :interlinks, class_name: 'SynsetInterlink'
 
   has_one  :synset_domain
   has_one  :domain, :through => :synset_domain
