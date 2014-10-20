@@ -66,6 +66,9 @@ namespace :yarn do
                     end
                   end
                 end
+                synset.interlinks.each do |interlink|
+                  xml.interlink({ source: interlink.source, ref: interlink.foreign_id }.compact)
+                end
               end
             end
           end
