@@ -8,3 +8,6 @@ github_secret: ''
 # Squash
 squash_host: ''
 squash_key: ''
+
+# Redis
+redis_uri: ''
