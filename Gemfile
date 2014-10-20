@@ -16,8 +16,6 @@ gem 'cells'
 gem 'protected_attributes'
 gem 'merit'
 
-gem 'dalli'
-
 gem 'squash_ruby', require: 'squash/ruby'
 gem 'squash_rails', require: 'squash/rails'
 
@@ -69,4 +67,5 @@ end
 
 group :production do
   gem 'unicorn'
+  gem 'redis-rails'
 end

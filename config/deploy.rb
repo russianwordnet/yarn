@@ -5,7 +5,7 @@ set :repo_url, 'git://github.com/russianwordnet/yarn.git'
 set :deploy_to, '/home/dmchk/yarn'
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/yarn.yml public/yarn.xml}
+set :linked_files, %w{config/database.yml config/yarn.yml config/initializers/cache.rb public/yarn.xml}
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
