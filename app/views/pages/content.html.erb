@@ -22,18 +22,20 @@
       </tr>
     </thead>
     <tbody>
-    <% Synset.retrieve_creators.each do |user, synsets| %>
-      <tr>
-        <td style="vertical-align: top;"><%= user.id %></td>
-        <td style="vertical-align: top;">
-          <%= link_to user, user_path(user) %> (синсетов: <strong><%= synsets.size %></strong>)
-        </td>
-        <td style="vertical-align: top;">
-          <%= synsets.map do |synset|
-            link_to(synset.id, synset_path(synset))
-          end.join(', ').html_safe %>
-        </td>
-      </tr>
+    <% cache ['synsets', 'creators'], expires_in: 30.minutes do %>
+      <% Synset.retrieve_creators.each do |user, synsets| %>
+        <tr>
+          <td style="vertical-align: top;"><%= user.id %></td>
+          <td style="vertical-align: top;">
+            <%= link_to user, user_path(user) %> (синсетов: <strong><%= synsets.size %></strong>)
+          </td>
+          <td style="vertical-align: top;">
+            <%= synsets.map do |synset|
+              link_to(synset.id, synset_path(synset))
+            end.join(', ').html_safe %>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
     </tbody>
   </table>

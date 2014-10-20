@@ -17,15 +17,17 @@
 <% end -%>
 
 <h2>Синсеты</h2>
-<% unless @synsets.blank? %>
-  <ul class="triple-columns">
-    <% @synsets.each do |synset| %>
-      <li>
-        <%= link_to synset.id, synset_path(synset) %>
-        <%= synset_words(synset) %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>Нет синсетов.</p>
+<% cache ['synsets', @user], expires_in: 30.minutes do %>
+  <% unless @synsets.blank? %>
+    <ul class="triple-columns">
+      <% @synsets.each do |synset| %>
+        <li>
+          <%= link_to synset.id, synset_path(synset) %>
+          <%= synset_words(synset) %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>Нет синсетов.</p>
+  <% end %>
 <% end %>
