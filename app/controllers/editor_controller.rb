@@ -20,6 +20,7 @@ class EditorController < ApplicationController
         order(['score DESC', 'word'])
     end
 
+    @words = @words.where(grammar: params[:grammar]) if params[:grammar].present?
     @words = @words.where(deleted_at: nil).page(params[:page])
 
     respond_with @words do |format|
