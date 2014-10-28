@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141028183930) do
+ActiveRecord::Schema.define(version: 20141028204732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -404,6 +404,18 @@ ActiveRecord::Schema.define(version: 20141028183930) do
     t.string  "category", default: "default"
   end
 
+  create_table "posts", force: true do |t|
+    t.text     "title",      null: false
+    t.text     "body",       null: false
+    t.text     "slug"
+    t.integer  "author_id",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "posts", ["author_id"], name: "index_posts_on_author_id", using: :btree
+  add_index "posts", ["slug"], name: "index_posts_on_slug", using: :btree
+
   create_table "raw_definitions", force: true do |t|
     t.integer  "word_id",       null: false
     t.integer  "definition_id", null: false
@@ -737,6 +749,8 @@ ActiveRecord::Schema.define(version: 20141028183930) do
   add_foreign_key "interlanguage_relations", "users", name: "interlanguage_relations_author_id_fk", column: "author_id", dependent: :delete
 
   add_foreign_key "marks", "mark_categories", name: "marks_mark_category_id_fk", dependent: :delete
+
+  add_foreign_key "posts", "users", name: "posts_author_id_fk", column: "author_id", dependent: :delete
 
   add_foreign_key "raw_definitions", "current_definitions", name: "raw_definitions_definition_id_fk", column: "definition_id", dependent: :delete
   add_foreign_key "raw_definitions", "current_words", name: "raw_definitions_word_id_fk", column: "word_id", dependent: :delete

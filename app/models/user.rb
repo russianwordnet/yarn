@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
 
   attr_accessible :name, :provider, :uid
 
+  has_many :posts, :foreign_key => :author_id
   has_many :words, :foreign_key => :author_id
   has_many :synsets, :foreign_key => :author_id
   has_many :synset_words, :foreign_key => :author_id
