@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   has_many :synset_relations, :foreign_key => :author_id
   has_many :word_relations, :foreign_key => :author_id
   has_many :interlinks, :foreign_key => :author_id
+  has_many :subsumption_answers
 
   validates :name, presence: true
 

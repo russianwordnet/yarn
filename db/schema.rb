@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141019201952) do
+ActiveRecord::Schema.define(version: 20141028183930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -428,6 +428,20 @@ ActiveRecord::Schema.define(version: 20141019201952) do
   add_index "raw_examples", ["example_id"], name: "index_raw_examples_on_example_id", using: :btree
   add_index "raw_examples", ["raw_definition_id"], name: "index_raw_examples_on_raw_definition_id", using: :btree
 
+  create_table "raw_subsumptions", force: true do |t|
+    t.integer  "hypernym_id", null: false
+    t.integer  "hyponym_id",  null: false
+    t.text     "source"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "raw_subsumptions", ["created_at"], name: "index_raw_subsumptions_on_created_at", using: :btree
+  add_index "raw_subsumptions", ["hypernym_id", "hyponym_id", "source"], name: "index_raw_subsumptions_on_hypernym_id_and_hyponym_id_and_source", unique: true, using: :btree
+  add_index "raw_subsumptions", ["hypernym_id"], name: "index_raw_subsumptions_on_hypernym_id", using: :btree
+  add_index "raw_subsumptions", ["hyponym_id"], name: "index_raw_subsumptions_on_hyponym_id", using: :btree
+  add_index "raw_subsumptions", ["updated_at"], name: "index_raw_subsumptions_on_updated_at", using: :btree
+
   create_table "raw_synonymies", force: true do |t|
     t.integer  "word1_id",   null: false
     t.integer  "word2_id",   null: false
@@ -473,6 +487,21 @@ ActiveRecord::Schema.define(version: 20141019201952) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "subsumption_answers", force: true do |t|
+    t.integer  "raw_subsumption_id", null: false
+    t.integer  "user_id",            null: false
+    t.text     "answer"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subsumption_answers", ["answer"], name: "index_subsumption_answers_on_answer", using: :btree
+  add_index "subsumption_answers", ["created_at"], name: "index_subsumption_answers_on_created_at", using: :btree
+  add_index "subsumption_answers", ["raw_subsumption_id", "user_id"], name: "index_subsumption_answers_on_raw_subsumption_id_and_user_id", unique: true, using: :btree
+  add_index "subsumption_answers", ["raw_subsumption_id"], name: "index_subsumption_answers_on_raw_subsumption_id", using: :btree
+  add_index "subsumption_answers", ["updated_at"], name: "index_subsumption_answers_on_updated_at", using: :btree
+  add_index "subsumption_answers", ["user_id"], name: "index_subsumption_answers_on_user_id", using: :btree
 
   create_table "synset_domains", force: true do |t|
     t.integer  "domain_id",  null: false
@@ -717,6 +746,9 @@ ActiveRecord::Schema.define(version: 20141019201952) do
   add_foreign_key "raw_examples", "raw_definitions", name: "raw_examples_raw_definition_id_fk", dependent: :delete
   add_foreign_key "raw_examples", "users", name: "raw_examples_author_id_fk", column: "author_id", dependent: :delete
 
+  add_foreign_key "raw_subsumptions", "current_words", name: "raw_subsumptions_hypernym_id_fk", column: "hypernym_id", dependent: :delete
+  add_foreign_key "raw_subsumptions", "current_words", name: "raw_subsumptions_hyponym_id_fk", column: "hyponym_id", dependent: :delete
+
   add_foreign_key "raw_synonymies", "current_words", name: "raw_synonymies_word1_id_fk", column: "word1_id", dependent: :delete
   add_foreign_key "raw_synonymies", "current_words", name: "raw_synonymies_word2_id_fk", column: "word2_id", dependent: :delete
   add_foreign_key "raw_synonymies", "users", name: "raw_synonymies_author_id_fk", column: "author_id", dependent: :delete
@@ -725,6 +757,9 @@ ActiveRecord::Schema.define(version: 20141019201952) do
   add_foreign_key "raw_synset_words", "users", name: "raw_synset_words_author_id_fk", column: "author_id", dependent: :delete
 
   add_foreign_key "raw_synsets", "users", name: "raw_synsets_author_id_fk", column: "author_id", dependent: :delete
+
+  add_foreign_key "subsumption_answers", "raw_subsumptions", name: "subsumption_answers_raw_subsumption_id_fk", dependent: :delete
+  add_foreign_key "subsumption_answers", "users", name: "subsumption_answers_user_id_fk", dependent: :delete
 
   add_foreign_key "synset_domains", "current_synsets", name: "synset_domains_synset_id_fk", column: "synset_id", dependent: :delete
   add_foreign_key "synset_domains", "domains", name: "synset_domains_domain_id_fk", dependent: :delete
