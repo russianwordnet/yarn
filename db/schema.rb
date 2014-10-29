@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141028204732) do
+ActiveRecord::Schema.define(version: 20141029175553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -449,7 +449,7 @@ ActiveRecord::Schema.define(version: 20141028204732) do
   end
 
   add_index "raw_subsumptions", ["created_at"], name: "index_raw_subsumptions_on_created_at", using: :btree
-  add_index "raw_subsumptions", ["hypernym_id", "hyponym_id", "source"], name: "index_raw_subsumptions_on_hypernym_id_and_hyponym_id_and_source", unique: true, using: :btree
+  add_index "raw_subsumptions", ["hypernym_id", "hyponym_id"], name: "index_raw_subsumptions_on_hypernym_id_and_hyponym_id", unique: true, using: :btree
   add_index "raw_subsumptions", ["hypernym_id"], name: "index_raw_subsumptions_on_hypernym_id", using: :btree
   add_index "raw_subsumptions", ["hyponym_id"], name: "index_raw_subsumptions_on_hyponym_id", using: :btree
   add_index "raw_subsumptions", ["updated_at"], name: "index_raw_subsumptions_on_updated_at", using: :btree

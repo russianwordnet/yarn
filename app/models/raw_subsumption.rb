@@ -8,4 +8,5 @@ class RawSubsumption < ActiveRecord::Base
 
   validates :hypernym, presence: true
   validates :hyponym, presence: true
+  validates_uniqueness_of :hypernym_id, :scope => :hyponym_id
 end
