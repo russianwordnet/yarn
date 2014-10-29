@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141029175553) do
+ActiveRecord::Schema.define(version: 20141029210318) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -501,19 +501,34 @@ ActiveRecord::Schema.define(version: 20141029175553) do
   end
 
   create_table "subsumption_answers", force: true do |t|
-    t.integer  "raw_subsumption_id", null: false
-    t.integer  "user_id",            null: false
+    t.integer  "assignment_id", null: false
+    t.integer  "user_id",       null: false
     t.text     "answer"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "subsumption_answers", ["answer"], name: "index_subsumption_answers_on_answer", using: :btree
+  add_index "subsumption_answers", ["assignment_id", "user_id"], name: "index_subsumption_answers_on_assignment_id_and_user_id", using: :btree
+  add_index "subsumption_answers", ["assignment_id"], name: "index_subsumption_answers_on_assignment_id", using: :btree
   add_index "subsumption_answers", ["created_at"], name: "index_subsumption_answers_on_created_at", using: :btree
-  add_index "subsumption_answers", ["raw_subsumption_id", "user_id"], name: "index_subsumption_answers_on_raw_subsumption_id_and_user_id", unique: true, using: :btree
-  add_index "subsumption_answers", ["raw_subsumption_id"], name: "index_subsumption_answers_on_raw_subsumption_id", using: :btree
   add_index "subsumption_answers", ["updated_at"], name: "index_subsumption_answers_on_updated_at", using: :btree
   add_index "subsumption_answers", ["user_id"], name: "index_subsumption_answers_on_user_id", using: :btree
+
+  create_table "subsumption_assignments", force: true do |t|
+    t.integer  "raw_subsumption_id", null: false
+    t.integer  "hypernym_synset_id", null: false
+    t.integer  "hyponym_synset_id",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subsumption_assignments", ["created_at"], name: "index_subsumption_assignments_on_created_at", using: :btree
+  add_index "subsumption_assignments", ["hypernym_synset_id", "hyponym_synset_id"], name: "index_subsumption_assignments_on_synset_ids", unique: true, using: :btree
+  add_index "subsumption_assignments", ["hypernym_synset_id"], name: "index_subsumption_assignments_on_hypernym_synset_id", using: :btree
+  add_index "subsumption_assignments", ["hyponym_synset_id"], name: "index_subsumption_assignments_on_hyponym_synset_id", using: :btree
+  add_index "subsumption_assignments", ["raw_subsumption_id"], name: "index_subsumption_assignments_on_raw_subsumption_id", using: :btree
+  add_index "subsumption_assignments", ["updated_at"], name: "index_subsumption_assignments_on_updated_at", using: :btree
 
   create_table "synset_domains", force: true do |t|
     t.integer  "domain_id",  null: false
@@ -772,8 +787,12 @@ ActiveRecord::Schema.define(version: 20141029175553) do
 
   add_foreign_key "raw_synsets", "users", name: "raw_synsets_author_id_fk", column: "author_id", dependent: :delete
 
-  add_foreign_key "subsumption_answers", "raw_subsumptions", name: "subsumption_answers_raw_subsumption_id_fk", dependent: :delete
+  add_foreign_key "subsumption_answers", "subsumption_assignments", name: "subsumption_answers_assignment_id_fk", column: "assignment_id", dependent: :delete
   add_foreign_key "subsumption_answers", "users", name: "subsumption_answers_user_id_fk", dependent: :delete
+
+  add_foreign_key "subsumption_assignments", "current_synsets", name: "subsumption_assignments_hypernym_synset_id_fk", column: "hypernym_synset_id", dependent: :delete
+  add_foreign_key "subsumption_assignments", "current_synsets", name: "subsumption_assignments_hyponym_synset_id_fk", column: "hyponym_synset_id", dependent: :delete
+  add_foreign_key "subsumption_assignments", "raw_subsumptions", name: "subsumption_assignments_raw_subsumption_id_fk", dependent: :delete
 
   add_foreign_key "synset_domains", "current_synsets", name: "synset_domains_synset_id_fk", column: "synset_id", dependent: :delete
   add_foreign_key "synset_domains", "domains", name: "synset_domains_domain_id_fk", dependent: :delete

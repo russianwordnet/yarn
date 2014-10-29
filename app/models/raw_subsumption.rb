@@ -3,7 +3,8 @@ class RawSubsumption < ActiveRecord::Base
 
   belongs_to :hypernym, class_name: 'Word'
   belongs_to :hyponym, class_name: 'Word'
-  has_many :subsumption_answers
+  has_many :assignments, class_name: 'SubsumptionAssignment'
+  has_many :answers, :through => :assignments
   has_one :score, class_name: 'RawSubsumptionScore'
 
   validates :hypernym, presence: true
