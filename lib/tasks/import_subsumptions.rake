@@ -18,8 +18,6 @@ namespace :yarn do
         raise 'Missing ENV["source"]'
       end
 
-      RawSubsumption.delete_all
-
       ActiveRecord::Base.connection.reset_pk_sequence! RawSubsumption.table_name unless dry
 
       begin
