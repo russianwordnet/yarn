@@ -13,6 +13,12 @@ Yarn::Application.routes.draw do
   get 'profile' => 'users#profile'
   resources :users, only: %i(show)
 
+  get 'subsumptions' => 'subsumptions#index', :as => :subsumptions
+
+  namespace :subsumptions do
+    post 'answer', :as => :answer
+  end
+
   resources :words do
     collection do
       get :search

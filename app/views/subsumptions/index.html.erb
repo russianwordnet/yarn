@@ -1,0 +1,47 @@
+<% if @assignment %>
+  <h2>Гипероним</h2>
+  <ul>
+    <% @assignment.hypernym_synset.lexemes.each do |word| %>
+      <li>
+        <% if word == @assignment.hypernym_synset.default_word %>
+          <strong><%= word %></strong>
+        <% else %>
+          <%= word %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+
+  <h2>Гипоним</h2>
+  <ul>
+    <% @assignment.hyponym_synset.lexemes.each do |word| %>
+      <li>
+        <% if word == @assignment.hyponym_synset.default_word %>
+          <strong><%= word %></strong>
+        <% else %>
+          <%= word %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+
+  <h2>Ответ</h2>
+  <%= form_for @answer, url: subsumptions_answer_url do |f| %>
+    <%= f.hidden_field :assignment_id %>
+    <%= f.hidden_field :answer, value: 'yes' %>
+    <%= f.submit 'Да', name: nil %>
+  <% end %>
+
+  <%= form_for @answer, url: subsumptions_answer_url do |f| %>
+    <%= f.hidden_field :assignment_id %>
+    <%= f.hidden_field :answer, value: 'no' %>
+    <%= f.submit 'Нет', name: nil %>
+  <% end %>
+
+  <%= form_for @answer, url: subsumptions_answer_url do |f| %>
+    <%= f.hidden_field :assignment_id %>
+    <%= f.submit 'Пропустить', name: nil %>
+  <% end %>
+<% else %>
+  <p>Нет заданий.</p>
+<% end %>
