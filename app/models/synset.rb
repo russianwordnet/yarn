@@ -14,6 +14,7 @@ class Synset < ActiveRecord::Base
   accepts_nested_attributes_for :default_definition
 
   belongs_to :default_synset_word, class_name: 'SynsetWord'
+  has_one :default_word, :through => :default_synset_word, :source => :word
 
   before_save do |synset|
     unless synset.words_ids.include? synset.default_synset_word_id
