@@ -13,10 +13,17 @@ class SubsumptionAssignment < ActiveRecord::Base
   validates_uniqueness_of :hypernym_synset_id, :scope => :hyponym_synset_id
 
   scope :for_user, ->(user) {
-    user_id = user.class == User ? user.id : user
-    joins('LEFT OUTER JOIN subsumption_answers ON subsumption_answers.assignment_id = subsumption_assignments.id').
+    join = if user_id = (user.class == User ? user.id : user)
+      joins('LEFT OUTER JOIN subsumption_answers ON ' \
+            'subsumption_answers.assignment_id = subsumption_assignments.id AND ' \
+            'subsumption_answers.user_id = %d' % user_id) # because fuck you
+    else
+      joins('LEFT OUTER JOIN subsumption_answers ON subsumption_answers.assignment_id = subsumption_assignments.id')
+    end
+
+    join.
     joins('JOIN raw_subsumptions_scores ON raw_subsumptions_scores.raw_subsumption_id = subsumption_assignments.raw_subsumption_id').
-    where(user_id && 'subsumption_answers.user_id <> ? OR subsumption_answers.user_id IS NULL', user_id).
+    where(subsumption_answers: { user_id: nil }).
     order('score DESC')
   }
 end
