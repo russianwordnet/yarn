@@ -18,7 +18,7 @@ set :bundle_binstubs, nil
 set :bundle_jobs, 4
 set :bundle_env_variables, { nokogiri_use_system_libraries: 1 }
 
-set :rvm_ruby_version, '2.1.3'
+set :rvm_ruby_version, '2.1.4'
 set :rvm_roles, :app
 set :rvm_type, :system
 
