@@ -18,18 +18,20 @@ namespace :yarn do
         raise 'Missing ENV["author_id"]'
       end
 
+      grammar = ENV['grammar'].present? && ENV['grammar']
+
       ActiveRecord::Base.connection.reset_pk_sequence! RawSynonymy.table_name unless dry
       
       begin
         csv.each_slice(100) do |slice|
           RawSynonymy.transaction do
             entries = slice.map { |s| [s['word1'], s['word2']] }.flatten!.uniq
-            words = Word.where(word: entries).group_by(&:word)
+            words = Word.where(word: entries, grammar: grammar).group_by(&:word)
 
             if (diff = entries - words.keys).any?
               Word.transaction do
                 diff.each do |w|
-                  Word.create(word: w) do |word|
+                  Word.create(word: w, grammar: grammar) do |word|
                     word.author_id = author_id
                     (words[w] ||= []) << word
                   end
@@ -46,6 +48,8 @@ namespace :yarn do
                 end
                 candidates.first
               end.sort_by!(&:id)
+
+              next if synonyms[0] == synonyms[1]
 
               begin
                 RawSynonymy.create! do |rs|

@@ -66,7 +66,8 @@ class Word < ActiveRecord::Base
   end  
 
   validates :word, presence: true
-  validates :word, uniqueness: true, if: ->(w) { w.new_record? }
+  validates_uniqueness_of :word, :scope => :grammar, if: ->(w) { w.new_record? }
+  validates :grammar, presence: true
 
   def to_s
     word
