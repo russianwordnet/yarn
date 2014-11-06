@@ -24,6 +24,7 @@
     <tbody>
     <% cache ['synsets', 'creators'], expires_in: 30.minutes do %>
       <% Synset.retrieve_creators.each do |user, synsets| %>
+        <% next if user.bot? %>
         <tr>
           <td style="vertical-align: top;"><%= user.id %></td>
           <td style="vertical-align: top;">
@@ -52,6 +53,7 @@
     </thead>
     <tbody>
     <% User.scores.each do |user| %>
+      <% next if user.bot? %>
       <tr>
         <td style="vertical-align: top;"><%= user.id %></td>
         <td style="vertical-align: top;"><%= link_to user, user_path(user) %></td>

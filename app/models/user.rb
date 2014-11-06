@@ -37,4 +37,8 @@ class User < ActiveRecord::Base
   def admin?
     role && role.casecmp('admin') == 0
   end
+
+  def bot?
+    role && role.casecmp('bot') == 0
+  end
 end
