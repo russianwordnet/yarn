@@ -29,11 +29,14 @@ class Word < ActiveRecord::Base
   has_many :raw_definitions
 
   scope :search, ->(query) {
-    tokens = query.to_s.split
-    regexps = tokens.map { |w| Regexp.escape(w).gsub(/[ЕеЁё]/, '[ЕеЁё]') }
-    bregexps = regexps.map { |r| "(word ~* '\\m%s')::integer" % r }
-    select(['%s.*' % table_name, '%s AS rank' % bregexps.join(' + ')]).
-    where(regexps.map { |r| "word ~* '%s'" % r }.join(' AND '))
+    if (tokens = query.to_s.split).any?
+      regexps = tokens.map { |w| Regexp.escape(w).gsub(/[ЕеЁё]/, '[ЕеЁё]') }
+      bregexps = regexps.map { |r| "(word ~* '\\m%s')::integer" % r }
+      select(['%s.*' % table_name, '%s AS rank' % bregexps.join(' + ')]).
+      where(regexps.map { |r| "word ~* '%s'" % r }.join(' AND '))
+    else
+      where()
+    end
   }
 
   scope :next_word, ->(id) {
