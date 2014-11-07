@@ -21,7 +21,6 @@ Yarn::Application.routes.draw do
 
   resources :words do
     collection do
-      get :search
       get :approved
     end
 

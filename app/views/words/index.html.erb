@@ -1,11 +1,18 @@
-<%= heading_with_title "Слова" %>
+<% if params[:q].present? %>
+  <%= heading_with_title "Слова по запросу #{params[:q]}" %>
+<% else %>
+  <%= heading_with_title "Слова" %>
+  <%= link_to 'Добавить слово', new_word_path %>
+<% end %>
 
-<%= link_to 'Добавить слово', new_word_path %>
+<% if @words.present? %>
+  <ul class="triple-columns">
+    <% @words.each do |word| %>
+      <li><%= link_to word.word, word_path(word) %></li>
+    <% end %>
+  </ul>
 
-<ul class="triple-columns">
-  <% @words.each do |word| %>
-    <li><%= link_to word.word, word_path(word) %></li>
-  <% end %>
-</ul>
-
-<%= paginate @words %>
+  <%= paginate @words %>
+<% else %>
+  <p>Слова не найдены.</p>
+<% end %>

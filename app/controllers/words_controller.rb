@@ -8,23 +8,14 @@ class WordsController < ApplicationController
   before_filter :track_word, :only => [:update, :revert]
 
   def index
-    @words = Word.where(deleted_at: nil).
-      order('frequency DESC').page params[:page]
-
-    respond_to do |format|
-      format.html
-      format.xml { render xml: @words }
-      format.json { render json: @words }
+    @words = if params[:q].present?
+      Word.search(params[:q]).
+        order(['rank DESC', 'frequency DESC', 'word'])
+    else
+      Word.order('frequency DESC')
     end
-  end
 
-  def search
-    return (redirect_to(words_url) and false) unless params[:q].present?
-
-    @words = Word.search(params[:q]).
-      where(deleted_at: nil).
-      order(['rank DESC', 'frequency DESC', 'word']).
-      page(params[:page])
+    @words = @words.where(deleted_at: nil).page params[:page]
 
     respond_to do |format|
       format.html
