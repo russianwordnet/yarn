@@ -7,7 +7,19 @@
   <div class="modal-body">
     <%= render 'shared/search' %>
 
-    <div class="word-picker-content">
+    <ul class="nav nav-pills" id="grammar-selector">
+      <li class="active">
+        <a href="#" data-grammar="">Все</a>
+      </li>
+      <li>
+        <a href="#" data-grammar="n">Существительные</a>
+      </li>
+      <li>
+        <a href="#" data-grammar="v">Глаголы</a>
+      </li>
+    </ul>
+
+    <div class="word-picker-content tab-content">
       <%= render 'editor/index/word_picker_listing', :words => words %>
     </div>
   </div>

@@ -20,6 +20,7 @@
       this.content = this.el.find('.word-picker-content')
       this.lock = false
       this.choiceButton = $('#choice-word')
+      this.currentGrammar = $.cookie('grammar') || ""
 
       this.content.on('click', '.pagination a', $.proxy(function(e) {
         e.preventDefault()
@@ -30,6 +31,7 @@
       }, this))
 
       this.handleSeachForm()
+      this.handleGrammarSelector()
       this.handleSeachInput()
       this.handleListing()
       this.disallowClose()
@@ -65,6 +67,22 @@
       }, this))
     },
 
+    handleGrammarSelector: function() {
+      $("#grammar-selector a").click($.proxy(function(e) {
+        $(e.currentTarget).tab('show')
+
+        var grammar = $(e.currentTarget).data('grammar')
+        this.setGrammar(grammar)
+
+        this.el.find('input.search-query').keyup()
+      }, this))
+    },
+
+    setGrammar: function(grammar) {
+      this.currentGrammar = grammar
+      $.cookie('grammar', grammar)
+    },
+
     handleSeachInput: function() {
       var input = this.el.find('input.search-query')
 
@@ -73,7 +91,10 @@
 
         if (code != 13 && !this.lock) {
           this.lock = true
-          $.get('/editor', { word : input.val() }, $.proxy(function(data) {
+          $.get('/editor', {
+            word : input.val(),
+            grammar : this.currentGrammar
+          }, $.proxy(function(data) {
             this.content.html(data)
             this.currentWord   = null
             this.currentWordId = null
