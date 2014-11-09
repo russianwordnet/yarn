@@ -21,6 +21,12 @@ class SynsetsController < ApplicationController
     @definitions = @synset.definitions
     @synset_words = @synset.words_with_default_first
     @lexemes = @synset.lexemes.to_a
+
+    respond_to do |format|
+      format.html
+      format.xml { render xml: @synset }
+      format.json
+    end
   end
 
   def search
@@ -72,7 +78,7 @@ class SynsetsController < ApplicationController
 
   protected
   def find_synset
-    @synset = Synset.find(params[:id])
+    @synset = Synset.where(deleted_at: nil).find(params[:id])
   end
 
   def find_word

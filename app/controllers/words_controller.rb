@@ -79,6 +79,37 @@ class WordsController < ApplicationController
     end
   end
 
+  def synsets
+    @synsets = @word.synsets.where(deleted_at: nil)
+
+    respond_to do |format|
+      format.xml { render xml: @synsets }
+      format.json { render json: @synsets }
+    end
+  end
+
+  def synonyms
+    @synonyms = @word.synsets.includes(:lexemes).
+      where(current_synsets: { deleted_at: nil },
+            current_synset_words: { deleted_at: nil },
+            current_words: { deleted_at: nil }).
+      map(&:lexemes).flatten
+
+    respond_to do |format|
+      format.xml { render xml: @synonyms }
+      format.json { render json: @synonyms }
+    end
+  end
+
+  def raw_synonyms
+    @synonyms = @word.raw_synonyms.where(deleted_at: nil)
+
+    respond_to do |format|
+      format.xml { render xml: @synonyms }
+      format.json { render json: @synonyms }
+    end
+  end
+
   def approve
     @word.approved_at = DateTime.now
     @word.approver = current_user
@@ -130,7 +161,7 @@ class WordsController < ApplicationController
 
   protected
   def find_word
-    @word = Word.find(params[:id])
+    @word = Word.where(deleted_at: nil).find(params[:id])
   end
 
   def set_top_bar_word

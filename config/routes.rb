@@ -25,6 +25,12 @@ Yarn::Application.routes.draw do
     end
 
     member do
+      get :synsets
+      get :synonyms
+      get :raw_synonyms
+    end
+
+    member do
       get :approve
       get :disapprove
       get :history
