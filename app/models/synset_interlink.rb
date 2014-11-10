@@ -6,6 +6,6 @@ class SynsetInterlink < ActiveRecord::Base
   belongs_to :author, class_name: 'User'
   belongs_to :synset
 
-  has_many :old_interlanguage_relations, -> { order(:revision) },
-    :inverse_of => :origin
+  has_many :old_relations, -> { order(:revision) },
+    class_name: 'OldSynsetInterlink', :inverse_of => :origin
 end
