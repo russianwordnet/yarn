@@ -70,6 +70,8 @@ Yarn::Application.routes.draw do
     end
   end
 
+  resources :posts
+
   get 'editor' => 'editor#index', :as => :editor
 
   namespace :editor do

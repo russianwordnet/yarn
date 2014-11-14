@@ -97,6 +97,8 @@ GEM
       sass-rails (>= 3.1.1)
     foreigner (1.6.1)
       activerecord (>= 3.0.0)
+    friendly_id (5.0.4)
+      activerecord (>= 4.0.0)
     fssm (0.2.10)
     haml (4.0.5)
       tilt
@@ -320,6 +322,7 @@ DEPENDENCIES
   devise-i18n
   font-awesome-sass-rails (= 3.0.2.2)
   foreigner
+  friendly_id
   haml
   high_voltage
   jbuilder

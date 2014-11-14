@@ -1,0 +1,12 @@
+.row-fluid
+  %h1
+    Новости
+    - if current_user.try(:admin?)
+      .pull-right
+        = link_to 'Добавить новость', new_post_path
+
+  - @posts.each do |post|
+    .well-large.post
+      = render 'posts/post', post: post, need_link: true
+
+  = paginate @posts

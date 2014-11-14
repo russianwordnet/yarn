@@ -41,6 +41,8 @@ gem 'jbuilder'
 gem 'jquery-validation-rails'
 gem 'nprogress-rails'
 
+gem 'friendly_id'
+
 group :assets, :production do
   gem 'bootstrap-sass', '~> 2.3.2.0'
   gem 'ceaser-easing'

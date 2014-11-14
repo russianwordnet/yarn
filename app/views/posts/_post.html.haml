@@ -1,0 +1,15 @@
+%h2{id: post.slug }
+  = post.title
+
+  - if current_user.try(:admin?)
+    .pull-right
+      = link_to 'Редактировать', edit_post_path(post)
+%hr
+%p
+  = post.body.html_safe
+%h4
+  .pull-right
+    - if defined?(need_link) && need_link
+      = link_to I18n.l(post.created_at, format: :short), post
+    - else
+      = I18n.l(post.created_at, format: :short)
