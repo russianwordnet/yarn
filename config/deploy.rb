@@ -2,7 +2,7 @@ lock '3.2.1'
 
 set :application, 'yarn'
 set :repo_url, 'git://github.com/russianwordnet/yarn.git'
-set :deploy_to, '/home/dmchk/yarn'
+set :deploy_to, '/var/www/yarn'
 
 # Default value for :linked_files is []
 set :linked_files, %w{config/database.yml config/yarn.yml public/yarn.xml}
@@ -16,9 +16,8 @@ set :default_env, { lang: 'ru_RU.utf8', ruby_gc_malloc_limit: 90000000,
 
 set :bundle_binstubs, nil
 set :bundle_jobs, 4
-set :bundle_env_variables, { nokogiri_use_system_libraries: 1 }
 
-set :rvm_ruby_version, '2.1.4'
+set :rvm_ruby_version, '2.1.5'
 set :rvm_roles, :app
 set :rvm_type, :system
 
