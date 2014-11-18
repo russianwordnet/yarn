@@ -1,5 +1,9 @@
 module SynsetsHelper
   def synset_words(synset)
-    synset.words.map(&:word).delete_if(&:deleted_at).map(&:word).join ', '
+    synset.lexemes.
+      where(current_words: { deleted_at: nil },
+            current_synset_words: { deleted_at: nil }).
+      map(&:word).
+      join(', ')
   end
 end
