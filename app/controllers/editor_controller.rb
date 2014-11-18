@@ -178,7 +178,11 @@ class EditorController < ApplicationController
       begin
         raise 'The synset is locked'
       rescue RuntimeError => ex
-        notify_squash ex
+        notify_squash ex, {
+          user_timestamp:   params[:timestamp],
+          user_converted:   params[:timestamp].to_f,
+          entity_timestamp: synset_word.updated_at.to_f
+        }
       end
       return head 409
     end
@@ -240,7 +244,11 @@ class EditorController < ApplicationController
       begin
         raise 'The synset is locked'
       rescue RuntimeError => ex
-        notify_squash ex
+        notify_squash ex, {
+          user_timestamp:   params[:timestamp],
+          user_converted:   params[:timestamp].to_f,
+          entity_timestamp: @synset.updated_at.to_f
+        }
       end
       return head 409
     end
