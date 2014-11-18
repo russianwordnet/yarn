@@ -17,7 +17,7 @@
 <% end -%>
 
 <h2>Синсеты</h2>
-<% cache ['synsets', @user], expires_in: 30.minutes do %>
+<% cache_if @user.bot?, ['synsets', @user], expires_in: 30.minutes do %>
   <% unless @synsets.blank? %>
     <ul class="triple-columns">
       <% @synsets.each do |synset| %>
