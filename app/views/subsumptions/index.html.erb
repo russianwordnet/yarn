@@ -1,46 +1,59 @@
 <% if @assignment %>
-  <h2>Гипероним</h2>
-  <ul>
-    <% @assignment.hypernym_synset.lexemes.each do |word| %>
-      <li>
-        <% if word == @assignment.hypernym_synset.default_word %>
-          <strong><%= word %></strong>
-        <% else %>
-          <%= word %>
+  <div class="row-fluid">
+    <h2 class='breadcrumb'>Пример</h2>
+    <div class = "span4">
+      <h3>Гипероним</h2>
+      <ul>
+        <% @assignment.hypernym_synset.lexemes.each do |word| %>
+          <li>
+            <% if word == @assignment.hypernym_synset.default_word %>
+              <strong><%= word %></strong>
+            <% else %>
+              <%= word %>
+            <% end %>
+          </li>
         <% end %>
-      </li>
-    <% end %>
-  </ul>
-
-  <h2>Гипоним</h2>
-  <ul>
-    <% @assignment.hyponym_synset.lexemes.each do |word| %>
-      <li>
-        <% if word == @assignment.hyponym_synset.default_word %>
-          <strong><%= word %></strong>
-        <% else %>
-          <%= word %>
+      </ul>
+    </div>
+    <div class="span4">
+      <h3>Гипоним</h2>
+      <ul>
+        <% @assignment.hyponym_synset.lexemes.each do |word| %>
+          <li>
+            <% if word == @assignment.hyponym_synset.default_word %>
+              <strong><%= word %></strong>
+            <% else %>
+              <%= word %>
+            <% end %>
+          </li>
         <% end %>
-      </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <h2 class='breadcrumb'>Ответ</h2>
+    <div class = "span8 answers">
+      <button type="button" class="btn btn-large btn-success" data-answer="yes">Да</button>
+      <button type="button" class="btn btn-large btn-danger" data-answer="no">Нет</button>
+      <button type="button" class="btn btn-large btn-primary">Пропустить</button>
+    </div>
+
+    <%= form_for @answer, url: subsumptions_answer_url do |f| %>
+      <%= f.hidden_field :assignment_id %>
+      <%= f.hidden_field :answer, value: nil %>
     <% end %>
-  </ul>
+  </div>
+  <%= content_for :javascript do %>
+    <script>
+      $('.answers button').click(function(event){
+        answer = $(event.currentTarget).data('answer');
+        if (answer != undefined) {
+          $('#subsumption_answer_answer').val(answer)
+        }
 
-  <h2>Ответ</h2>
-  <%= form_for @answer, url: subsumptions_answer_url do |f| %>
-    <%= f.hidden_field :assignment_id %>
-    <%= f.hidden_field :answer, value: 'yes' %>
-    <%= f.submit 'Да', name: nil %>
-  <% end %>
-
-  <%= form_for @answer, url: subsumptions_answer_url do |f| %>
-    <%= f.hidden_field :assignment_id %>
-    <%= f.hidden_field :answer, value: 'no' %>
-    <%= f.submit 'Нет', name: nil %>
-  <% end %>
-
-  <%= form_for @answer, url: subsumptions_answer_url do |f| %>
-    <%= f.hidden_field :assignment_id %>
-    <%= f.submit 'Пропустить', name: nil %>
+        $('#new_subsumption_answer').submit();
+      });
+    </script>
   <% end %>
 <% else %>
   <p>Нет заданий.</p>

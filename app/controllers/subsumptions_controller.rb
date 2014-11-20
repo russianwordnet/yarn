@@ -11,6 +11,7 @@ class SubsumptionsController < ApplicationController
   end
 
   def answer
+    params[:subsumption_answer][:answer] = params[:subsumption_answer][:answer].presence
     @answer = SubsumptionAnswer.new(params[:subsumption_answer])
     @answer.user = current_user
 
