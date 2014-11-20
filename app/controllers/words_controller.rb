@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class WordsController < ApplicationController
-  before_filter :authenticate_user!, :except => [:index, :search, :approved, :show, :history]
+  before_filter :authenticate_user!, only: %i(new create update approve disapprove revert destroy)
   before_filter :find_word, :except => [:index, :search, :approved, :new, :create]
   before_filter :set_top_bar_word, :except => [:index, :search, :approved]
   before_filter :prepare_revert, :only => :revert
@@ -107,6 +107,46 @@ class WordsController < ApplicationController
     respond_to do |format|
       format.xml { render xml: @synonyms }
       format.json { render json: @synonyms }
+    end
+  end
+
+  def definitions
+    @definitions = @word.definitions.where(deleted_at: nil)
+
+    respond_to do |format|
+      format.xml { render xml: @definitions }
+      format.json { render json: @definitions }
+    end
+  end
+
+  def raw_definitions
+    @definitions = @word.raw_definitions.includes(:definition).
+      where(current_definitions: { deleted_at: nil }).
+      map(&:definition)
+
+    respond_to do |format|
+      format.xml { render xml: @definitions }
+      format.json { render json: @definitions }
+    end
+  end
+
+  def examples
+    @examples = @word.examples.where(deleted_at: nil)
+
+    respond_to do |format|
+      format.xml { render xml: @examples }
+      format.json { render json: @examples }
+    end
+  end
+
+  def raw_examples
+    @examples = @word.raw_examples.includes(:example).
+      where(current_examples: { deleted_at: nil }).
+      map(&:example)
+
+    respond_to do |format|
+      format.xml { render xml: @examples }
+      format.json { render json: @examples }
     end
   end
 

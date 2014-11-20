@@ -28,6 +28,10 @@ Yarn::Application.routes.draw do
       get :synsets
       get :synonyms
       get :raw_synonyms
+      get :definitions
+      get :raw_definitions
+      get :examples
+      get :raw_examples
     end
 
     member do

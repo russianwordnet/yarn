@@ -26,7 +26,9 @@ class Word < ActiveRecord::Base
 
   has_many :raw_synonym, :inverse_of => :word1, :foreign_key => :word1_id
   has_many :raw_synonyms, :through => :raw_synonym, :source => :word2
+
   has_many :raw_definitions
+  has_many :raw_examples, :through => :raw_definitions
 
   scope :search, ->(query) {
     if (tokens = query.to_s.split).any?
