@@ -3,24 +3,18 @@
   <table class="table table-bordered table-striped">
     <tr>
       <th>Синсет</th>
-      <th>Пример</th>
     </tr>
 
-    <% word.synset_words.each do |synset_word| %>
-      <% synset_word.synsets.where(deleted_at: nil).each do |synset|%>
+    <% word.synsets.where(deleted_at: nil).each do |synset| %>
       <tr>
-        <td><%= link_to synset.id, synset_path(synset) %></td>
         <td>
-          <% if synset_word.examples.size > 0%>
-            <% synset_word.examples.each do |example| %>
-              <div><%= example.text %></div>
-            <% end %>
+          <% if (words = synset_words(synset)).empty? %>
+            <%= link_to synset.id, synset_path(synset) %>
           <% else %>
-            &mdash;
+            <%= link_to synset.id, synset_path(synset) %>: <%= words %>
           <% end %>
         </td>
       </tr>
-      <% end %>
     <% end %>
   </table>
 <% else %>

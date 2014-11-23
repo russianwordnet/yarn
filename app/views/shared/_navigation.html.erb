@@ -5,10 +5,9 @@
   <%= active_link_to 'Технологии', page_path(:technologies), :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Инструкция', page_path(:help), :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Новости', posts_path, :wrap_tag => :li, :active => :exclusive %>
-  <%= active_link_to 'Редактор связей', subsumptions_path, :wrap_tag => :li, :active => :exclusive %>
+  <%= active_link_to 'Словник', words_path, :wrap_tag => :li, :active => :exclusive %>
   <% if current_user.try(:admin?) -%>
     <li class="divider"></li>
-    <%= active_link_to 'Все слова', words_path, :wrap_tag => :li, :active => :exclusive %>
     <%= active_link_to 'Утверждённые слова', approved_words_path, :wrap_tag => :li %>
     <li><%= top_link_to('Слово №%d' % top_bar_word.id, word_url(top_bar_word)) if top_bar_word %></li>
     <li class="divider"></li>
@@ -17,4 +16,5 @@
     <li><%= top_link_to('Cинсет №%d' % top_bar_synset.id, synset_url(top_bar_synset)) if top_bar_synset %></li>
     <li><%= top_link_to('Cинсет-слово №%d' % top_bar_synset_word.id, synset_word_url(top_bar_synset, top_bar_synset_word)) if top_bar_synset_word %></li>
   <% end -%>
+  <%= active_link_to 'Редактор связей', subsumptions_path, :wrap_tag => :li, :active => :exclusive %>
 </ul>
