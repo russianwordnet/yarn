@@ -102,6 +102,8 @@ Yarn::Application.routes.draw do
   end
 
   root to: 'high_voltage/pages#show', id: 'index'
+  get 'instructions' => redirect('/help')
+  get 'content' => redirect('/data')
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

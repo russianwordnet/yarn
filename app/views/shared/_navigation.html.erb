@@ -1,9 +1,9 @@
 <ul class="nav nav-list">
   <%= active_link_to 'Главная страница', root_path, :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Публикации', page_path(:publications), :wrap_tag => :li, :active => :exclusive %>
-  <%= active_link_to 'Данные', page_path(:content), :wrap_tag => :li, :active => :exclusive %>
+  <%= active_link_to 'Данные', page_path(:data), :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Технологии', page_path(:technologies), :wrap_tag => :li, :active => :exclusive %>
-  <%= active_link_to 'Инструкция', page_path(:instructions), :wrap_tag => :li, :active => :exclusive %>
+  <%= active_link_to 'Инструкция', page_path(:help), :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Новости', posts_path, :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Редактор связей', subsumptions_path, :wrap_tag => :li, :active => :exclusive %>
   <% if current_user.try(:admin?) -%>
