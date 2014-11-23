@@ -1,0 +1,4 @@
+ru:
+  time:
+    formats:
+      short: "%d %B %Y, %H:%M:%S"
