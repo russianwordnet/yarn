@@ -5,7 +5,7 @@
     <ul class="disc">
       <li>слов &mdash; <%= Word.where(deleted_at: nil).count %>;</li>
       <li>определений&mdash; <%= Definition.where(deleted_at: nil).count %>;</li>
-      <li>примеров&mdash; <%= Sample.where(deleted_at: nil).count %>;</li>
+      <li>примеров&mdash; <%= Example.where(deleted_at: nil).count %>;</li>
       <li>синсетов &mdash; <%= Synset.where(deleted_at: nil).count %>;</li>
       <li>&laquo;сырых&raquo; пар синонимов &mdash; <%= RawSynonymy.count %>;</li>
       <li>&laquo;сырых&raquo; родо-видовых пар &mdash; <%= RawSubsumption.count %>.</li>
