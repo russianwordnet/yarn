@@ -61,6 +61,8 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rvm', require: false
   gem 'capistrano-rails', require: false
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :test do
