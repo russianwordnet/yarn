@@ -22,6 +22,7 @@ class UsersController < ApplicationController
   protected
   def compute_statistics!
     @stats = User.scores(@user.id).first
-    @synsets = Synset.by_author(@user)
+    @synsets = Synset.joins_initiators.where(deleted_at: nil,
+      current_synsets_initiators: { initiator_id: @user })
   end
 end

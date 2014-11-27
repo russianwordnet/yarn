@@ -43,20 +43,26 @@ class Synset < ActiveRecord::Base
   has_one  :synset_domain
   has_one  :domain, :through => :synset_domain
 
-  scope :by_author, ->(author) { from_origins.where(author_id: author.id) }
+  scope :with_initiators, -> {
+    select('current_synsets.*',
+           'first_value(synsets.author_id) OVER ('\
+             'PARTITION BY current_synsets.id ' \
+             'ORDER BY synsets.revision' \
+           ') AS initiator_id').
+    joins(:old_synsets).
+    uniq
+  }
 
-  scope :from_origins, -> {
-    old = history_class.select('synset_id as id, author_id, revision')
-    new = self.select('id, author_id, revision')
-
-    from("(#{new.to_sql} union #{old.to_sql}) as current_synsets").where(revision: 1)
+  scope :joins_initiators, -> {
+    joins('INNER JOIN (%s) AS "current_synsets_initiators" ON ' \
+          '"current_synsets_initiators"."id" = "current_synsets"."id"' % with_initiators.to_sql)
   }
 
   def self.retrieve_creators
-    from_origins
-    .includes(:author)
-    .group_by(&:author)
-    .sort { |(_, s1), (_, s2)| s2.size <=> s1.size }
+    synsets = with_initiators.where(deleted_at: nil).order(:updated_at).reverse
+    users = User.find(synsets.map(&:initiator_id)).group_by(&:id)
+    synsets.group_by { |s| users[s.initiator_id].first }.
+      sort { |(_, s1), (_, s2)| s2.size <=> s1.size }
   end
 
   def destroy
