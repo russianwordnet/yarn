@@ -4,13 +4,10 @@ set :application, 'yarn'
 set :repo_url, 'git://github.com/russianwordnet/yarn.git'
 set :deploy_to, '/var/www/yarn'
 
-# Default value for :linked_files is []
 set :linked_files, %w{config/database.yml config/yarn.yml public/yarn.xml}
 
-# Default value for linked_dirs is []
-set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, %w{log public/assets tmp/pids tmp/cache tmp/sockets}
 
-# Default value for default_env is {}
 set :default_env, { lang: 'ru_RU.utf8', ruby_gc_malloc_limit: 90000000,
                     ld_preload: '/usr/lib64/libtcmalloc_minimal.so.4' }
 
@@ -33,7 +30,7 @@ namespace :unicorn do
     on roles(:app), :in => :sequence do
       within current_path do
         with rack_env: fetch(:rails_env) do
-          execute :bundle, "exec unicorn -c #{fetch(:unicorn_conf)} -D"
+          execute 'bin/unicorn', "-c #{fetch(:unicorn_conf)} -D"
         end
       end
     end
