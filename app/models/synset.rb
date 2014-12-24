@@ -45,11 +45,11 @@ class Synset < ActiveRecord::Base
 
   scope :with_initiators, -> {
     select('current_synsets.*',
-           'first_value(synsets.author_id) OVER ('\
+           'first_value(COALESCE(synsets.author_id, current_synsets.author_id)) OVER ('\
              'PARTITION BY current_synsets.id ' \
              'ORDER BY synsets.revision' \
            ') AS initiator_id').
-    joins(:old_synsets).
+    joins('LEFT JOIN synsets ON synsets.synset_id = current_synsets.id').
     uniq
   }
 
