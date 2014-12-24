@@ -16,7 +16,33 @@
   <p>Нет значков.</p>
 <% end -%>
 
-<h2>Синсеты</h2>
+<h2>Свежие правки в синсетах</h2>
+<% cache_if @user.bot?, ['recent_synsets', @user], expires_in: 30.minutes do %>
+  <% unless @recent_synsets.blank? %>
+    <table style="width: 100%; text-align: left;" border="1">
+      <thead>
+        <tr>
+          <th style="width: 5%;">ID</th>
+          <th style="width: 60%;">Слова</th>
+          <th style="width: 35%;">Время правки</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @recent_synsets.each do |synset| %>
+        <tr>
+          <td style="vertical-align: top;"><%= link_to synset.id, synset_path(synset) %></td>
+          <td style="vertical-align: top;"><%= synset_words(synset) %></td>
+          <td style="vertical-align: top;"><%= synset.updated_at.strftime('%H:%M:%S %d.%m.%Y') %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>Нет правок.</p>
+  <% end %>
+<% end %>
+
+<h2>Созданные синсеты</h2>
 <% cache_if @user.bot?, ['synsets', @user], expires_in: 30.minutes do %>
   <% unless @synsets.blank? %>
     <ul class="triple-columns">
