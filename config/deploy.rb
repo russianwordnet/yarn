@@ -1,10 +1,10 @@
-lock '3.2.1'
+lock '3.3.5'
 
 set :application, 'yarn'
 set :repo_url, 'git://github.com/russianwordnet/yarn.git'
 set :deploy_to, '/var/www/yarn'
 
-set :linked_files, %w{config/database.yml config/yarn.yml public/yarn.xml}
+set :linked_files, %w{config/database.yml config/yarn.yml public/yarn.xml public/yarn.xml.xz}
 
 set :linked_dirs, %w{log public/assets tmp/pids tmp/cache tmp/sockets}
 
