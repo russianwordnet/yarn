@@ -229,6 +229,11 @@ Devise.setup do |config|
     Rails.configuration.local['github_key'],
     Rails.configuration.local['github_secret']
 
+  config.omniauth :vkontakte,
+    Rails.configuration.local['vk_key'],
+    Rails.configuration.local['vk_secret'],
+    lang: 'ru'
+
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.

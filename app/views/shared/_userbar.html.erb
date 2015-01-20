@@ -18,6 +18,11 @@
       <i class="icon icon-user"></i>&nbsp;Войти при помощи GitHub
     <% end %>
 
+    <%= link_to user_omniauth_authorize_path(:vkontakte,
+      :origin => request.original_url), :id => 'vkontakte-auth' do %>
+      <i class="icon icon-user"></i>&nbsp;Войти при помощи VK
+    <% end %>
+
     <%= link_to user_omniauth_authorize_path(:facebook,
       :origin => request.original_url), :id => 'facebook-auth' do %>
       <i class="icon icon-user"></i>&nbsp;Войти при помощи Facebook
