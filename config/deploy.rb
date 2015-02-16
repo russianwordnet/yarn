@@ -16,7 +16,7 @@ set :default_env, { lang: 'ru_RU.utf8', ruby_gc_malloc_limit: 90000000,
 set :bundle_binstubs, nil
 set :bundle_jobs, 4
 
-set :rvm_ruby_version, '2.1.5'
+set :rvm_ruby_version, '2.2.0'
 set :rvm_roles, :app
 set :rvm_type, :system
 
