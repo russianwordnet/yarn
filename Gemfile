@@ -26,6 +26,11 @@ gem 'devise-i18n'
 gem 'nokogiri'
 gem 'sax-machine'
 
+gem 'rdf'
+gem 'rdf-lemon'
+gem 'rdf-raptor'
+gem 'rdf-turtle'
+
 gem 'haml'
 gem 'high_voltage'
 gem 'kramdown'
