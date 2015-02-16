@@ -45,6 +45,9 @@ Yarn::Application.routes.draw do
   resources :definitions, only: [:index, :show] do
   end
 
+  resources :examples, only: [:index, :show] do
+  end
+
   resources :synset_words, only: [:show, :edit]
 
   resources :synsets, only: [:index, :show, :destroy, :edit] do
