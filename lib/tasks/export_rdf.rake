@@ -6,7 +6,14 @@ namespace :yarn do
       Rails.application.routes.default_url_options[:host] = 'russianword.net'
 
       uri = RDF::URI('http://russianword.net/')
-      graph = RDF::Graph.new(context: uri)
+
+      graph = RDF::Graph.new
+
+      graph << [uri, RDF.type, RDF::Lemon.Lexicon]
+      graph << [uri, RDF.type, RDF::OWL.Ontology]
+      graph << [uri, RDF::RDFS.label, 'Yet Another RussNet']
+      graph << [uri, RDF::DC.title, 'Yet Another RussNet']
+      graph << [uri, RDF::DC.date, Date.today.iso8601]
 
       i = 0
 
@@ -44,6 +51,8 @@ namespace :yarn do
       group('current_synsets.id').find_each do |synset|
         subject = RDF::URI(synset_url(synset.id))
 
+        graph << [subject, RDF::type, RDF::SKOS.Concept]
+
         synset.words_agg.zip(synset.synset_words_agg) do |word_id, synset_word_id|
           subject_sense = RDF::URI(synset_word_url(synset_word_id))
           subject_word = RDF::URI(word_url(word_id))
@@ -51,10 +60,10 @@ namespace :yarn do
           graph << [subject_sense, RDF.type, RDF::Lemon.LexicalSense]
           graph << [subject_sense, RDF::DC.source, uri]
           graph << [subject_sense, RDF::Lemon.reference, subject]
-          graph << [subject_sense, RDF::Lemon.sense, subject_word]            
+          graph << [subject, RDF::Lemon.isReferenceOf, subject_sense]
+          graph << [subject_word, RDF::Lemon.sense, subject_sense]
+          graph << [subject_sense, RDF::Lemon.isSenseOf, subject_word]
         end
-
-        graph << [subject, RDF::type, RDF::SKOS.Concept]
 
         p i if (i += 1) % 500 == 0 and !Rails.env.production?
       end
@@ -110,6 +119,7 @@ namespace :yarn do
       RDF::Writer.open(Rails.root.join('public', 'yarn.ttl')) do |writer|
         writer.prefix! :rdf, RDF::to_uri
         writer.prefix! :rdfs, RDF::RDFS.to_uri
+        writer.prefix! :owl, RDF::OWL.to_uri
         writer.prefix! :dc, RDF::DC::to_uri
         writer.prefix! :skos, RDF::SKOS.to_uri
         writer.prefix! :lemon, RDF::Lemon.to_uri
