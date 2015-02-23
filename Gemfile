@@ -29,7 +29,7 @@ gem 'sax-machine'
 gem 'rdf'
 gem 'rdf-lemon'
 gem 'rdf-raptor'
-gem 'rdf-turtle'
+gem 'rdf-n3'
 
 gem 'haml'
 gem 'high_voltage'
