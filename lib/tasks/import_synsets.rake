@@ -34,6 +34,12 @@ namespace :yarn do
 
       csv.each_slice(100) do |slice|
         slice.each do |word_entries|
+          word_entries.each { |w| w.gsub! /\p{Zs}/, ' ' }.
+            each { |w| w.gsub! /[\p{C}\p{M}\p{Sk}]|[\p{Nd}&&[^\d]]/, '' }.
+            each(&:strip!).each(&:scrub!)
+
+          next if word_entries.any? { |w| w !~ /^[А-Яа-яЁё]+[А-Яа-яЁё -]*$/u.freeze }
+
           words = Word.where(word: word_entries, grammar: grammar, deleted_at: nil).group_by(&:word)
           next if words.empty?
 
