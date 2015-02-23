@@ -116,7 +116,7 @@ namespace :yarn do
         p i if (i += 1) % 500 == 0 and !Rails.env.production?
       end
 
-      RDF::Writer.open(Rails.root.join('public', 'yarn.ttl')) do |writer|
+      RDF::Writer.open(Rails.root.join('public', 'yarn.n3')) do |writer|
         writer.prefix! :rdf, RDF::to_uri
         writer.prefix! :rdfs, RDF::RDFS.to_uri
         writer.prefix! :owl, RDF::OWL.to_uri
