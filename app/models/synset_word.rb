@@ -23,6 +23,9 @@ class SynsetWord < ActiveRecord::Base
   has_many :synset_word_marks
   has_many :marks, :through => :synset_word_marks
 
+  def destroy
+    update_with_tracking { |s| s.deleted_at = Time.now.utc }
+  end
 
 private
   def definition_ids

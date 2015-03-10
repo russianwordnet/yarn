@@ -58,6 +58,7 @@ Yarn::Application.routes.draw do
 
     collection do
       get :search
+      post :merge
     end
 
     member do

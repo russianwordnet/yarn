@@ -2,7 +2,7 @@ class SynsetsController < ApplicationController
   before_filter :find_synset, :only => [:show, :destroy, :edit, :approve, :set_domain]
   before_filter :find_word, :only => :search
   before_filter :set_top_bar_synset, :only => :show
-  before_filter :allow_destroy?, :only => :destroy
+  before_filter :allow_destroy?, :only => [:destroy, :merge]
   before_filter :allow_approve?, :only => :approve
 
   respond_to :html, :json
@@ -44,6 +44,39 @@ class SynsetsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to action: :index }
       format.json { head :no_content }
+    end
+  end
+
+  def merge
+    @acceptor = Synset.where(deleted_at: nil).find(params[:acceptor_synset_id])
+    @synset = Synset.where(deleted_at: nil).find(params[:synset_id])
+
+    intersection = @acceptor.words.map do |asw|
+      [asw, @synset.words.find { |sw| sw.word_id == asw.word_id }]
+    end
+
+    intersection.each do |acceptor_word, synset_word|
+      next unless synset_word
+
+      acceptor_word.update_with_tracking do |acceptor_word|
+        acceptor_word.definitions_ids |= synset_word.definitions_ids
+        acceptor_word.examples_ids |= synset_word.examples_ids
+        acceptor_word.marks_ids |= synset_word.marks_ids
+      end
+
+      synset_word.destroy
+    end
+
+    @acceptor.update_with_tracking do |acceptor|
+      acceptor.words_ids |= @synset.words_ids
+    end
+
+    @synset.destroy
+
+    respond_to do |format|
+      format.html { redirect_to synset_url(@acceptor) }
+      format.xml  { render xml: @acceptor }
+      format.json { render json: @acceptor }
     end
   end
 
