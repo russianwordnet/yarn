@@ -1,0 +1,10 @@
+*.log
+log
+.git
+*.bak
+*.swp
+*.gitkeep
+*.gitignore
+Dockerfile
+.dockerignore
+docker-compose.yml

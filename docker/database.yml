@@ -1,0 +1,8 @@
+production:
+  adapter: postgresql
+  encoding: unicode
+  host: <%= ENV['POSTGRES_PORT_5432_TCP_ADDR'] %>
+  database: <%= ENV['POSTGRES_DATABASE'] || 'yarn' %>
+  username: <%= ENV['POSTGRES_USER'] || 'yarn' %>
+  password: <%= ENV['POSTGRES_PASSWORD'] || 'yarn228' %>
+  pool: 5

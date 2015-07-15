@@ -48,3 +48,6 @@
 
 # Do not include the Rails documentation
 /doc/api
+
+# Docker
+/docker-compose.yml
