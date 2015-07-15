@@ -1,6 +1,7 @@
 #!/bin/sh
 /home/app/yarn/bin/yarn.yml.sh > /home/app/yarn/config/yarn.yml
 chown app:app /home/app/yarn/config/yarn.yml
+crontab -r
 crontab 2>/dev/null -l | { cat; echo "0  * * * * /home/app/yarn/bin/merit-ranks.sh";    } | crontab -
 crontab 2>/dev/null -l | { cat; echo "0  0 * * * /home/app/yarn/bin/export-csv.sh";     } | crontab -
 crontab 2>/dev/null -l | { cat; echo "0  5 * * * /home/app/yarn/bin/export-xml.sh";     } | crontab -
