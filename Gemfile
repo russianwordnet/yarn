@@ -63,10 +63,6 @@ end
 group :development do
   gem 'railroady'
   gem 'meta_request'
-  gem 'capistrano'
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano-rvm', require: false
-  gem 'capistrano-rails', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
 end
