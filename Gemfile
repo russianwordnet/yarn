@@ -13,7 +13,7 @@ gem 'omniauth-facebook'
 gem 'omniauth-github'
 gem 'omniauth-vkontakte'
 gem 'kaminari'
-gem 'cells'
+gem 'cells', '~> 3.11.3'
 gem 'protected_attributes'
 gem 'merit'
 
