@@ -30,9 +30,12 @@
 /config/database.yml
 /config/yarn.yml
 
-# Ignore XML dumps
+# Ignore data dumps
 /*.xml
+/*.csv
 /public/yarn.xml
+/public/yarn-synsets.csv
+*.xz
 
 # Ignore RVM
 .ruby-gemset
