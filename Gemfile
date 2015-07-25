@@ -17,8 +17,7 @@ gem 'cells'
 gem 'protected_attributes'
 gem 'merit'
 
-gem 'squash_ruby', require: 'squash/ruby'
-gem 'squash_rails', require: 'squash/rails'
+gem 'sentry-raven'
 
 gem 'rails-i18n'
 gem 'devise-i18n'
