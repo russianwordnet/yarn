@@ -1,9 +1,6 @@
 # encoding: utf-8
 
 class EditorController < ApplicationController
-  include Squash::Ruby::ControllerMethods
-  enable_squash_client
-
   before_filter :authenticate_user!, except:
     [:index, :word, :show_synset, :definitions, :synonymes]
   before_filter :timestamp_required, only: [:edit_marks, :save]
@@ -175,15 +172,7 @@ class EditorController < ApplicationController
     synset_word = SynsetWord.find(params[:synset_word_id])
 
     if params[:timestamp].to_f < synset_word.updated_at.to_f
-      begin
-        raise 'The synset is locked'
-      rescue RuntimeError => ex
-        notify_squash ex, {
-          user_timestamp:   params[:timestamp],
-          user_converted:   params[:timestamp].to_f,
-          entity_timestamp: synset_word.updated_at.to_f
-        }
-      end
+      raise 'The synset is locked'
       return head 409
     end
 
@@ -241,15 +230,7 @@ class EditorController < ApplicationController
     @synset = Synset.find(params[:synset_id])
 
     if params[:timestamp].to_f < @synset.updated_at.to_f
-      begin
-        raise 'The synset is locked'
-      rescue RuntimeError => ex
-        notify_squash ex, {
-          user_timestamp:   params[:timestamp],
-          user_converted:   params[:timestamp].to_f,
-          entity_timestamp: @synset.updated_at.to_f
-        }
-      end
+      raise 'The synset is locked'
       return head 409
     end
 

@@ -1,7 +1,4 @@
 class SubsumptionsController < ApplicationController
-  include Squash::Ruby::ControllerMethods
-  enable_squash_client
-
   before_filter :authenticate_user!
 
   def index
