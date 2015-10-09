@@ -34,14 +34,14 @@
   <div class="listing listing-synsets">
     <ul>
       {{#synsets}}
-        <li data-id="{{id}}" class="{{state}}"><strong>{{text}}</strong><span>{{&first_definition}}</span></li>
+        <li data-id="{{id}}" class="{{state}}"><i class="icon icon-circle-arrow-right"></i><strong>{{text}}</strong><span>{{&first_definition}}</span></li>
       {{/synsets}}
     </ul>
   </div>
 </script>
 
 <script id="selected-synset-tpl" type="text/html">
-  <strong>{{text}}</strong><span>{{first_definition}}</span>
+  <i class="icon icon-circle-arrow-right"></i><strong>{{text}}</strong><span>{{first_definition}}</span>
 </script>
 
 <script id="accordion-tpl" type="text/html">
