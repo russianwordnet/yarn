@@ -65,6 +65,7 @@ class SynsetsController < ApplicationController
       end
 
       synset_word.destroy
+      @synset.words_ids = @synset.words_ids - [synset_word.id]
     end
 
     @acceptor.update_with_tracking do |acceptor|
