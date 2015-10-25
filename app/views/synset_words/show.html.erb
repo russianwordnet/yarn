@@ -8,10 +8,10 @@
       <th>Источник</th>
     </tr>
 
-    <% @samples.each do |sample| %>
+    <% @synset_word.examples.each do |sample| %>
       <tr>
-        <td><%= link_to sample.text, synset_word_sample_url(@synset, @synset_word, sample) %></td>
-        <td><%= link_to_unless !sample.uri, sample.source || 'источник', sample.uri %></td>
+        <td><%= link_to example.text, synset_word_sample_url(@synset, @synset_word, example) %></td>
+        <td><%= link_to_unless !example.uri, example.source || 'источник', example.uri %></td>
       </tr>
     <% end %>
   </table>
