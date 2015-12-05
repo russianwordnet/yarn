@@ -51,7 +51,7 @@ gem 'friendly_id'
 group :assets, :production do
   gem 'bootstrap-sass', '~> 2.3.2.0'
   gem 'ceaser-easing'
-  gem 'compass-rails'
+  gem 'compass-rails', github: 'Compass/compass-rails', branch: 'master'
   gem 'sass-rails'
   gem 'coffee-rails'
   gem 'therubyracer', :platform => :ruby
