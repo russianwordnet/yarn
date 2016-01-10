@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141102193456) do
+ActiveRecord::Schema.define(version: 20160110163355) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_trgm"
+  enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
+  enable_extension "pg_trgm"
 
   create_table "antonomy_relations", force: true do |t|
     t.integer  "antonomy_relation_id",             null: false
@@ -51,7 +52,6 @@ ActiveRecord::Schema.define(version: 20141102193456) do
   end
 
   add_index "badges_sashes", ["badge_id", "sash_id"], name: "index_badges_sashes_on_badge_id_and_sash_id", using: :btree
-  add_index "badges_sashes", ["badge_id"], name: "index_badges_sashes_on_badge_id", using: :btree
   add_index "badges_sashes", ["sash_id"], name: "index_badges_sashes_on_sash_id", using: :btree
 
   create_table "current_antonomy_relations", force: true do |t|
@@ -450,7 +450,6 @@ ActiveRecord::Schema.define(version: 20141102193456) do
 
   add_index "raw_subsumptions", ["created_at"], name: "index_raw_subsumptions_on_created_at", using: :btree
   add_index "raw_subsumptions", ["hypernym_id", "hyponym_id"], name: "index_raw_subsumptions_on_hypernym_id_and_hyponym_id", unique: true, using: :btree
-  add_index "raw_subsumptions", ["hypernym_id"], name: "index_raw_subsumptions_on_hypernym_id", using: :btree
   add_index "raw_subsumptions", ["hyponym_id"], name: "index_raw_subsumptions_on_hyponym_id", using: :btree
   add_index "raw_subsumptions", ["updated_at"], name: "index_raw_subsumptions_on_updated_at", using: :btree
 
@@ -464,7 +463,6 @@ ActiveRecord::Schema.define(version: 20141102193456) do
 
   add_index "raw_synonymies", ["author_id"], name: "index_raw_synonymies_on_author_id", using: :btree
   add_index "raw_synonymies", ["word1_id", "word2_id"], name: "index_raw_synonymies_on_word1_id_and_word2_id", unique: true, using: :btree
-  add_index "raw_synonymies", ["word1_id"], name: "index_raw_synonymies_on_word1_id", using: :btree
   add_index "raw_synonymies", ["word2_id"], name: "index_raw_synonymies_on_word2_id", using: :btree
 
   create_table "raw_synset_words", force: true do |t|
@@ -510,7 +508,6 @@ ActiveRecord::Schema.define(version: 20141102193456) do
 
   add_index "subsumption_answers", ["answer"], name: "index_subsumption_answers_on_answer", using: :btree
   add_index "subsumption_answers", ["assignment_id", "user_id"], name: "index_subsumption_answers_on_assignment_id_and_user_id", using: :btree
-  add_index "subsumption_answers", ["assignment_id"], name: "index_subsumption_answers_on_assignment_id", using: :btree
   add_index "subsumption_answers", ["created_at"], name: "index_subsumption_answers_on_created_at", using: :btree
   add_index "subsumption_answers", ["updated_at"], name: "index_subsumption_answers_on_updated_at", using: :btree
   add_index "subsumption_answers", ["user_id"], name: "index_subsumption_answers_on_user_id", using: :btree
@@ -525,7 +522,6 @@ ActiveRecord::Schema.define(version: 20141102193456) do
 
   add_index "subsumption_assignments", ["created_at"], name: "index_subsumption_assignments_on_created_at", using: :btree
   add_index "subsumption_assignments", ["hypernym_synset_id", "hyponym_synset_id"], name: "index_subsumption_assignments_on_synset_ids", unique: true, using: :btree
-  add_index "subsumption_assignments", ["hypernym_synset_id"], name: "index_subsumption_assignments_on_hypernym_synset_id", using: :btree
   add_index "subsumption_assignments", ["hyponym_synset_id"], name: "index_subsumption_assignments_on_hyponym_synset_id", using: :btree
   add_index "subsumption_assignments", ["raw_subsumption_id"], name: "index_subsumption_assignments_on_raw_subsumption_id", using: :btree
   add_index "subsumption_assignments", ["updated_at"], name: "index_subsumption_assignments_on_updated_at", using: :btree
