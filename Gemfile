@@ -22,6 +22,7 @@ gem 'sentry-raven'
 gem 'rails-i18n'
 gem 'devise-i18n'
 
+gem 'json'
 gem 'nokogiri'
 gem 'sax-machine'
 
