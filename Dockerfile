@@ -1,6 +1,6 @@
 FROM phusion/passenger-ruby22
 
-MAINTAINER Dmitry Ustalov <dmitry@eveel.ru>
+MAINTAINER Dmitry Ustalov <dmitry.ustalov@gmail.com>
 
 CMD ["/sbin/my_init"]
 
