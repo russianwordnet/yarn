@@ -2,6 +2,7 @@
 //= require jquery_ujs
 //= require bootstrap
 //= require jquery.color
+//= require jquery.autocompete
 //= require mustache
 //= require jquery.validate
 //= require jquery.validate.additional-methods
@@ -13,6 +14,9 @@
 
 // Editor
 //= require editor
+//= require relations_editor
+//= require relations_editor/relation_editor_synset_control
+//= require relations_editor/relation_editor_notification
 
 (function() {
   var flash_messages;

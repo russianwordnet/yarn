@@ -1,0 +1,47 @@
+// Place all the styles related to the relations_editor controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#relation-buttons > .btn {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.relation-edit-heading {
+  min-height: 60px;
+
+  > .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  label {
+    font-size: 18px;
+    text-align: center;
+  }
+}
+
+.relation-editor-notification {
+  display: none;
+  background: #5bb75b;
+  position: absolute;
+  top: 0;
+  min-width: 700px;
+  padding: 3px;
+  text-align: center;
+  border-radius: 5px;
+  color: white;
+}
+
+.autocomplete-suggestions {
+  background: white;
+  border: 2px solid #ddd;
+  box-sizing: border-box;
+
+  > .autocomplete-suggestion {
+    padding: 2px 5px;
+    cursor: pointer;
+  }
+}

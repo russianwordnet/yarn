@@ -1,0 +1,39 @@
+= render partial: 'templates'
+
+.relation-editor-notification
+  Связь успешно сохранена!
+
+.row-fluid.relation-editor
+  #word1.span5
+    .row-fluid.relation-edit-heading
+      .form-group
+        = label_tag :word1, 'Слово 1'
+        .input-append
+          %input.form-control.search-synsets{type: :search}
+          .add-on
+            %i.icon-search
+    .row_fluid.synsets
+
+  .span2
+    .row-fluid.relation-edit-heading
+      = label_tag :controls, 'Тип связи'
+    .row-fluid#relation-buttons
+      %a.btn.btn-info{data: {type: :hypernymy}}
+        Род ->
+      %a.btn.btn-info{data: {type: :hypernymy, reverse: true}}
+        Вид ->
+      %a.btn.btn-info{data: {type: :holonymy}}
+        Часть ->
+      %a.btn.btn-info{data: {type: :holonymy, reverse: true}}
+        Целое ->
+      %a.btn.btn-info{data: {type: :antonymy}}
+        Антоним
+  #word2.span5
+    .row_fluid.relation-edit-heading
+      .form-group
+        = label_tag :word2, 'Слово 2'
+        .input-append
+          %input.form-control.search-synsets{type: :search}
+          .add-on
+            %i.icon-search
+    .row_fluid.synsets

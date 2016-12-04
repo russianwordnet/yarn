@@ -15,7 +15,7 @@ class WordsController < ApplicationController
       Word.order('frequency DESC')
     end
 
-    @words = @words.where(deleted_at: nil).page params[:page]
+    @words = @words.where(deleted_at: nil).page(params[:page]).per(limit)
 
     respond_to do |format|
       format.html
@@ -218,5 +218,9 @@ class WordsController < ApplicationController
     attributes.merge! params[:word]
     attributes['author_id'] = current_user.id
     @new_word = OpenStruct.new(attributes)
+  end
+
+  def limit
+    params[:limit].presence
   end
 end

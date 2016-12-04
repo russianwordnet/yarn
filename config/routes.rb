@@ -19,6 +19,10 @@ Yarn::Application.routes.draw do
     post 'answer', :as => :answer
   end
 
+  resource :relations_editor, controller: :relations_editor, only: :show do
+    post :save
+  end
+
   resources :words do
     collection do
       get :approved
