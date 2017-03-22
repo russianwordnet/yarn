@@ -3,6 +3,7 @@ class this.RelationEditorSynsetControl
     @container = $(@container)
     @synsetsContainer = @container.find('.synsets')
     @synsetsTemplate = $('#synsets-tpl').text()
+    @chosenWordId = null
 
   init: ->
     @initSearchForm()
@@ -12,6 +13,9 @@ class this.RelationEditorSynsetControl
 
   chosenSynset: ->
     @synsetsContainer.find('input:checked').val()
+
+  chosenWord: ->
+    @chosenWordId
 
   #private
 
@@ -26,6 +30,7 @@ class this.RelationEditorSynsetControl
       transformResult: (response, _) =>
         @transformResult(response)
       onSelect: (item) =>
+        @chosenWordId = item.data
         @loadSynsets(item.data)
 
 
@@ -42,7 +47,7 @@ class this.RelationEditorSynsetControl
       @clearSynsets()
       @renderSynsets(data.synsets)
       @bindSynsetEvents()
-      $(document).trigger 'synsetChosen'
+      $(document).trigger 'wordChosen'
 
   clearSynsets: ->
     @synsetsContainer.html('')

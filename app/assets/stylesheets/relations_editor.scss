@@ -7,6 +7,10 @@
   margin-bottom: 10px;
   font-size: 18px;
   padding: 4px 8px;
+
+  &.selected {
+    background: green;
+  }
 }
 
 .relation-edit-heading {

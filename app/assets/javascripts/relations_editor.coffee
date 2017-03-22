@@ -2,6 +2,7 @@ class RelationEditor
   constructor: ->
     @buttonsContainer = $('#relation-buttons')
     @notification = new RelationEditorNotification()
+    @repo = new RelationEditorRelationsRepo()
 
   init: ->
     return unless @relationEditorPage()
@@ -13,7 +14,14 @@ class RelationEditor
     all_checked = @synsetControls.every (control) ->
       control.isSynsetChosen()
 
-    if all_checked then @enableButtons() else @disableButtons()
+    if all_checked
+      @enableButtons()
+      @showExistingRelations()
+    else
+      @disableButtons()
+
+  onWordChosen: ->
+    @loadExistingRelations()
 
   #private
 
@@ -39,6 +47,21 @@ class RelationEditor
     $.each @synsetControls, (idx, control) ->
       control.init()
 
+  loadExistingRelations: ->
+    word1 = @synsetControls[0].chosenWord()
+    word2 = @synsetControls[1].chosenWord()
+
+    return unless word1 && word2
+
+    @repo.load_for word1, word2
+
+  showExistingRelations: ->
+    synset1 = @synsetControls[0].chosenSynset()
+    synset2 = @synsetControls[1].chosenSynset()
+
+    relation = @repo.relation_for synset1, synset2
+    @showRelation(relation)
+
   selectRelation: (data) ->
     synset1 = if data.reverse then @synsetControls[0] else @synsetControls[1]
     synset2 = if data.reverse then @synsetControls[1] else @synsetControls[0]
@@ -54,6 +77,16 @@ class RelationEditor
           relation_type: data.type
       success: =>
         @showSuccessMessage()
+
+  showRelation: (relation) ->
+    @buttonsContainer.find('.btn').removeClass('selected')
+    return unless relation
+
+    query = "[data-type=#{relation.relation_type}]"
+    query += '[data-reverse]' if relation.reverse
+
+    @buttonsContainer.find(query).addClass('selected')
+
 
   showSuccessMessage: ->
     @notification.success()
@@ -74,3 +107,6 @@ $(document).ready ->
 
 $(document).on 'synsetChosen', ->
   window.relationEditor.onSynsetChosen()
+
+$(document).on 'wordChosen', ->
+  window.relationEditor.onWordChosen()

@@ -21,6 +21,7 @@ Yarn::Application.routes.draw do
 
   resource :relations_editor, controller: :relations_editor, only: :show do
     post :save
+    get :relations
   end
 
   resources :words do
