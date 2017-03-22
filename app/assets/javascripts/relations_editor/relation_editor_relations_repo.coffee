@@ -10,7 +10,36 @@ class this.RelationEditorRelationsRepo
     relation = @select_for(synset1, synset2)
     relation ||= @select_for(synset2, synset1, true)
 
+  update_relation: (synset1, synset2, relation, reverse) ->
+    @remove_relation(synset1, synset2)
+
+    if reverse
+      first = synset2
+      second = synset1
+    else
+      first = synset1
+      second = synset2
+
+    @relations.push({
+      synset1_id: first,
+      synset2_id: second,
+      relation_type: relation
+    })
+
   #private
+
+  remove_relation: (synset1, synset2) ->
+    synset1 = synset1.toString()
+    synset2 = synset2.toString()
+
+    @relations = @relations.filter (relation) ->
+      relation1_id = relation.synset1_id.toString()
+      relation2_id = relation.synset2_id.toString()
+
+      return !(
+        (relation1_id == synset1 && relation2_id == synset2) ||
+        (relation1_id == synset2 && relation2_id == synset1)
+      )
 
   clear: ->
     @relations = []

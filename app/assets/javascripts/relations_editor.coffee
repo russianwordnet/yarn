@@ -63,8 +63,8 @@ class RelationEditor
     @showRelation(relation)
 
   selectRelation: (data) ->
-    synset1 = if data.reverse then @synsetControls[0] else @synsetControls[1]
-    synset2 = if data.reverse then @synsetControls[1] else @synsetControls[0]
+    synset1 = if data.reverse then @synsetControls[1] else @synsetControls[0]
+    synset2 = if data.reverse then @synsetControls[0] else @synsetControls[1]
 
     $.ajax
       url: '/relations_editor/save.json'
@@ -77,13 +77,24 @@ class RelationEditor
           relation_type: data.type
       success: =>
         @showSuccessMessage()
+        @updateRelationButton(data.type, data.reverse)
+
+  updateRelationButton: (relation, reverse) ->
+    synset1 = @synsetControls[0].chosenSynset()
+    synset2 = @synsetControls[1].chosenSynset()
+
+    @repo.update_relation(synset1, synset2, relation, reverse)
+    @showExistingRelations()
 
   showRelation: (relation) ->
     @buttonsContainer.find('.btn').removeClass('selected')
     return unless relation
 
     query = "[data-type=#{relation.relation_type}]"
-    query += '[data-reverse]' if relation.reverse
+    if relation.reverse
+      query += '[data-reverse]'
+    else
+      query += ':not([data-reverse])'
 
     @buttonsContainer.find(query).addClass('selected')
 
