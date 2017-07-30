@@ -12,3 +12,20 @@
     </ul>
   </div>
 </script>
+
+<script id="relations-list-item-tpl" type="text/html">
+  <div class="relations-list-item row-fluid" data-synset1="{{synset1.id}}" data-synset2="{{synset2.id}}">
+    <div class='synset span5'>{{synset1.text}}</div>
+    <div class='relation-type span2'>{{relation_title}}</div>
+    <div class='synset span5'>{{synset2.text}}</div>
+    <div class='remove-relation span1'>
+      <a href='#'>
+        <i title="Удалить" class="icon icon-remove"></i>
+      </a>
+    </div>
+  </div>
+</script>
+
+<script id="relations-list-blank-tpl" type="text/html">
+  <h4 class="centered"> Пока не создано ни одной связи. Используйте редактор для создания.
+</script>

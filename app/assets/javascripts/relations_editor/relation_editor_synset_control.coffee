@@ -4,6 +4,7 @@ class this.RelationEditorSynsetControl
     @synsetsContainer = @container.find('.synsets')
     @synsetsTemplate = $('#synsets-tpl').text()
     @chosenWordId = null
+    @synsets = []
 
   init: ->
     @initSearchForm()
@@ -16,6 +17,11 @@ class this.RelationEditorSynsetControl
 
   chosenWord: ->
     @chosenWordId
+
+  get: (synset_id) ->
+    id = parseInt(synset_id)
+    @synsets.find (synset) ->
+      synset.id == id
 
   #private
 
@@ -45,6 +51,7 @@ class this.RelationEditorSynsetControl
   loadSynsets: (word_id) ->
     $.get 'editor/word.json?word_id=' + word_id, (data) =>
       @clearSynsets()
+      @synsets = data.synsets
       @renderSynsets(data.synsets)
       @bindSynsetEvents()
       $(document).trigger 'wordChosen'

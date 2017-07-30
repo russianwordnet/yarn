@@ -18,6 +18,7 @@
 //= require relations_editor/relation_editor_synset_control
 //= require relations_editor/relation_editor_notification
 //= require relations_editor/relation_editor_relations_repo
+//= require relations_editor/relations_editor_renderer
 
 (function() {
   var flash_messages;

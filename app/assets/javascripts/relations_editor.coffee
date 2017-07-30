@@ -3,6 +3,9 @@ class RelationEditor
     @buttonsContainer = $('#relation-buttons')
     @notification = new RelationEditorNotification()
     @repo = new RelationEditorRelationsRepo()
+    @relations_renderer = new RelationsEditorRenderer(this)
+    @relations_renderer.on_remove (synset1_id, synset2_id) =>
+      @onRemoveRelation(synset1_id, synset2_id)
 
   init: ->
     return unless @relationEditorPage()
@@ -19,6 +22,19 @@ class RelationEditor
       @showExistingRelations()
     else
       @disableButtons()
+
+  onRemoveRelation: (synset1_id, synset2_id) ->
+    $.ajax
+      url: '/relations_editor.json'
+      dataType: 'json'
+      type: 'DELETE'
+      data:
+        relation:
+          synset1_id: synset1_id
+          synset2_id: synset2_id
+      success: =>
+        @repo.remove_relation(synset1_id, synset2_id)
+        @renderRelations()
 
   onWordChosen: ->
     @loadExistingRelations()
@@ -53,7 +69,8 @@ class RelationEditor
 
     return unless word1 && word2
 
-    @repo.load_for word1, word2
+    @repo.load_for word1, word2, =>
+      @renderRelations()
 
   showExistingRelations: ->
     synset1 = @synsetControls[0].chosenSynset()
@@ -85,6 +102,10 @@ class RelationEditor
 
     @repo.update_relation(synset1, synset2, relation, reverse)
     @showExistingRelations()
+    @renderRelations()
+
+  renderRelations: ->
+    @relations_renderer.render()
 
   showRelation: (relation) ->
     @buttonsContainer.find('.btn').removeClass('selected')

@@ -2,9 +2,9 @@ class this.RelationEditorRelationsRepo
   constructor: ->
     @relations = []
 
-  load_for: (word1, word2) ->
+  load_for: (word1, word2, callback) ->
     @clear()
-    @load_relations(word1, word2)
+    @load_relations(word1, word2, callback)
 
   relation_for: (synset1, synset2) ->
     relation = @select_for(synset1, synset2)
@@ -26,8 +26,6 @@ class this.RelationEditorRelationsRepo
       relation_type: relation
     })
 
-  #private
-
   remove_relation: (synset1, synset2) ->
     synset1 = synset1.toString()
     synset2 = synset2.toString()
@@ -41,15 +39,18 @@ class this.RelationEditorRelationsRepo
         (relation1_id == synset2 && relation2_id == synset1)
       )
 
+  #private
+
   clear: ->
     @relations = []
 
-  load_relations: (word1, word2) ->
+  load_relations: (word1, word2, callback) ->
     $.get 'relations_editor/relations.json',
       word1: word1,
       word2: word2,
       (data) =>
         @relations = data
+        callback.call(data) if callback
 
   select_for: (synset1, synset2, reverse = false) ->
     relations = @relations.filter (relation) ->

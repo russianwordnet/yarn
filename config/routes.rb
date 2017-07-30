@@ -19,7 +19,7 @@ Yarn::Application.routes.draw do
     post 'answer', :as => :answer
   end
 
-  resource :relations_editor, controller: :relations_editor, only: :show do
+  resource :relations_editor, controller: :relations_editor, only: %i[show destroy] do
     post :save
     get :relations
   end

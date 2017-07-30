@@ -28,6 +28,10 @@
   }
 }
 
+.centered {
+  text-align: center;
+}
+
 .relation-editor-notification {
   display: none;
   background: #5bb75b;
@@ -48,5 +52,32 @@
   > .autocomplete-suggestion {
     padding: 2px 5px;
     cursor: pointer;
+  }
+}
+
+.relations-list-item {
+  font-weight: normal;
+  line-height: 20px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+
+  > .synset {
+    padding: 5px 5px 5px 25px;
+    font-size: 14px;
+  }
+
+  > .relation-type {
+    padding: 5px;
+    text-align: center;
+    font-size: 16px;
+  }
+
+  > .remove-relation > a {
+    font-size: 22px;
+    padding: 5px 0;
+    color: #FF0000;
+    opacity: 0.7;
+    background: none;
   }
 }
