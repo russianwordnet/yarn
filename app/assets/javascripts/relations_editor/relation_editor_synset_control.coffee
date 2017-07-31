@@ -32,7 +32,9 @@ class this.RelationEditorSynsetControl
       params:
         limit: 5
       minChars: 2
-      deferRequestBy: 100
+      deferRequestBy: 0,
+      ajaxSettings:
+        error: -> # Override default ajaxSetup
       transformResult: (response, _) =>
         @transformResult(response)
       onSelect: (item) =>
