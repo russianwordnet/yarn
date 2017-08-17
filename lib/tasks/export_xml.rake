@@ -31,8 +31,8 @@ namespace :yarn do
       end
 
       builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
-        xml.comment(' Generated on http://russianword.net/ at %s. ' % DateTime.now.iso8601)
-        xml.yarn('xmlns' => 'http://russianword.net',
+        xml.comment(' Generated on https://russianword.net/ at %s. ' % DateTime.now.iso8601)
+        xml.yarn('xmlns' => 'https://russianword.net',
                  'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
                  'xsi:schemaLocation' => XSD) do
           xml.words do
