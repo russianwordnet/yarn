@@ -75,6 +75,9 @@ namespace :yarn do
           end
 
           xml.synsetRelations do
+            SynsetRelation.joins(:synset1, :synset2).where(deleted_at: nil, current_synsets: { deleted_at: nil }, synset2s_current_synset_relations: { deleted_at: nil }).find_each do |relation|
+              xml.relationEntry(version[relation].merge(type: relation.relation_type, synset1: xmlid[relation.synset1], synset2: xmlid[relation.synset2]).compact)
+            end
           end
 
           xml.wordRelations do
