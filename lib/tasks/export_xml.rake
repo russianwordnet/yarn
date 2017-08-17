@@ -10,6 +10,7 @@ namespace :yarn do
         when Synset then 's%d' % entry.id
         when Definition then 'd%d' % entry.id
         when Example then 'e%d' % entry.id
+        when SynsetRelation then 'r%d' % entry.id
         else raise 'Unknown class: %s' % entry.class
         end
       end
@@ -31,7 +32,7 @@ namespace :yarn do
       end
 
       builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
-        xml.comment(' Generated on https://russianword.net/ at %s. ' % DateTime.now.iso8601)
+        xml.comment(' Generated at https://russianword.net/ at %s. ' % DateTime.now.iso8601)
         xml.yarn('xmlns' => 'https://russianword.net',
                  'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
                  'xsi:schemaLocation' => XSD) do
@@ -53,7 +54,7 @@ namespace :yarn do
           xml.synsets do
             Synset.where(deleted_at: nil).find_each do |synset|
               xml.synsetEntry(version[synset]) do
-                synset.words.where(deleted_at: nil).each do |synset_word|
+                synset.words.joins(:word).where(deleted_at: nil, current_words: { deleted_at: nil }).each do |synset_word|
                   xml.word({ ref: xmlid[synset_word.word], nonStandardGrammar: !!synset_word.nsg }.compact) do
                     synset_word.marks.each do |mark|
                       xml.mark(mark.name)
