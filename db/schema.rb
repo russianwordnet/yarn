@@ -11,10 +11,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171014122905) do
+ActiveRecord::Schema.define(version: 20171014202622) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "hstore"
   enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -442,18 +441,20 @@ ActiveRecord::Schema.define(version: 20171014122905) do
   add_index "raw_examples", ["example_id"], name: "index_raw_examples_on_example_id", using: :btree
   add_index "raw_examples", ["raw_definition_id"], name: "index_raw_examples_on_raw_definition_id", using: :btree
 
-  create_table "raw_subsumptions", force: true do |t|
-    t.integer  "hypernym_id", null: false
-    t.integer  "hyponym_id",  null: false
+  create_table "raw_relations", force: true do |t|
+    t.integer  "upper_id",   null: false
+    t.integer  "lower_id",   null: false
     t.text     "source"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "type",       null: false
   end
 
-  add_index "raw_subsumptions", ["created_at"], name: "index_raw_subsumptions_on_created_at", using: :btree
-  add_index "raw_subsumptions", ["hypernym_id", "hyponym_id"], name: "index_raw_subsumptions_on_hypernym_id_and_hyponym_id", unique: true, using: :btree
-  add_index "raw_subsumptions", ["hyponym_id"], name: "index_raw_subsumptions_on_hyponym_id", using: :btree
-  add_index "raw_subsumptions", ["updated_at"], name: "index_raw_subsumptions_on_updated_at", using: :btree
+  add_index "raw_relations", ["created_at"], name: "index_raw_relations_on_created_at", using: :btree
+  add_index "raw_relations", ["lower_id"], name: "index_raw_relations_on_lower_id", using: :btree
+  add_index "raw_relations", ["type"], name: "index_raw_relations_on_type", using: :btree
+  add_index "raw_relations", ["updated_at"], name: "index_raw_relations_on_updated_at", using: :btree
+  add_index "raw_relations", ["upper_id", "lower_id"], name: "index_raw_relations_on_upper_id_and_lower_id", unique: true, using: :btree
 
   create_table "raw_synonymies", force: true do |t|
     t.integer  "word1_id",   null: false
@@ -515,7 +516,7 @@ ActiveRecord::Schema.define(version: 20171014122905) do
   add_index "subsumption_answers", ["user_id"], name: "index_subsumption_answers_on_user_id", using: :btree
 
   create_table "subsumption_assignments", force: true do |t|
-    t.integer  "raw_subsumption_id", null: false
+    t.integer  "raw_relation_id",    null: false
     t.integer  "hypernym_synset_id", null: false
     t.integer  "hyponym_synset_id",  null: false
     t.datetime "created_at"
@@ -525,7 +526,7 @@ ActiveRecord::Schema.define(version: 20171014122905) do
   add_index "subsumption_assignments", ["created_at"], name: "index_subsumption_assignments_on_created_at", using: :btree
   add_index "subsumption_assignments", ["hypernym_synset_id", "hyponym_synset_id"], name: "index_subsumption_assignments_on_synset_ids", unique: true, using: :btree
   add_index "subsumption_assignments", ["hyponym_synset_id"], name: "index_subsumption_assignments_on_hyponym_synset_id", using: :btree
-  add_index "subsumption_assignments", ["raw_subsumption_id"], name: "index_subsumption_assignments_on_raw_subsumption_id", using: :btree
+  add_index "subsumption_assignments", ["raw_relation_id"], name: "index_subsumption_assignments_on_raw_relation_id", using: :btree
   add_index "subsumption_assignments", ["updated_at"], name: "index_subsumption_assignments_on_updated_at", using: :btree
 
   create_table "synset_domains", force: true do |t|
@@ -774,8 +775,8 @@ ActiveRecord::Schema.define(version: 20171014122905) do
   add_foreign_key "raw_examples", "raw_definitions", name: "raw_examples_raw_definition_id_fk", dependent: :delete
   add_foreign_key "raw_examples", "users", name: "raw_examples_author_id_fk", column: "author_id", dependent: :delete
 
-  add_foreign_key "raw_subsumptions", "current_words", name: "raw_subsumptions_hypernym_id_fk", column: "hypernym_id", dependent: :delete
-  add_foreign_key "raw_subsumptions", "current_words", name: "raw_subsumptions_hyponym_id_fk", column: "hyponym_id", dependent: :delete
+  add_foreign_key "raw_relations", "current_words", name: "raw_relations_lower_id_fk", column: "lower_id", dependent: :delete
+  add_foreign_key "raw_relations", "current_words", name: "raw_relations_upper_id_fk", column: "upper_id", dependent: :delete
 
   add_foreign_key "raw_synonymies", "current_words", name: "raw_synonymies_word1_id_fk", column: "word1_id", dependent: :delete
   add_foreign_key "raw_synonymies", "current_words", name: "raw_synonymies_word2_id_fk", column: "word2_id", dependent: :delete
@@ -791,7 +792,7 @@ ActiveRecord::Schema.define(version: 20171014122905) do
 
   add_foreign_key "subsumption_assignments", "current_synsets", name: "subsumption_assignments_hypernym_synset_id_fk", column: "hypernym_synset_id", dependent: :delete
   add_foreign_key "subsumption_assignments", "current_synsets", name: "subsumption_assignments_hyponym_synset_id_fk", column: "hyponym_synset_id", dependent: :delete
-  add_foreign_key "subsumption_assignments", "raw_subsumptions", name: "subsumption_assignments_raw_subsumption_id_fk", dependent: :delete
+  add_foreign_key "subsumption_assignments", "raw_relations", name: "subsumption_assignments_raw_relation_id_fk", dependent: :delete
 
   add_foreign_key "synset_domains", "current_synsets", name: "synset_domains_synset_id_fk", column: "synset_id", dependent: :delete
   add_foreign_key "synset_domains", "domains", name: "synset_domains_domain_id_fk", dependent: :delete
