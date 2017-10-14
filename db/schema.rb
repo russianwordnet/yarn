@@ -11,9 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160110163355) do
+ActiveRecord::Schema.define(version: 20171014122905) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "hstore"
   enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -163,14 +164,15 @@ ActiveRecord::Schema.define(version: 20160110163355) do
   add_index "current_synset_interlinks", ["updated_at"], name: "index_current_synset_interlinks_on_updated_at", using: :btree
 
   create_table "current_synset_relations", force: true do |t|
-    t.integer  "synset1_id",              null: false
-    t.integer  "synset2_id",              null: false
-    t.integer  "author_id",               null: false
-    t.integer  "revision",    default: 1, null: false
-    t.integer  "approver_id",             null: false
+    t.integer  "synset1_id",                null: false
+    t.integer  "synset2_id",                null: false
+    t.integer  "author_id",                 null: false
+    t.integer  "revision",      default: 1, null: false
+    t.integer  "approver_id"
     t.datetime "approved_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
+    t.string   "relation_type"
   end
 
   add_index "current_synset_relations", ["approved_at"], name: "index_current_synset_relations_on_approved_at", using: :btree
@@ -566,10 +568,11 @@ ActiveRecord::Schema.define(version: 20160110163355) do
     t.integer  "synset2_id",                     null: false
     t.integer  "author_id",                      null: false
     t.integer  "revision",           default: 1, null: false
-    t.integer  "approver_id",                    null: false
+    t.integer  "approver_id"
     t.datetime "approved_at"
     t.datetime "created_at"
     t.datetime "deleted_at"
+    t.string   "relation_type"
   end
 
   add_index "synset_relations", ["approved_at"], name: "index_synset_relations_on_approved_at", using: :btree
