@@ -10,6 +10,13 @@ class RelationsEditorController < ApplicationController
     render json: {}
   end
 
+  def next_example
+    render json: {
+      word1: 130,
+      word2: 131
+    }
+  end
+
   def destroy
     @relation.destroy
     render json: {}

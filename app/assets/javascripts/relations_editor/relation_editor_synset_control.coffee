@@ -23,6 +23,9 @@ class this.RelationEditorSynsetControl
     @synsets.find (synset) ->
       synset.id == id
 
+  loadWord: (word_id) ->
+    @chosenWordId = word_id
+    @loadSynsets(word_id)
   #private
 
   initSearchForm: ->
@@ -38,8 +41,7 @@ class this.RelationEditorSynsetControl
       transformResult: (response, _) =>
         @transformResult(response)
       onSelect: (item) =>
-        @chosenWordId = item.data
-        @loadSynsets(item.data)
+        @loadWord(item.data)
 
 
   transformResult: (response) ->
@@ -53,6 +55,7 @@ class this.RelationEditorSynsetControl
   loadSynsets: (word_id) ->
     $.get 'editor/word.json?word_id=' + word_id, (data) =>
       @clearSynsets()
+      @container.find('.search-synsets').val(data.word)
       @synsets = data.synsets
       @renderSynsets(data.synsets)
       @bindSynsetEvents()
