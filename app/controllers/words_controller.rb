@@ -8,14 +8,7 @@ class WordsController < ApplicationController
   before_filter :track_word, :only => [:update, :revert]
 
   def index
-    @words = if params[:q].present?
-      Word.search(params[:q]).
-        order(['rank DESC', 'frequency DESC', 'word'])
-    else
-      Word.order('frequency DESC')
-    end
-
-    @words = @words.where(deleted_at: nil).page(params[:page]).per(limit)
+    @words = WordsFinderService.new(params).find
 
     respond_to do |format|
       format.html
@@ -218,9 +211,5 @@ class WordsController < ApplicationController
     attributes.merge! params[:word]
     attributes['author_id'] = current_user.id
     @new_word = OpenStruct.new(attributes)
-  end
-
-  def limit
-    params[:limit].presence
   end
 end
