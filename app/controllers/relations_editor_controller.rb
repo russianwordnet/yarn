@@ -11,10 +11,10 @@ class RelationsEditorController < ApplicationController
   end
 
   def next_example
-    render json: {
-      word1: 130,
-      word2: 131
-    }
+    render json: RelationAssignmentFinderService
+      .new(current_user)
+      .next_assignment
+      .to_json
   end
 
   def destroy
