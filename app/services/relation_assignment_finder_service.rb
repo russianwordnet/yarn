@@ -17,7 +17,9 @@ class RelationAssignmentFinderService
   def find_relation
     RawRelation
       .joins(:score)
-      .where.not(id: RelationAssignment.select(:raw_relation_id).where(user_id: @user.id))
+      .where.not(
+        id: RelationAssignment.select(:raw_relation_id).where(user_id: @user.id)
+      )
       .order("#{RawSubsumptionScore.table_name}.score desc")
       .first
   end

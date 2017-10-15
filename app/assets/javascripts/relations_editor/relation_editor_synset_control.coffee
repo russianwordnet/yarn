@@ -24,9 +24,15 @@ class this.RelationEditorSynsetControl
       synset.id == id
 
   loadWord: (word_id) ->
+    @reset()
     @chosenWordId = word_id
     @loadSynsets(word_id)
   #private
+
+  reset: ->
+    @chosenWordId = null
+    @clearSynsets()
+
 
   initSearchForm: ->
     @container.find('.search-synsets').autocomplete
@@ -54,7 +60,6 @@ class this.RelationEditorSynsetControl
 
   loadSynsets: (word_id) ->
     $.get 'editor/word.json?word_id=' + word_id, (data) =>
-      @clearSynsets()
       @container.find('.search-synsets').val(data.word)
       @synsets = data.synsets
       @renderSynsets(data.synsets)
