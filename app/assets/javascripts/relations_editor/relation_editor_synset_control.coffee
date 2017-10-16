@@ -31,6 +31,7 @@ class this.RelationEditorSynsetControl
       paramName: 'q'
       params:
         limit: 5
+        non_empty: true
       minChars: 2
       deferRequestBy: 0,
       ajaxSettings:
