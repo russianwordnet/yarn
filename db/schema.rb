@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171014202622) do
+ActiveRecord::Schema.define(version: 20171015063730) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -495,6 +495,13 @@ ActiveRecord::Schema.define(version: 20171014202622) do
   add_index "raw_synsets", ["author_id"], name: "index_raw_synsets_on_author_id", using: :btree
   add_index "raw_synsets", ["definitions_ids"], name: "index_raw_synsets_on_definitions_ids", using: :gin
   add_index "raw_synsets", ["words_ids"], name: "index_raw_synsets_on_words_ids", using: :gin
+
+  create_table "relation_assignments", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "raw_relation_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "sashes", force: true do |t|
     t.datetime "created_at"

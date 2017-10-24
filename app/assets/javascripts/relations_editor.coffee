@@ -39,6 +39,10 @@ class RelationEditor
   onWordChosen: ->
     @loadExistingRelations()
 
+  loadExample: (data) ->
+    @synsetControls[0].loadWord(data.word1)
+    @synsetControls[1].loadWord(data.word2)
+
   #private
 
   relationEditorPage: ->
