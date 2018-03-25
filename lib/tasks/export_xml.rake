@@ -20,7 +20,8 @@ namespace :yarn do
           id: xmlid[entry],
           author: entry.author_id,
           version: entry.revision,
-          timestamp: entry.updated_at.iso8601
+          timestamp: entry.updated_at.iso8601,
+          approved: entry.approved_at.present?
         }
       end
 
