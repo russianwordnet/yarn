@@ -11,7 +11,8 @@ apt-get update && \
 apt-get install -y -o Dpkg::Options::="--force-confold" libraptor2-0 && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/* && \
-rm -f /etc/nginx/sites-enabled/default /etc/service/nginx/down
+rm -f /etc/service/nginx/down && \
+echo -n > /etc/nginx/sites-enabled/default
 
 WORKDIR /home/app/yarn
 
