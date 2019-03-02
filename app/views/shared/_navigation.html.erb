@@ -5,6 +5,7 @@
   <%= active_link_to 'Публикации', page_path(:publications), :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Участники', page_path(:team), :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Помощь', page_path(:help), :wrap_tag => :li, :active => :exclusive %>
+  <%= active_link_to 'Конфиденциальность', page_path(:terms), :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Технологии', page_path(:technologies), :wrap_tag => :li, :active => :exclusive %>
   <%= active_link_to 'Словник', words_path, :wrap_tag => :li, :active => :exclusive %>
   <% if current_user.try(:admin?) -%>

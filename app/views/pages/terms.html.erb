@@ -1,0 +1,32 @@
+<div class="row-fluid">
+  <h1>Политика конфиденциальности</h1>
+  <p><%= link_to 'Yet Another RussNet', root_path %> (YARN) &mdash; некоммерческий проект по созданию большого электронного тезауруса русского языка под открытой лицензией <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA</a> при помощи краудсорсинга.</p>
+  <p>Любой желающий может присоединиться к работе над материалами проекта. Для этого требуется регистрация при помощи одной из поддерживаемых социальных сетей: Facebook, GitHub, VK. Доступ к материалам ресурса для чтения регистрации не требует.</p>
+  <p>База данных проекта содержит только следующую информацию о пользователях (см. <a href="https://github.com/russianwordnet/yarn/blob/master/db/schema.rb#L645-L654">исходный код</a>):</p>
+  <ul>
+    <li>имя пользователя, указанное в использованной социальной сети, для отображения на странице с <%= link_to 'данными', page_path(:data) %> (поле <em>name</em>)</li>
+    <li>название использованной для входа социальной сети (поле <em>provider</em>)</li>
+    <li>численный идентификатор профиля в использованной социальной сети (поле <em>uid</em>)</li>
+    <li>роль в проекте, указывающая является ли пользователь администратором или нет (поле <em>role</em>)</li>
+    <li>дата создания и обновления учётной записи (поля <em>created_at</em> и <em>updated_at</em>)</li>
+    <li>метаданные для игрофикации (поля <em>sash_id</em> и <em>level</em>)</li>
+  </ul>
+  <p>Мы не используем данные пользователей вне проекта YARN и не передаём их никому.</p>
+  <p>При необходимости удалить учётную запись рекомендуем обратиться к <%= link_to 'команде проекта', page_path(:team) %>.</p>
+</div>
+<div class="row-fluid">
+  <h1>Privacy Policy</h1>
+  <p><%= link_to 'Yet Another RussNet', page_path(:en) %> (YARN) is a non-commercial project aiming at creating a large open WordNet-like thesaurus for the Russian language under the <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA</a> license using Wikipedia-style crowdsourcing.</p>
+  <p>We invite volunteers to contribute to our resource. For their convenience we offer log in functionality via three popular online social networks: Facebook, GitHub, and VK. Note that read-only access does not require creating an account.</p>
+  <p>Our database contains only the following information associated with the user profile (cf. the <a href="https://github.com/russianwordnet/yarn/blob/master/db/schema.rb#L645-L654">source code</a>):</p>
+  <ul>
+    <li>the <em>name</em> as specified in your social network account to show at the <%= link_to 'data', page_path(:data) %> page</li>
+    <li>the social network you used to log in (also known as <em>provider</em>)</li>
+    <li>the numerical identifier of your social network account (also known as <em>uid</em>)</li>
+    <li>the <em>role</em> in the YARN project indicating whether you are administrator or not</li>
+    <li>the account creation and update dates (<em>created_at</em> and <em>updated_at</em> fields)</li>
+    <li>the YARN-based gamification metadata (<em>sash_id</em> and <em>level</em> fields)</li>
+  </ul>
+  <p>We neither use nor transfer any data associated with your account outside of the Yet Another RussNet project.</p>
+  <p>In case you want to remove your account please contact our <%= link_to 'team', page_path(:team) %>.</p>
+</div>
