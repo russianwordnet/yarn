@@ -17,8 +17,6 @@ gem 'cells', '~> 3.11.3'
 gem 'protected_attributes'
 gem 'merit'
 
-gem 'sentry-raven'
-
 gem 'rails-i18n'
 gem 'devise-i18n'
 
