@@ -7,8 +7,8 @@ services:
     command: jekyll build --safe
     volumes:
     - './_config.yml:/srv/jekyll/_config.yml:ro'
-    - './index.markdown:/srv/jekyll/index.markdown:ro'
-    - './en.markdown:/srv/jekyll/en.markdown:ro'
+    - './index.md:/srv/jekyll/index.md:ro'
+    - './README.md:/srv/jekyll/README.md:ro'
     - './favicon.ico:/srv/jekyll/favicon.ico:ro'
     - './robots.txt:/srv/jekyll/robots.txt:ro'
     - './yarn.xml:/srv/jekyll/yarn.xml:ro'
