@@ -1,0 +1,6 @@
+title: Yet Another RussNet
+description: Yet Another RussNet aims at creating a large electronic thesaurus for Russian using crowdsourcing.
+baseurl: ""
+url: "https://russianword.net"
+github_username: russianwordnet
+theme: minima

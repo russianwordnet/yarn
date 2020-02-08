@@ -1,0 +1,14 @@
+User-Agent: *
+Disallow: /editor
+Disallow: /subsumptions
+Disallow: /terms
+Disallow: /data
+Disallow: /technologies
+Disallow: /help
+Disallow: /posts
+Disallow: /publications
+Disallow: /russnet
+Disallow: /users
+Disallow: /words
+Disallow: /synsets
+Disallow: /synset_words
